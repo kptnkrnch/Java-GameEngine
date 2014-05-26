@@ -100,42 +100,38 @@ public class Entity {
 		}
 	}
 	
-	public void Move(int direction, float distance) {
+	public void UndoLastMove() {
 		if (this.IsMoveable()) {
+			int direction = Direction.Opposite(this.last_direction);
+			float distance = this.last_distance;
 			switch(direction) {
 			case Direction.LEFT:
 				this.movx -= distance;
 				this.x = (int)Math.floor(this.movx);
-				this.last_direction = direction;
-				this.last_distance = distance;
+				this.last_direction = -1;
+				this.last_distance = 0;
 				break;
 			case Direction.RIGHT:
 				this.movx += distance;
 				this.x = (int)Math.floor(this.movx);
-				this.last_direction = direction;
-				this.last_distance = distance;
+				this.last_direction = -1;
+				this.last_distance = 0;
 				break;
 			case Direction.UP:
 				this.movy -= distance;
 				this.y = (int)Math.floor(this.movy);
-				this.last_direction = direction;
-				this.last_distance = distance;
+				this.last_direction = -1;
+				this.last_distance = 0;
 				break;
 			case Direction.DOWN:
 				this.movy += distance;
 				this.y = (int)Math.floor(this.movy);
-				this.last_direction = direction;
-				this.last_distance = distance;
+				this.last_direction = -1;
+				this.last_distance = 0;
 				break;
 			}
 			this.bounding_box.x = this.x;
 			this.bounding_box.y = this.y;
-		}
-	}
-	
-	public void UndoLastMove() {
-		if (this.IsMoveable()) {
-			this.Move(Direction.Opposite(this.last_direction), this.last_distance);
 		}
 	}
 	
