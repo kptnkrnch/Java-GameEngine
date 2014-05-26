@@ -51,7 +51,7 @@ public class MapLoader {
 					for (int x = 0; x < world.width; x++) {
 						if (lineScanner.hasNextInt()) {
 							int type = lineScanner.nextInt();
-							world.tile[y][x] = TileFactory.CreateTile(type, x, y, world.tilesize);
+							world.tile[x][y] = TileFactory.CreateTile(type, x, y, world.tilesize);
 						} else {
 							System.out.println("Error! There seems to be too few columns of tiles.");
 							lineScanner.close();
