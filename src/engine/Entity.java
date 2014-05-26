@@ -48,7 +48,7 @@ public class Entity {
 		this.controlled = false;
 		this.moveable = false;
 		this.speed = 0f;
-		this.bounding_box = new Rectangle(x, y, width, height);
+		this.bounding_box = new Rectangle(x + 1, y + 1, width - 2, height - 2);
 		
 		this.last_distance = 0;
 		this.last_direction = -1;
@@ -95,8 +95,8 @@ public class Entity {
 				this.last_distance = distance;
 				break;
 			}
-			this.bounding_box.x = this.x;
-			this.bounding_box.y = this.y;
+			this.bounding_box.x = this.x + 1;
+			this.bounding_box.y = this.y + 1;
 		}
 	}
 	
@@ -130,8 +130,8 @@ public class Entity {
 				this.last_distance = 0;
 				break;
 			}
-			this.bounding_box.x = this.x;
-			this.bounding_box.y = this.y;
+			this.bounding_box.x = this.x + 1;
+			this.bounding_box.y = this.y + 1;
 		}
 	}
 	

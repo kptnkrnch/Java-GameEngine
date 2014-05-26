@@ -81,7 +81,7 @@
 					for (var y = 0; y < mapheight; y++) {
 						map += "<tr>";
 						for (var x = 0; x < mapwidth; x++) {
-							map += "<td id=\"tile-" + x + "-" + y + "\"><a href=\"javascript:void()\" onclick=\"ChangeTileController('" + x + "-" + y + "')\">";
+							map += "<td id=\"tile-" + x + "-" + y + "\"><a href=\"javascript:void(0)\" onclick=\"ChangeTileController('" + x + "-" + y + "')\">";
 							map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tile_blank.bmp\" />";
 							map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"1\"></a></td>";
 						}
@@ -108,19 +108,19 @@
 					for (var y = 0; y < mapheight; y++) {
 						map += "<tr>";
 						for (var x = 0; x < mapwidth; x++) {
-							map += "<td id=\"tile-" + x + "-" + y + "\"><a href=\"javascript:void()\" onclick=\"ChangeTileController('" + x + "-" + y + "')\">";
+							map += "<td id=\"tile-" + x + "-" + y + "\"><a href=\"javascript:void(0)\" onclick=\"ChangeTileController('" + x + "-" + y + "')\">";
 							if (x < curwidth && y < curheight) {
 								switch(mapdata[y][x]) {
 									case '1':
-										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/00_40px.bmp\" />";
+										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/grass.png\" />";
 										map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"1\"></a></td>";
 									break;
 									case '2':
-										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/01_40px.bmp\" />";
+										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree.png\" />";
 										map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"2\"></a></td>";
 									break;
 									case '3':
-										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/02_40px.bmp\" />";
+										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/water.png\" />";
 										map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"3\"></a></td>";
 									break;
 									case '4':
@@ -233,19 +233,19 @@
 					
 					map += "<tr>";
 					for (var x = 0; x < mapwidth; x++) {
-						map += "<td id=\"tile-" + x + "-" + y + "\"><a href=\"javascript:void()\" onclick=\"ChangeTileController('" + x + "-" + y + "')\">";
+						map += "<td id=\"tile-" + x + "-" + y + "\"><a href=\"javascript:void(0)\" onclick=\"ChangeTileController('" + x + "-" + y + "')\">";
 						
 						switch(tool) {
 							case '1':
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/00_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/grass.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"1\"></a></td>";
 							break;
 							case '2':
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/01_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"2\"></a></td>";
 							break;
 							case '3':
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/02_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/water.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"3\"></a></td>";
 							break;
 							case '4':
@@ -362,15 +362,15 @@
 				
 				switch(tool) {
 					case '1':
-						$(image).attr("src", "tiles/00_40px.bmp");
+						$(image).attr("src", "tiles/grass.png");
 						$(tiletype).val('1');
 					break;
 					case '2':
-						$(image).attr("src", "tiles/01_40px.bmp");
+						$(image).attr("src", "tiles/tree.png");
 						$(tiletype).val('2');
 					break;
 					case '3':
-						$(image).attr("src", "tiles/02_40px.bmp");
+						$(image).attr("src", "tiles/water.png");
 						$(tiletype).val('3');
 					break;
 					case '4':
@@ -475,15 +475,15 @@
 			function SetTool(tool) {
 				switch(tool) {
 					case '1':
-						$("#selected-tool").attr("src", "tiles/00_40px.bmp");
+						$("#selected-tool").attr("src", "tiles/grass.png");
 						$("#current-tool").val(tool);
 					break;
 					case '2':
-						$("#selected-tool").attr("src", "tiles/01_40px.bmp");
+						$("#selected-tool").attr("src", "tiles/tree.png");
 						$("#current-tool").val(tool);
 					break;
 					case '3':
-						$("#selected-tool").attr("src", "tiles/02_40px.bmp");
+						$("#selected-tool").attr("src", "tiles/water.png");
 						$("#current-tool").val(tool);
 					break;
 					case '4':
@@ -577,9 +577,14 @@
 				for (var y = 0; y < mapheight; y++) {
 					for (var x = 0; x < mapwidth; x++) {
 						var tiletype = '#tiletype-' + x + '-' + y;
-						mapdata += $(tiletype).val() + ' ';
+						mapdata += $(tiletype).val();
+						if (x != mapwidth - 1) {
+							mapdata += ' ';
+						}
 					}
-					mapdata += '\n';
+					if (y != mapheight -1) {
+						mapdata += '\n';
+					}
 				}
 				$("#mapdata textarea").html(mapdata);
 				$("#mapdata").show();
@@ -615,10 +620,8 @@
 			 */
 			function LoadMapData() {
 				var mapstring = $("#load-map-data").val();
-				alert(mapstring);
 				var mapdata = new Array();
 				mapdata = mapstring.split("\n");
-				/*var levelID = mapdata[0];*/
 				var sizeline = new Array();
 				sizeline = mapdata[0].split(" ");
 				var mapwidth = parseInt(sizeline[0]);
@@ -631,20 +634,20 @@
 					var line = mapdata[y + 1].split(" ");
 					map += "<tr>";
 					for (var x = 0; x < mapwidth; x++) {
-						map += "<td id=\"tile-" + x + "-" + y + "\"><a href=\"javascript:void()\" onclick=\"ChangeTileController('" + x + "-" + y + "')\">";
+						map += "<td id=\"tile-" + x + "-" + y + "\"><a href=\"javascript:void(0)\" onclick=\"ChangeTileController('" + x + "-" + y + "')\">";
 						var tile = parseInt(line[x]);
 						
 						switch(tile) {
 							case 1:
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/00_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/grass.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"1\"></a></td>";
 							break;
 							case 2:
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/01_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"2\"></a></td>";
 							break;
 							case 3:
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/02_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/water.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"3\"></a></td>";
 							break;
 							case 4:
@@ -834,8 +837,11 @@
 					$("#linepos-2").val(id);
 					var x = 0;
 					var y = 1;
-					var pos1 = $("#linepos-1").val().split("-");
-					var pos2 = $("#linepos-2").val().split("-");
+					var temppos1 = $("#linepos-1").val().split("-");
+					var temppos2 = $("#linepos-2").val().split("-");
+					
+					var pos1 = [parseInt(temppos1[x]), parseInt(temppos1[y])];
+					var pos2 = [parseInt(temppos2[x]), parseInt(temppos2[y])];
 					
 					var xdist = Math.abs(pos2[x] - pos1[x]);
 					var ydist = Math.abs(pos2[y] - pos1[y]);
@@ -939,7 +945,7 @@
 		<br/>
 		<input type="hidden" id="hidden-width" value="0" />
 		<input type="hidden" id="hidden-height" value="0" />
-		<input type="hidden" id="hidden-tilesize" value="0" />
+		<input type="hidden" id="hidden-tilesize" value="32" />
 		
 		<!-- Tile tool box dialog -->
 		<div id="toolbox" title="Tool Box" style="display: none;">
@@ -952,46 +958,45 @@
 			</table>
 			<table id="tools">
 				<tr>
-					<td><a href="javascript:void()" onclick="SetTool('1')"><img src="tiles/00_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('2')"><img src="tiles/01_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('3')"><img src="tiles/02_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('4')"><img src="tiles/03_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('5')"><img src="tiles/04_40px.bmp" /></a></td>
-				</tr>
-				<tr>
-					<td><a href="javascript:void()" onclick="SetTool('6')"><img src="tiles/05_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('7')"><img src="tiles/06_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('8')"><img src="tiles/07_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('9')"><img src="tiles/08_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('10')"><img src="tiles/09_40px.bmp" /></a></td>
-				</tr>
-				<tr>
-					<td><a href="javascript:void()" onclick="SetTool('11')"><img src="tiles/10_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('12')"><img src="tiles/11_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('13')"><img src="tiles/12_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('14')"><img src="tiles/13_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('15')"><img src="tiles/14_40px.bmp" /></a></td>
-				</tr>
-				<tr>
-					<td><a href="javascript:void()" onclick="SetTool('16')"><img src="tiles/15_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('17')"><img src="tiles/16_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('18')"><img src="tiles/17_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('19')"><img src="tiles/18_40px.bmp" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('20')"><img src="tiles/19_40px.bmp" /></a></td>
-				</tr>
-				<tr>
-					<td><a href="javascript:void()" onclick="SetTool('21')"><img src="tiles/20_40px.bmp" /></a></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('1');"><img src="tiles/grass.png" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('2');"><img src="tiles/tree.png" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('3');"><img src="tiles/water.png" /></a></td>
 					<td></td>
 				</tr>
 				<!--<tr>
-					<td><a href="javascript:void()" onclick="SetTool('05')"><img src="" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('06')"><img src="" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('07')"><img src="" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('08')"><img src="" /></a></td>
-					<td><a href="javascript:void()" onclick="SetTool('09')"><img src="" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('6')"><img src="tiles/05_40px.bmp" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('7')"><img src="tiles/06_40px.bmp" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('8')"><img src="tiles/07_40px.bmp" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('9')"><img src="tiles/08_40px.bmp" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('10')"><img src="tiles/09_40px.bmp" /></a></td>
+				</tr>
+				<tr>
+					<td><a href="javascript:void(0)" onclick="SetTool('11')"><img src="tiles/10_40px.bmp" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('12')"><img src="tiles/11_40px.bmp" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('13')"><img src="tiles/12_40px.bmp" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('14')"><img src="tiles/13_40px.bmp" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('15')"><img src="tiles/14_40px.bmp" /></a></td>
+				</tr>
+				<tr>
+					<td><a href="javascript:void(0)" onclick="SetTool('16')"><img src="tiles/15_40px.bmp" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('17')"><img src="tiles/16_40px.bmp" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('18')"><img src="tiles/17_40px.bmp" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('19')"><img src="tiles/18_40px.bmp" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('20')"><img src="tiles/19_40px.bmp" /></a></td>
+				</tr>
+				<tr>
+					<td><a href="javascript:void(0)" onclick="SetTool('21')"><img src="tiles/20_40px.bmp" /></a></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>-->
+				<!--<tr>
+					<td><a href="javascript:void(0)" onclick="SetTool('05')"><img src="" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('06')"><img src="" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('07')"><img src="" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('08')"><img src="" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool('09')"><img src="" /></a></td>
 				</tr>-->
 			</table>
 			<br/>
@@ -1012,7 +1017,7 @@
 			<table>
 				<tr>
 					<td><label>Tilesize: </label></td>
-					<td><input type="text" id="map_tilesize" /></td>
+					<td><input type="text" id="map_tilesize" value="32" /></td>
 				</tr>
 				<tr>
 					<td><label>Width: </label></td>
