@@ -15,7 +15,7 @@ public class MovementController {
 				Entity e = world.GetEntity(i);
 				switch(e.type) {
 				case EntityDictionary.PLAYER:
-					Player.MovePlayer(e, input, fps_scaler);
+					Player.MovePlayer(world, e, input, fps_scaler);
 					world.SetEntity(i, e);
 					break;
 				case EntityDictionary.NPC:

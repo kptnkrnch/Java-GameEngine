@@ -60,7 +60,7 @@ public class Main extends BasicGame {
 		world.LoadEntityDictionary("res/dictionaries/EntityDictionary.dict");
 		MapLoader.LoadMap(world, "res/maps/Map01.map");
 		InputController.LoadKeyMapping("res/config/keymap.conf");
-		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.PLAYER, 0, 0, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.PLAYER, 1, 1, 32, 32));
 	}
 	
 	/**
