@@ -21,9 +21,13 @@ public class GraphicsController {
 			
 			if (Camera.IsMoveableX(world)) {
 				g.translate(-(camera.x - Main.ResX / 2), 0);
+			} else if (camera.x > world.width * world.tilesize / 2) {
+				g.translate(-(world.width * world.tilesize - Main.ResX), 0);
 			}
 			if (Camera.IsMoveableY(world)) {
 				g.translate(0, -(camera.y - Main.ResY / 2));
+			} else if (camera.y > world.height * world.tilesize / 2) {
+				g.translate(0, -(world.height * world.tilesize - Main.ResY));
 			}
 			
 			for (int y = 0; y < world.height; y++) {
