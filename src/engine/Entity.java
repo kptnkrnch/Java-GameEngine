@@ -135,6 +135,13 @@ public class Entity {
 		}
 	}
 	
+	public void SetPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+		this.bounding_box.x = this.x;
+		this.bounding_box.y = this.y;
+	}
+	
 	public boolean Intersects(Tile tile) {
 		return bounding_box.intersects(tile.bounding_box);
 	}

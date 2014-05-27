@@ -3,6 +3,9 @@ package engine;
 import java.util.HashMap;
 
 import input.InputController;
+import entities.Camera;
+import exceptions.CameraNotFoundException;
+import exceptions.PlayerNotFoundException;
 import gameplay.MovementController;
 import graphics.GraphicsController;
 
@@ -21,6 +24,8 @@ import org.newdawn.slick.geom.Rectangle;
 public class Main extends BasicGame {
 	
 	World world;
+	public static final int ResX = 800;
+	public static final int ResY = 600;
 	
 	public Main(String title) {
 		super(title);
@@ -32,7 +37,7 @@ public class Main extends BasicGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		AppGameContainer app = new AppGameContainer(new Main("Default Engine"));
-		app.setDisplayMode(800, 600, false);
+		app.setDisplayMode(ResX, ResY, false);
 		app.setIcon("res/icon/icon.png");
 		app.setShowFPS(true);
 		app.setVSync(false);
@@ -61,6 +66,13 @@ public class Main extends BasicGame {
 		MapLoader.LoadMap(world, "res/maps/Map02.map");
 		InputController.LoadKeyMapping("res/config/keymap.conf");
 		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.PLAYER, 288, 128, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));
+		try {
+			int player = world.FindPlayer();
+			Camera.Follow(player);
+		} catch (PlayerNotFoundException e) {
+		}
+		
 	}
 	
 	/**

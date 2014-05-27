@@ -8,6 +8,7 @@ import org.newdawn.slick.SlickException;
 
 public class EntityDictionary {
 	
+	public static final int CAMERA = 0;
 	public static final int PLAYER = 1;
 	public static final int NPC = 2;
 	public static final int ENEMY = 3;

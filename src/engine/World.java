@@ -2,6 +2,9 @@ package engine;
 
 import java.util.ArrayList;
 
+import exceptions.CameraNotFoundException;
+import exceptions.PlayerNotFoundException;
+
 public class World {
 	
 	public int width;
@@ -51,6 +54,42 @@ public class World {
 	
 	public void AddEntity(Entity entity) {
 		this.entities.add(entity);
+	}
+	
+	public int FindPlayer() throws PlayerNotFoundException {
+		boolean found = false;
+		int index = -1;
+		for (int i = 0; i < entities.size(); i++) {
+			if (entities.get(i).type == EntityDictionary.PLAYER) {
+				found = true;
+				index = i;
+				break;
+			}
+		}
+		
+		if (found) {
+			return index;
+		} else {
+			throw new PlayerNotFoundException();
+		}
+	}
+	
+	public int FindCamera() throws CameraNotFoundException {
+		boolean found = false;
+		int index = -1;
+		for (int i = 0; i < entities.size(); i++) {
+			if (entities.get(i).type == EntityDictionary.CAMERA) {
+				found = true;
+				index = i;
+				break;
+			}
+		}
+		
+		if (found) {
+			return index;
+		} else {
+			throw new CameraNotFoundException();
+		}
 	}
 	
 }
