@@ -29,9 +29,9 @@ public class EntityFactory {
 	private static Entity CreateCamera(int x, int y) {
 		Entity e = new Entity(EntityDictionary.CAMERA, x, y, 32, 32);
 		e.speed = 0.2f;
-		e.controlled = true;
+		e.controlled = false;
 		e.solid = false;
-		e.moveable = true;
+		e.moveable = false;
 		return e;
 	}
 	
