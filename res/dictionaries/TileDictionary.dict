@@ -1,4 +1,4 @@
 3
-1 res/tiles/grass.png
-2 res/tiles/tree.png
-3 res/tiles/water.png
+1 res/tiles/grass/grass.anim
+2 res/tiles/tree/tree.anim
+3 res/tiles/water/water.anim

@@ -23,21 +23,21 @@ public class MapLoader {
 				if (lineScanner.hasNextInt()) {
 					width = lineScanner.nextInt();
 				} else {
-					System.out.println("Error on line: 1 - Missing Width Parameter.");
+					System.err.println("Error on line: 1 - Missing Width Parameter.");
 					lineScanner.close();
 					throw new Exception();
 				}
 				if (lineScanner.hasNextInt()) {
 					height = lineScanner.nextInt();
 				} else {
-					System.out.println("Error on line: 1 - Missing Height Parameter.");
+					System.err.println("Error on line: 1 - Missing Height Parameter.");
 					lineScanner.close();
 					throw new Exception();
 				}
 				if (lineScanner.hasNextInt()) {
 					tilesize = lineScanner.nextInt();
 				} else {
-					System.out.println("Error on line: 1 - Missing Tile Size Parameter.");
+					System.err.println("Error on line: 1 - Missing Tile Size Parameter.");
 					lineScanner.close();
 					throw new Exception();
 				}
@@ -53,20 +53,20 @@ public class MapLoader {
 							int type = lineScanner.nextInt();
 							world.tile[x][y] = TileFactory.CreateTile(type, x, y, world.tilesize);
 						} else {
-							System.out.println("Error! There seems to be too few columns of tiles.");
+							System.err.println("Error! There seems to be too few columns of tiles.");
 							lineScanner.close();
 							throw new Exception();
 						}
 					}
 					lineScanner.close();
 				} else {
-					System.out.println("Error! There seems to be too few rows of tiles.");
+					System.err.println("Error! There seems to be too few rows of tiles.");
 					throw new Exception();
 				}
 			}
 			scan.close();
 		} catch (Exception e) {
-			System.out.println("Failed to load map.");
+			System.err.println("Failed to load map.");
 			world.width = 0;
 			world.tilesize = 0;
 			world.height = 0;

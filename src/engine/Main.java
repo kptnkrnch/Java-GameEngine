@@ -26,14 +26,9 @@ import sound.SoundController;
 
 public class Main extends BasicGame {
 	
-	World world;
+	private World world;
 	public static final int ResX = 800;
 	public static final int ResY = 600;
-	
-	public static Image[] w;// = new Image[2];
-	//w[0] = new Image("res/animations/water_animation/water-1.png");
-	//w[1] = new Image("res/animations/water_animation/water-2.png");
-	public static Animation wa;// = new Animation(w, 1000, true);
 	
 	public Main(String title) {
 		super(title);
@@ -80,11 +75,6 @@ public class Main extends BasicGame {
 			Camera.Follow(player);
 		} catch (PlayerNotFoundException e) {
 		}
-		
-		w = new Image[2];
-		w[0] = new Image("res/animations/water_animation/water-1.png");
-		w[1] = new Image("res/animations/water_animation/water-2.png");
-		wa = new Animation(w, 700);
 	}
 	
 	/**
@@ -96,7 +86,7 @@ public class Main extends BasicGame {
 		Input input = gc.getInput();
 		HashMap<String, Boolean> pressed = InputController.HandleInput(input);
 		MovementController.HandleMovement(world, pressed, fps_scaler);
-		wa.update(fps_scaler);
+		world.tile_dictionary.UpdateAnimations(fps_scaler);
 	}
 
 }

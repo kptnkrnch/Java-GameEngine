@@ -1,8 +1,11 @@
 package engine;
 
+import graphics.AnimationLoader;
+
 import java.io.File;
 import java.util.Scanner;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -12,7 +15,8 @@ public class TileDictionary {
 	public static final int TREE = 2;
 	public static final int WATER = 3;
 	
-	public Image[] tiles;
+	public Animation[] tiles;
+	
 	public int[] types;
 	
 	private int entry_count;
@@ -36,10 +40,10 @@ public class TileDictionary {
 				Scanner lineScanner = new Scanner(line);
 				if (lineScanner.hasNextInt()) {
 					entry_count = lineScanner.nextInt();
-					tiles = new Image[entry_count];
+					tiles = new Animation[entry_count];
 					types = new int[entry_count];
 				} else {
-					System.out.println("Invalid dictionary file. Missing entry count.");
+					System.err.println("Invalid dictionary file. Missing entry count.");
 					lineScanner.close();
 					throw new Exception();
 				}
@@ -52,23 +56,25 @@ public class TileDictionary {
 					if (lineScanner.hasNextInt()) {
 						types[i] = lineScanner.nextInt();
 					} else {
-						System.out.println("Error on line: " + (i + 1));
-						System.out.println("Missing tile type code.");
+						System.err.println("Error on line: " + (i + 1));
+						System.err.println("Missing tile type code.");
 						lineScanner.close();
 						throw new Exception();
 					}
 					if (lineScanner.hasNext()) {
 						String image_src = lineScanner.next();
 						try {
-							tiles[i] = new Image(image_src);
+							Image[] temp = new Image[1];
+							temp[0] = new Image(image_src);
+							tiles[i] = new Animation(temp, 0);
 						} catch (SlickException e) {
-							System.out.println("Could not find image resource.");
+							System.err.println("Could not find image resource.");
 							lineScanner.close();
 							throw new Exception();
 						}
 					} else {
-						System.out.println("Error on line: " + (i + 1));
-						System.out.println("Missing tile image location.");
+						System.err.println("Error on line: " + (i + 1));
+						System.err.println("Missing tile image location.");
 						lineScanner.close();
 						throw new Exception();
 					}
@@ -77,7 +83,7 @@ public class TileDictionary {
 			}
 			scan.close();
 		} catch (Exception e) {
-			System.out.println("Failed to load Tile Dictionary.");
+			System.err.println("Failed to load Tile Dictionary.");
 			if (entry_count != 0) {
 				try {
 					for (int i = 0; i < entry_count; i++) {
@@ -97,7 +103,7 @@ public class TileDictionary {
 	 * @param type - the tile type to look up.
 	 * @return the image if it is found, else null.
 	 */
-	public Image GetImage(int type) {
+	public Animation GetImage(int type) {
 		for (int i = 0; i < this.entry_count; i++) {
 			if (type == this.types[i]) {
 				return tiles[i];
@@ -121,10 +127,10 @@ public class TileDictionary {
 				Scanner lineScanner = new Scanner(line);
 				if (lineScanner.hasNextInt()) {
 					entry_count = lineScanner.nextInt();
-					tiles = new Image[entry_count];
+					tiles = new Animation[entry_count];
 					types = new int[entry_count];
 				} else {
-					System.out.println("Invalid dictionary file. Missing entry count.");
+					System.err.println("Invalid dictionary file. Missing entry count.");
 					lineScanner.close();
 					throw new Exception();
 				}
@@ -137,23 +143,24 @@ public class TileDictionary {
 					if (lineScanner.hasNextInt()) {
 						types[i] = lineScanner.nextInt();
 					} else {
-						System.out.println("Error on line: " + (i + 1));
-						System.out.println("Missing tile type code.");
+						System.err.println("Error on line: " + (i + 1));
+						System.err.println("Missing tile type code.");
 						lineScanner.close();
 						throw new Exception();
 					}
 					if (lineScanner.hasNext()) {
-						String image_src = lineScanner.next();
-						try {
-							tiles[i] = new Image(image_src);
-						} catch (SlickException e) {
-							System.out.println("Could not find image resource.");
+						String anim_src = lineScanner.next();
+						AnimationLoader loader = new AnimationLoader(anim_src);
+						if (loader.IsLoaded()) {
+							tiles[i] = new Animation(loader.frames, loader.durations);
+						} else {
+							System.err.println("Failed to load animation on line: " + (i + 2));
 							lineScanner.close();
 							throw new Exception();
 						}
 					} else {
-						System.out.println("Error on line: " + (i + 1));
-						System.out.println("Missing tile image location.");
+						System.err.println("Error on line: " + (i + 1));
+						System.err.println("Missing tile image location.");
 						lineScanner.close();
 						throw new Exception();
 					}
@@ -162,7 +169,7 @@ public class TileDictionary {
 			}
 			scan.close();
 		} catch (Exception e) {
-			System.out.println("Failed to load Tile Dictionary.");
+			System.err.println("Failed to load Tile Dictionary.");
 			if (entry_count != 0) {
 				try {
 					for (int i = 0; i < entry_count; i++) {
@@ -177,5 +184,11 @@ public class TileDictionary {
 			return false;
 		}
 		return true;
+	}
+	
+	public void UpdateAnimations(int fps_scaler) {
+		for (int i = 0; i < tiles.length; i++) {
+			tiles[i].update(fps_scaler);
+		}
 	}
 }

@@ -51,7 +51,7 @@ public class InputController {
 				if (lineScanner.hasNext()) {
 					command = lineScanner.next();
 				} else {
-					System.out.println("Error! Invalid key config file!");
+					System.err.println("Error! Invalid key config file!");
 					lineScanner.close();
 					throw new Exception();
 				}
@@ -59,7 +59,7 @@ public class InputController {
 				if (lineScanner.hasNextInt()) {
 					key = lineScanner.nextInt();
 				} else {
-					System.out.println("Error! Invalid key config file!");
+					System.err.println("Error! Invalid key config file!");
 					lineScanner.close();
 					throw new Exception();
 				}

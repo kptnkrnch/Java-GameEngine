@@ -8,7 +8,6 @@ import engine.Entity;
 import engine.EntityDictionary;
 import engine.Main;
 import engine.Tile;
-import engine.TileDictionary;
 import engine.World;
 import entities.Camera;
 import exceptions.CameraNotFoundException;
@@ -46,11 +45,7 @@ public class GraphicsController {
 				for (int x = 0; x < world.width; x++) {
 					Tile temp = world.GetTile(x, y);
 					if (VIEWPORT_BOX.intersects(temp.bounding_box)) {
-						if (temp.type == TileDictionary.WATER) {
-							g.drawAnimation(Main.wa, temp.x, temp.y);
-						} else {
-							g.drawImage(world.tile_dictionary.GetImage(temp.type), temp.x, temp.y);
-						}
+						g.drawAnimation(world.tile_dictionary.GetImage(temp.type), temp.x, temp.y);
 					}
 				}
 			}
@@ -63,9 +58,6 @@ public class GraphicsController {
 					}
 				}
 			}
-			
-			//g.drawString("V_X: " + VIEWPORT_X, 600 + VIEWPORT_X, 10 + VIEWPORT_Y);
-			//g.drawString("V_Y: " + VIEWPORT_Y, 600 + VIEWPORT_X, 30 + VIEWPORT_Y);
 			
 		} catch (CameraNotFoundException e) {
 			System.err.println("Error! Camera entity does not exist!");

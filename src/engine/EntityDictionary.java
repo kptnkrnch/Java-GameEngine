@@ -36,7 +36,7 @@ public class EntityDictionary {
 					sprites = new Image[entry_count];
 					types = new int[entry_count];
 				} else {
-					System.out.println("Invalid dictionary file. Missing entry count.");
+					System.err.println("Invalid dictionary file. Missing entry count.");
 					lineScanner.close();
 					throw new Exception();
 				}
@@ -49,8 +49,8 @@ public class EntityDictionary {
 					if (lineScanner.hasNextInt()) {
 						types[i] = lineScanner.nextInt();
 					} else {
-						System.out.println("Error on line: " + (i + 1));
-						System.out.println("Missing entity type code.");
+						System.err.println("Error on line: " + (i + 1));
+						System.err.println("Missing entity type code.");
 						lineScanner.close();
 						throw new Exception();
 					}
@@ -59,13 +59,13 @@ public class EntityDictionary {
 						try {
 							sprites[i] = new Image(image_src);
 						} catch (SlickException e) {
-							System.out.println("Could not find image resource.");
+							System.err.println("Could not find image resource.");
 							lineScanner.close();
 							throw new Exception();
 						}
 					} else {
-						System.out.println("Error on line: " + (i + 1));
-						System.out.println("Missing entity image location.");
+						System.err.println("Error on line: " + (i + 1));
+						System.err.println("Missing entity image location.");
 						lineScanner.close();
 						throw new Exception();
 					}
@@ -74,7 +74,7 @@ public class EntityDictionary {
 			}
 			scan.close();
 		} catch (Exception e) {
-			System.out.println("Failed to load Entity Dictionary.");
+			System.err.println("Failed to load Entity Dictionary.");
 			if (entry_count != 0) {
 				try {
 					for (int i = 0; i < entry_count; i++) {
@@ -111,7 +111,7 @@ public class EntityDictionary {
 					sprites = new Image[entry_count];
 					types = new int[entry_count];
 				} else {
-					System.out.println("Invalid dictionary file. Missing entry count.");
+					System.err.println("Invalid dictionary file. Missing entry count.");
 					lineScanner.close();
 					throw new Exception();
 				}
@@ -124,8 +124,8 @@ public class EntityDictionary {
 					if (lineScanner.hasNextInt()) {
 						types[i] = lineScanner.nextInt();
 					} else {
-						System.out.println("Error on line: " + (i + 1));
-						System.out.println("Missing entity type code.");
+						System.err.println("Error on line: " + (i + 1));
+						System.err.println("Missing entity type code.");
 						lineScanner.close();
 						throw new Exception();
 					}
@@ -134,13 +134,13 @@ public class EntityDictionary {
 						try {
 							sprites[i] = new Image(image_src);
 						} catch (SlickException e) {
-							System.out.println("Could not find image resource.");
+							System.err.println("Could not find image resource.");
 							lineScanner.close();
 							throw new Exception();
 						}
 					} else {
-						System.out.println("Error on line: " + (i + 1));
-						System.out.println("Missing entity image location.");
+						System.err.println("Error on line: " + (i + 1));
+						System.err.println("Missing entity image location.");
 						lineScanner.close();
 						throw new Exception();
 					}
@@ -149,7 +149,7 @@ public class EntityDictionary {
 			}
 			scan.close();
 		} catch (Exception e) {
-			System.out.println("Failed to load Entity Dictionary.");
+			System.err.println("Failed to load Entity Dictionary.");
 			if (entry_count != 0) {
 				try {
 					for (int i = 0; i < entry_count; i++) {
