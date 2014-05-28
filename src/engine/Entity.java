@@ -16,7 +16,7 @@ public class Entity {
 	public boolean moveable;
 	public Rectangle bounding_box;
 	
-	private int last_direction;
+	public int last_direction;
 	private float last_distance;
 	
 	public Entity(Entity temp) {
@@ -93,6 +93,10 @@ public class Entity {
 				this.y = (int)Math.floor(this.movy);
 				this.last_direction = direction;
 				this.last_distance = distance;
+				break;
+			default:
+				this.last_direction = Direction.NONE;
+				this.last_distance = 0;
 				break;
 			}
 			this.bounding_box.x = this.x + 1;
