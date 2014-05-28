@@ -21,6 +21,8 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Rectangle;
 
+import sound.SoundController;
+
 public class Main extends BasicGame {
 	
 	World world;
@@ -72,7 +74,6 @@ public class Main extends BasicGame {
 			Camera.Follow(player);
 		} catch (PlayerNotFoundException e) {
 		}
-		
 	}
 	
 	/**
