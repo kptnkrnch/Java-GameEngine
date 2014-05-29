@@ -29,6 +29,7 @@ public class Main extends BasicGame {
 	private World world;
 	public static final int ResX = 800;
 	public static final int ResY = 600;
+	public static boolean debug_mode = false;
 	
 	public Main(String title) {
 		super(title);
@@ -66,7 +67,7 @@ public class Main extends BasicGame {
 		world = new World();
 		world.LoadTileDictionary("res/dictionaries/TileDictionary.dict");
 		world.LoadEntityDictionary("res/dictionaries/EntityDictionary.dict");
-		MapLoader.LoadMap(world, "res/maps/Map02.map");
+		MapLoader.LoadMap(world, "res/maps/Map01.map");
 		InputController.LoadKeyMapping("res/config/keymap.conf");
 		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.PLAYER, 288, 128, 32, 32));
 		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));
@@ -87,6 +88,11 @@ public class Main extends BasicGame {
 		HashMap<String, Boolean> pressed = InputController.HandleInput(input);
 		MovementController.HandleMovement(world, pressed, fps_scaler);
 		world.tile_dictionary.UpdateAnimations(fps_scaler);
+		world.UpdateEntityAnimations(fps_scaler);
+		
+		if (input.isKeyPressed(Input.KEY_F1)) {
+			debug_mode = !debug_mode;
+		}
 	}
 
 }

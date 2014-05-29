@@ -37,7 +37,7 @@ public class CollisionController {
 	
 	public static boolean CheckEntityOutOfBounds(World world, Entity temp_entity) {
 		Rectangle world_box = new Rectangle(0, 0, world.width * world.tilesize, world.height * world.tilesize);
-		boolean outofbounds = !world_box.contains(temp_entity.bounding_box);
+		boolean outofbounds = !world_box.contains(temp_entity.collision_box);
 		return outofbounds;
 	}
 	

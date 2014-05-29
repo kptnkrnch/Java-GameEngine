@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 
 import org.newdawn.slick.Graphics;
 
+import engine.Direction;
 import engine.Entity;
 import engine.EntityDictionary;
 import engine.Main;
@@ -22,45 +23,150 @@ public class GraphicsController {
 	public static void RenderWorld(World world, Graphics g) {
 		
 		try {
-			int cameraID = world.FindCamera();
-			Entity camera = world.GetEntity(cameraID);
+			HandleCamera(world, g);
 			
-			if (Camera.IsMoveableX(world)) {
-				g.translate(-(camera.x - Main.ResX / 2), 0);
-				VIEWPORT_X = (camera.x - Main.ResX / 2);
-			} else if (camera.x > world.width * world.tilesize / 2) {
-				g.translate(-(world.width * world.tilesize - Main.ResX), 0);
+			HandleTileAnimations(world, g);
+			TileCollisionDebug(world, g);
+			
+			HandleEntityAnimations(world, g);
+			EntityCollisionDebug(world, g);
+			
+		} catch (CameraNotFoundException e) {
+			System.err.println("Error! Camera entity does not exist!");
+		}
+	}
+	
+	private static void HandleCamera(World world, Graphics g) throws CameraNotFoundException {
+		int cameraID = world.FindCamera();
+		Entity camera = world.GetEntity(cameraID);
+		
+		if (Camera.IsMoveableX(world)) {
+			g.translate(-(camera.x - Main.ResX / 2), 0);
+			VIEWPORT_X = (camera.x - Main.ResX / 2);
+		} else if (camera.x > world.width * world.tilesize / 2) {
+			g.translate(-(world.width * world.tilesize - Main.ResX), 0);
+		}
+		if (Camera.IsMoveableY(world)) {
+			g.translate(0, -(camera.y - Main.ResY / 2));
+			VIEWPORT_Y = (camera.y - Main.ResY / 2);
+		} else if (camera.y > world.height * world.tilesize / 2) {
+			g.translate(0, -(world.height * world.tilesize - Main.ResY));
+		}
+		
+		VIEWPORT_BOX.x = VIEWPORT_X;
+		VIEWPORT_BOX.y = VIEWPORT_Y;
+	}
+	
+	private static void HandleTileAnimations(World world, Graphics g) {
+		for (int y = 0; y < world.height; y++) {
+			for (int x = 0; x < world.width; x++) {
+				Tile temp = world.GetTile(x, y);
+				if (VIEWPORT_BOX.intersects(temp.bounding_box)) {
+					g.drawAnimation(world.tile_dictionary.GetImage(temp.type), temp.x, temp.y);
+					if (Main.debug_mode) {
+						if (temp.IsSolid()) {
+							g.drawRect(temp.bounding_box.x, temp.bounding_box.y, 
+									temp.bounding_box.width, temp.bounding_box.height);
+						}
+					}
+				}
 			}
-			if (Camera.IsMoveableY(world)) {
-				g.translate(0, -(camera.y - Main.ResY / 2));
-				VIEWPORT_Y = (camera.y - Main.ResY / 2);
-			} else if (camera.y > world.height * world.tilesize / 2) {
-				g.translate(0, -(world.height * world.tilesize - Main.ResY));
+		}
+	}
+	
+	private static void HandleEntityAnimations(World world, Graphics g) {
+		/*for (int i = 0; i < world.GetEntityCount(); i++) {
+			Entity temp = world.GetEntity(i);
+			if (VIEWPORT_BOX.intersects(temp.bounding_box)) {
+				if (temp.type != EntityDictionary.CAMERA) {
+					g.drawImage(world.entity_dictionary.GetImage(temp.type), temp.x, temp.y);
+				}
 			}
-			
-			VIEWPORT_BOX.x = VIEWPORT_X;
-			VIEWPORT_BOX.y = VIEWPORT_Y;
-			
+		}*/
+		/*NOTE: Animation function StopAt() does not seem to work.
+		 * -- it cannot be restarted! --*/
+		for (int i = 0; i < world.GetEntityCount(); i++) {
+			Entity temp = world.GetEntity(i);
+			if (VIEWPORT_BOX.intersects(temp.collision_box)) {
+				if (temp.type != EntityDictionary.CAMERA) {
+					switch(temp.last_animation) {
+					case Direction.LEFT:
+						if (temp.last_direction == Direction.NONE) {
+							temp.left_anim.stop();
+							temp.left_anim.setCurrentFrame(0);
+						} else if (temp.left_anim.isStopped() && !temp.IsAnimating()) {
+							temp.left_anim.start();
+						}
+						g.drawAnimation(temp.left_anim, temp.x, temp.y);
+						break;
+					case Direction.RIGHT:
+						if (temp.last_direction == Direction.NONE) {
+							temp.right_anim.stop();
+							temp.right_anim.setCurrentFrame(0);
+						} else if (temp.right_anim.isStopped() && !temp.IsAnimating()) {
+							temp.right_anim.start();
+						}
+						g.drawAnimation(temp.right_anim, temp.x, temp.y);
+						break;
+					case Direction.UP:
+						if (temp.last_direction == Direction.NONE) {
+							temp.up_anim.stop();
+							temp.up_anim.setCurrentFrame(0);
+						} else if (temp.up_anim.isStopped() && !temp.IsAnimating()) {
+							temp.up_anim.start();
+						}
+						g.drawAnimation(temp.up_anim, temp.x, temp.y);
+						break;
+					case Direction.DOWN:
+						if (temp.last_direction == Direction.NONE) {
+							temp.down_anim.stop();
+							temp.down_anim.setCurrentFrame(0);
+						} else if (temp.down_anim.isStopped() && !temp.IsAnimating()) {
+							temp.down_anim.start();
+						}
+						g.drawAnimation(temp.down_anim, temp.x, temp.y);
+						break;
+					default:
+						temp.down_anim.stop();
+						temp.down_anim.setCurrentFrame(0);
+						g.drawAnimation(temp.down_anim, temp.x, temp.y);
+						break;	
+					}
+				}
+			}
+			world.entities.set(i, temp);
+		}
+	}
+	
+	private static void TileCollisionDebug(World world, Graphics g) {
+		if (Main.debug_mode) {
 			for (int y = 0; y < world.height; y++) {
 				for (int x = 0; x < world.width; x++) {
 					Tile temp = world.GetTile(x, y);
 					if (VIEWPORT_BOX.intersects(temp.bounding_box)) {
-						g.drawAnimation(world.tile_dictionary.GetImage(temp.type), temp.x, temp.y);
+						if (temp.IsSolid()) {
+							g.drawRect(temp.bounding_box.x, temp.bounding_box.y, 
+									temp.bounding_box.width, temp.bounding_box.height);
+						}
 					}
 				}
 			}
-			
+		}
+	}
+	
+	private static void EntityCollisionDebug(World world, Graphics g) {
+		if (Main.debug_mode) {
 			for (int i = 0; i < world.GetEntityCount(); i++) {
 				Entity temp = world.GetEntity(i);
-				if (VIEWPORT_BOX.intersects(temp.bounding_box)) {
+				if (VIEWPORT_BOX.intersects(temp.collision_box)) {
 					if (temp.type != EntityDictionary.CAMERA) {
-						g.drawImage(world.entity_dictionary.GetImage(temp.type), temp.x, temp.y);
+						if (temp.IsSolid()) {
+							g.drawRect(temp.collision_box.x, temp.collision_box.y, 
+									temp.collision_box.width, temp.collision_box.height);
+						}
 					}
 				}
 			}
-			
-		} catch (CameraNotFoundException e) {
-			System.err.println("Error! Camera entity does not exist!");
 		}
 	}
 	

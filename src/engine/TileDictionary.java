@@ -14,9 +14,9 @@ public class TileDictionary {
 	public static final int GRASS = 1;
 	public static final int TREE = 2;
 	public static final int WATER = 3;
+	public static final int BEACH_TOP = 4;
 	
 	public Animation[] tiles;
-	
 	public int[] types;
 	
 	private int entry_count;

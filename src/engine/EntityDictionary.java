@@ -14,6 +14,7 @@ public class EntityDictionary {
 	public static final int ENEMY = 3;
 	
 	public Image[] sprites;
+	public String[] animation_files;
 	public int[] types;
 	
 	private int entry_count;

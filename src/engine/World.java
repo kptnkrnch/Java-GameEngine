@@ -92,4 +92,11 @@ public class World {
 		}
 	}
 	
+	public void UpdateEntityAnimations(int fps_scaler) {
+		for (int i = 0; i < entities.size(); i++) {
+			Entity temp = entities.get(i);
+			temp.UpdateAnimations(fps_scaler);
+			entities.set(i, temp);
+		}
+	}
 }

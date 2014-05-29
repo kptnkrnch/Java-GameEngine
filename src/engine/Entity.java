@@ -2,6 +2,8 @@ package engine;
 
 import java.awt.Rectangle;
 
+import org.newdawn.slick.Animation;
+
 public class Entity {
 	public int x;
 	public int y;
@@ -14,10 +16,18 @@ public class Entity {
 	public boolean solid;
 	public boolean controlled;
 	public boolean moveable;
-	public Rectangle bounding_box;
+	public Rectangle collision_box;
+	public Rectangle image_box;
 	
 	public int last_direction;
 	private float last_distance;
+	public int last_animation;
+	
+	public Animation left_anim;
+	public Animation right_anim;
+	public Animation down_anim;
+	public Animation up_anim;
+	public boolean animating;
 	
 	public Entity(Entity temp) {
 		this.x = temp.x;
@@ -31,9 +41,16 @@ public class Entity {
 		this.solid = temp.solid;
 		this.controlled = temp.controlled;
 		this.moveable = temp.moveable;
-		this.bounding_box = new Rectangle(temp.bounding_box);
+		this.collision_box = new Rectangle(temp.collision_box);
 		this.last_direction = temp.last_direction;
 		this.last_distance = temp.last_distance;
+		
+		this.left_anim = temp.left_anim;
+		this.right_anim = temp.right_anim;
+		this.down_anim = temp.down_anim;
+		this.up_anim = temp.up_anim;
+		this.last_animation = temp.last_animation;
+		this.animating = temp.animating;
 	}
 
 	public Entity(int type, int x, int y, int width, int height) {
@@ -48,10 +65,17 @@ public class Entity {
 		this.controlled = false;
 		this.moveable = false;
 		this.speed = 0f;
-		this.bounding_box = new Rectangle(x + 1, y + 1, width - 2, height - 2);
+		this.collision_box = new Rectangle(x + 1, y + 1, width - 2, height - 2);
 		
 		this.last_distance = 0;
 		this.last_direction = -1;
+		
+		this.left_anim = null;
+		this.right_anim = null;
+		this.down_anim = null;
+		this.up_anim = null;
+		this.last_animation = Direction.NONE;
+		this.animating = false;
 	}
 	
 	public boolean IsMoveable() {
@@ -75,32 +99,37 @@ public class Entity {
 				this.x = (int)Math.floor(this.movx);
 				this.last_direction = direction;
 				this.last_distance = distance;
+				this.animating = true;
 				break;
 			case Direction.RIGHT:
 				this.movx += distance;
 				this.x = (int)Math.floor(this.movx);
 				this.last_direction = direction;
 				this.last_distance = distance;
+				this.animating = true;
 				break;
 			case Direction.UP:
 				this.movy -= distance;
 				this.y = (int)Math.floor(this.movy);
 				this.last_direction = direction;
 				this.last_distance = distance;
+				this.animating = true;
 				break;
 			case Direction.DOWN:
 				this.movy += distance;
 				this.y = (int)Math.floor(this.movy);
 				this.last_direction = direction;
 				this.last_distance = distance;
+				this.animating = true;
 				break;
 			default:
 				this.last_direction = Direction.NONE;
 				this.last_distance = 0;
+				this.animating = false;
 				break;
 			}
-			this.bounding_box.x = this.x + 1;
-			this.bounding_box.y = this.y + 1;
+			this.collision_box.x = this.x + 1;
+			this.collision_box.y = this.y + 1;
 		}
 	}
 	
@@ -112,42 +141,42 @@ public class Entity {
 			case Direction.LEFT:
 				this.movx -= distance;
 				this.x = (int)Math.floor(this.movx);
-				this.last_direction = -1;
+				//this.last_direction = -1;
 				this.last_distance = 0;
 				break;
 			case Direction.RIGHT:
 				this.movx += distance;
 				this.x = (int)Math.floor(this.movx);
-				this.last_direction = -1;
+				//this.last_direction = -1;
 				this.last_distance = 0;
 				break;
 			case Direction.UP:
 				this.movy -= distance;
 				this.y = (int)Math.floor(this.movy);
-				this.last_direction = -1;
+				//this.last_direction = -1;
 				this.last_distance = 0;
 				break;
 			case Direction.DOWN:
 				this.movy += distance;
 				this.y = (int)Math.floor(this.movy);
-				this.last_direction = -1;
+				//this.last_direction = -1;
 				this.last_distance = 0;
 				break;
 			}
-			this.bounding_box.x = this.x + 1;
-			this.bounding_box.y = this.y + 1;
+			this.collision_box.x = this.x + 1;
+			this.collision_box.y = this.y + 1;
 		}
 	}
 	
 	public void SetPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.bounding_box.x = this.x;
-		this.bounding_box.y = this.y;
+		this.collision_box.x = this.x;
+		this.collision_box.y = this.y;
 	}
 	
 	public boolean Intersects(Tile tile) {
-		return bounding_box.intersects(tile.bounding_box);
+		return collision_box.intersects(tile.bounding_box);
 	}
 	
 	public void Copy(Entity temp) {
@@ -162,10 +191,30 @@ public class Entity {
 		this.solid = temp.solid;
 		this.controlled = temp.controlled;
 		this.moveable = temp.moveable;
-		this.bounding_box.x =temp.bounding_box.x;
-		this.bounding_box.y =temp.bounding_box.y;
+		this.collision_box.x = temp.collision_box.x;
+		this.collision_box.y = temp.collision_box.y;
 		this.last_direction = temp.last_direction;
 		this.last_distance = temp.last_distance;
+		this.last_animation = temp.last_animation;
+	}
+	
+	public void UpdateAnimations(int fps_scaler) {
+		if (left_anim != null) {
+			left_anim.update(fps_scaler);
+		}
+		if (right_anim != null) {
+			right_anim.update(fps_scaler);
+		}
+		if (down_anim != null) {
+			down_anim.update(fps_scaler);
+		}
+		if (up_anim != null) {
+			up_anim.update(fps_scaler);
+		}
+	}
+	
+	public boolean IsAnimating() {
+		return this.animating;
 	}
 	
 }

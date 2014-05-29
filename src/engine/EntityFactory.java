@@ -1,5 +1,9 @@
 package engine;
 
+import org.newdawn.slick.Animation;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
 public class EntityFactory {
 	
 	public static Entity CreateEntity(int type, int x, int y, int width, int height) {
@@ -23,6 +27,44 @@ public class EntityFactory {
 		e.controlled = true;
 		e.solid = true;
 		e.moveable = true;
+		
+		Image[] left = new Image[4];
+		Image[] right = new Image[4];
+		Image[] up = new Image[3];
+		Image[] down = new Image[3];
+		
+		try {
+			left[0] = new Image("res/sprites/player/josh_walk_left_1.png");
+			left[1] = new Image("res/sprites/player/josh_walk_left_2.png");
+			left[2] = new Image("res/sprites/player/josh_walk_left_3.png");
+			left[3] = new Image("res/sprites/player/josh_walk_left_4.png");
+			
+			right[0] = new Image("res/sprites/player/josh_walk_right_1.png");
+			right[1] = new Image("res/sprites/player/josh_walk_right_2.png");
+			right[2] = new Image("res/sprites/player/josh_walk_right_3.png");
+			right[3] = new Image("res/sprites/player/josh_walk_right_4.png");
+			
+			down[0] = new Image("res/sprites/player/josh_walk_front_1.png");
+			down[1] = new Image("res/sprites/player/josh_walk_front_2.png");
+			down[2] = new Image("res/sprites/player/josh_walk_front_3.png");
+			
+			up[0] = new Image("res/sprites/player/josh_walk_back_1.png");
+			up[1] = new Image("res/sprites/player/josh_walk_back_2.png");
+			up[2] = new Image("res/sprites/player/josh_walk_back_3.png");
+		} catch (SlickException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		e.left_anim = new Animation(left, 300);
+		e.left_anim.setPingPong(true);
+		e.right_anim = new Animation(right, 300);
+		e.right_anim.setPingPong(true);
+		e.up_anim = new Animation(up, 300);
+		e.up_anim.setPingPong(true);
+		e.down_anim = new Animation(down, 300);
+		e.down_anim.setPingPong(true);
+		
 		return e;
 	}
 	

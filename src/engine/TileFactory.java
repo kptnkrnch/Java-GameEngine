@@ -16,6 +16,8 @@ public class TileFactory {
 		case TileDictionary.WATER: //water tile
 			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize, true);
 			break;
+		case TileDictionary.BEACH_TOP:
+			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize);
 		}
 		
 		return tile;
