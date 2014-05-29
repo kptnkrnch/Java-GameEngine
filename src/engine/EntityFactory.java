@@ -13,9 +13,9 @@ public class EntityFactory {
 		case EntityDictionary.PLAYER:
 			return CreatePlayer(x, y, width, height);
 		case EntityDictionary.NPC:
-			break;
+			return CreateNPC(x, y, width, height);
 		case EntityDictionary.ENEMY:
-			break;
+			return null;
 		}
 		
 		return null;
@@ -74,6 +74,42 @@ public class EntityFactory {
 		e.controlled = false;
 		e.solid = false;
 		e.moveable = false;
+		return e;
+	}
+	
+	private static Entity CreateNPC(int x, int y, int width, int height) {
+		Entity e = new Entity(EntityDictionary.NPC, x, y, width, height);
+		e.speed = 0f;
+		e.controlled = false;
+		e.solid = true;
+		e.moveable = false;
+		
+		Image[] down = new Image[1];
+		
+		try {
+			down[0] = new Image("res/sprites/npc.png");
+		} catch (SlickException e1) {
+		}
+		e.down_anim = new Animation(down, 1);
+		
+		return e;
+	}
+	
+	public static Entity CreateDialog(int x, int y) {
+		Entity e = new Entity(EntityDictionary.DIALOG_BOX, x, y, 240, 160);
+		e.speed = 0f;
+		e.controlled = false;
+		e.solid = false;
+		e.moveable = false;
+		
+		Image[] down = new Image[1];
+		
+		try {
+			down[0] = new Image("res/sprites/dialog_box.png");
+		} catch (SlickException e1) {
+		}
+		e.down_anim = new Animation(down, 1);
+		
 		return e;
 	}
 	

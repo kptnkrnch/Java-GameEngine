@@ -1,10 +1,12 @@
 package engine;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 import org.newdawn.slick.Animation;
 
 public class Entity {
+	public int id;
 	public int x;
 	public int y;
 	public int width;
@@ -19,6 +21,8 @@ public class Entity {
 	public Rectangle collision_box;
 	public Rectangle image_box;
 	
+	public ArrayList<String> dialog;
+	
 	public int last_direction;
 	private float last_distance;
 	public int last_animation;
@@ -30,6 +34,7 @@ public class Entity {
 	public boolean animating;
 	
 	public Entity(Entity temp) {
+		this.id = temp.id;
 		this.x = temp.x;
 		this.y = temp.y;
 		this.width = temp.width;
@@ -54,6 +59,7 @@ public class Entity {
 	}
 
 	public Entity(int type, int x, int y, int width, int height) {
+		this.id = -1;
 		this.type = type;
 		this.x = x;
 		this.y = y;
@@ -176,7 +182,11 @@ public class Entity {
 	}
 	
 	public boolean Intersects(Tile tile) {
-		return collision_box.intersects(tile.bounding_box);
+		return collision_box.intersects(tile.collision_box);
+	}
+	
+	public boolean Intersects(Entity entity) {
+		return collision_box.intersects(entity.collision_box);
 	}
 	
 	public void Copy(Entity temp) {

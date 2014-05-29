@@ -3,6 +3,7 @@ package gameplay;
 import java.awt.Rectangle;
 
 import engine.Entity;
+import engine.EntityDictionary;
 import engine.World;
 
 public class CollisionController {
@@ -31,8 +32,28 @@ public class CollisionController {
 		}
 	}
 	
-	public static int[] CheckEntityCollision() {
-		return null;
+	public static int[] CheckEntityCollision(World world, Entity temp_entity) {
+		int[] collision_list = new int[9];
+		int collision_count = 0;
+		
+		for (int i = 0; i < 9; i++) {
+			collision_list[i] = -1;
+		}
+		
+		for (int i = 0; i < world.entities.size(); i++) {
+			Entity temp = world.GetEntity(i);
+			if (temp.IsSolid() && temp.id != temp_entity.id && temp.type != EntityDictionary.CAMERA) {
+				if (temp_entity.Intersects(temp)) {
+					collision_list[collision_count++] = temp.type;
+				}
+			}
+		}
+		
+		if (collision_count > 0) {
+			return collision_list;
+		} else {
+			return null;
+		}
 	}
 	
 	public static boolean CheckEntityOutOfBounds(World world, Entity temp_entity) {

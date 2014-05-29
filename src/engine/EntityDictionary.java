@@ -12,6 +12,7 @@ public class EntityDictionary {
 	public static final int PLAYER = 1;
 	public static final int NPC = 2;
 	public static final int ENEMY = 3;
+	public static final int DIALOG_BOX = 4;
 	
 	public Image[] sprites;
 	public String[] animation_files;

@@ -1,5 +1,7 @@
 package entities;
 
+import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import engine.Direction;
@@ -29,6 +31,11 @@ public class Player {
 						temp.UndoLastMove();
 						SetCollisionBox(temp, temp.x, temp.y);
 					}
+					collisions = CollisionController.CheckEntityCollision(world, temp);
+					if (collisions != null) {
+						temp.UndoLastMove();
+						SetCollisionBox(temp, temp.x, temp.y);
+					}
 				} else {
 					temp.UndoLastMove();
 					SetCollisionBox(temp, temp.x, temp.y);
@@ -38,6 +45,11 @@ public class Player {
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
 					collisions = CollisionController.CheckTileCollision(world, temp);
+					if (collisions != null) {
+						temp.UndoLastMove();
+						SetCollisionBox(temp, temp.x, temp.y);
+					}
+					collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (collisions != null) {
 						temp.UndoLastMove();
 						SetCollisionBox(temp, temp.x, temp.y);
@@ -63,6 +75,11 @@ public class Player {
 						temp.UndoLastMove();
 						SetCollisionBox(temp, temp.x, temp.y);
 					}
+					collisions = CollisionController.CheckEntityCollision(world, temp);
+					if (collisions != null) {
+						temp.UndoLastMove();
+						SetCollisionBox(temp, temp.x, temp.y);
+					}
 				} else {
 					temp.UndoLastMove();
 					SetCollisionBox(temp, temp.x, temp.y);
@@ -72,6 +89,11 @@ public class Player {
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
 					collisions = CollisionController.CheckTileCollision(world, temp);
+					if (collisions != null) {
+						temp.UndoLastMove();
+						SetCollisionBox(temp, temp.x, temp.y);
+					}
+					collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (collisions != null) {
 						temp.UndoLastMove();
 						SetCollisionBox(temp, temp.x, temp.y);
@@ -97,6 +119,11 @@ public class Player {
 						temp.UndoLastMove();
 						SetCollisionBox(temp, temp.x, temp.y);
 					}
+					collisions = CollisionController.CheckEntityCollision(world, temp);
+					if (collisions != null) {
+						temp.UndoLastMove();
+						SetCollisionBox(temp, temp.x, temp.y);
+					}
 				} else {
 					temp.UndoLastMove();
 					SetCollisionBox(temp, temp.x, temp.y);
@@ -106,6 +133,11 @@ public class Player {
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
 					collisions = CollisionController.CheckTileCollision(world, temp);
+					if (collisions != null) {
+						temp.UndoLastMove();
+						SetCollisionBox(temp, temp.x, temp.y);
+					}
+					collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (collisions != null) {
 						temp.UndoLastMove();
 						SetCollisionBox(temp, temp.x, temp.y);
@@ -131,6 +163,11 @@ public class Player {
 						temp.UndoLastMove();
 						SetCollisionBox(temp, temp.x, temp.y);
 					}
+					collisions = CollisionController.CheckEntityCollision(world, temp);
+					if (collisions != null) {
+						temp.UndoLastMove();
+						SetCollisionBox(temp, temp.x, temp.y);
+					}
 				} else {
 					temp.UndoLastMove();
 					SetCollisionBox(temp, temp.x, temp.y);
@@ -140,6 +177,11 @@ public class Player {
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
 					collisions = CollisionController.CheckTileCollision(world, temp);
+					if (collisions != null) {
+						temp.UndoLastMove();
+						SetCollisionBox(temp, temp.x, temp.y);
+					}
+					collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (collisions != null) {
 						temp.UndoLastMove();
 						SetCollisionBox(temp, temp.x, temp.y);
@@ -163,6 +205,11 @@ public class Player {
 						temp.UndoLastMove();
 						SetCollisionBox(temp, temp.x, temp.y);
 					}
+					collisions = CollisionController.CheckEntityCollision(world, temp);
+					if (collisions != null) {
+						temp.UndoLastMove();
+						SetCollisionBox(temp, temp.x, temp.y);
+					}
 				} else {
 					temp.UndoLastMove();
 					SetCollisionBox(temp, temp.x, temp.y);
@@ -176,6 +223,11 @@ public class Player {
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
 					collisions = CollisionController.CheckTileCollision(world, temp);
+					if (collisions != null) {
+						temp.UndoLastMove();
+						SetCollisionBox(temp, temp.x, temp.y);
+					}
+					collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (collisions != null) {
 						temp.UndoLastMove();
 						SetCollisionBox(temp, temp.x, temp.y);
@@ -197,6 +249,11 @@ public class Player {
 						temp.UndoLastMove();
 						SetCollisionBox(temp, temp.x, temp.y);
 					}
+					collisions = CollisionController.CheckEntityCollision(world, temp);
+					if (collisions != null) {
+						temp.UndoLastMove();
+						SetCollisionBox(temp, temp.x, temp.y);
+					}
 				} else {
 					temp.UndoLastMove();
 					SetCollisionBox(temp, temp.x, temp.y);
@@ -210,6 +267,11 @@ public class Player {
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
 					collisions = CollisionController.CheckTileCollision(world, temp);
+					if (collisions != null) {
+						temp.UndoLastMove();
+						SetCollisionBox(temp, temp.x, temp.y);
+					}
+					collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (collisions != null) {
 						temp.UndoLastMove();
 						SetCollisionBox(temp, temp.x, temp.y);
@@ -234,6 +296,43 @@ public class Player {
 	}
 	
 	public static void HandleCollision() {
+		
+	}
+	
+	public static void Interact(World world, Entity player) {
+		Rectangle interaction_box = null;
+		
+		switch(player.last_animation) {
+		case Direction.LEFT:
+			interaction_box = new Rectangle(player.collision_box.x - 8, player.collision_box.y, 8, 32);
+			break;
+		case Direction.RIGHT:
+			interaction_box = new Rectangle(player.collision_box.x + player.collision_box.width, 
+					player.collision_box.y, 8, 32);
+			break;
+		case Direction.UP:
+			interaction_box = new Rectangle(player.collision_box.x, player.collision_box.y - 8, 32, 8);
+			break;
+		case Direction.DOWN:
+			interaction_box = new Rectangle(player.collision_box.x, 
+					player.collision_box.y + player.collision_box.height, 32, 8);
+			break;
+		default:
+			interaction_box = new Rectangle(player.collision_box.x, 
+					player.collision_box.y + player.collision_box.height, 32, 8);
+			break;
+		}
+		
+		for (int i = 0; i < world.entities.size(); i++) {
+			Entity temp = world.entities.get(i);
+			if (interaction_box.intersects(temp.collision_box)) {
+				switch (temp.type) {
+				case EntityDictionary.NPC:
+					NPC.Speak(world, temp);
+					break;
+				}
+			}
+		}
 		
 	}
 	

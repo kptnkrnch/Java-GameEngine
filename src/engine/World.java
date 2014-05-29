@@ -53,7 +53,17 @@ public class World {
 	}
 	
 	public void AddEntity(Entity entity) {
+		entity.id = this.entities.size();
 		this.entities.add(entity);
+	}
+	
+	public void RemoveEntity(int index) {
+		this.entities.remove(index);
+		for (int i = 0; i < this.entities.size(); i++) {
+			Entity temp = this.entities.get(i);
+			temp.id = i;
+			this.entities.set(i, temp);
+		}
 	}
 	
 	public int FindPlayer() throws PlayerNotFoundException {

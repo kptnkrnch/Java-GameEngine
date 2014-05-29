@@ -9,7 +9,7 @@ public class Tile {
 	public int height;
 	public int type;
 	public boolean solid;
-	public Rectangle bounding_box;
+	public Rectangle collision_box;
 	
 	public Tile() {
 		
@@ -22,7 +22,7 @@ public class Tile {
 		this.width = width;
 		this.height = height;
 		this.solid = false;
-		bounding_box = new Rectangle(x_pos, y_pos, width, height);
+		collision_box = new Rectangle(x_pos, y_pos, width, height);
 	}
 	
 	public Tile(int type, int x_pos, int y_pos, int width, int height, boolean solid) {
@@ -32,7 +32,7 @@ public class Tile {
 		this.width = width;
 		this.height = height;
 		this.solid = solid;
-		bounding_box = new Rectangle(x_pos, y_pos, width, height);
+		collision_box = new Rectangle(x_pos, y_pos, width, height);
 	}
 	
 	public boolean IsSolid() {

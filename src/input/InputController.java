@@ -9,27 +9,51 @@ import java.util.Scanner;
 import org.newdawn.slick.Input;
 
 public class InputController {
-	private static HashMap<String, Boolean> input = null;
+	private static HashMap<String, Boolean> held_input = null;
+	private static HashMap<String, Boolean> pressed_input = null;
 	private static HashMap<String, Integer> keymap = null;
 	
-	public static HashMap<String, Boolean> HandleInput(Input input_obj) {
+	public static HashMap<String, Boolean> HandleHeldInput(Input input_obj) {
 		if (keymap != null) {
 			
 			/* Resets the input pressed map */
-			Iterator<Entry<String, Boolean>> inputIterator = input.entrySet().iterator();
+			Iterator<Entry<String, Boolean>> inputIterator = held_input.entrySet().iterator();
 			while (inputIterator.hasNext()) {
 				Entry<String, Boolean> current = inputIterator.next();
-				input.put(current.getKey(), false);
+				held_input.put(current.getKey(), false);
 			}
 			
 			Iterator<Entry<String, Integer>> mapIterator = keymap.entrySet().iterator();
 			while (mapIterator.hasNext()) {
 				Entry<String, Integer> current = mapIterator.next();
 				if (input_obj.isKeyDown(current.getValue())) {
-					input.put(current.getKey(), true);
+					held_input.put(current.getKey(), true);
 				}
 			}
-			return input;
+			return held_input;
+		} else {
+			return null;
+		}
+	}
+	
+	public static HashMap<String, Boolean> HandlePressedInput(Input input_obj) {
+		if (keymap != null) {
+			
+			/* Resets the input pressed map */
+			Iterator<Entry<String, Boolean>> inputIterator = pressed_input.entrySet().iterator();
+			while (inputIterator.hasNext()) {
+				Entry<String, Boolean> current = inputIterator.next();
+				pressed_input.put(current.getKey(), false);
+			}
+			
+			Iterator<Entry<String, Integer>> mapIterator = keymap.entrySet().iterator();
+			while (mapIterator.hasNext()) {
+				Entry<String, Integer> current = mapIterator.next();
+				if (input_obj.isKeyPressed(current.getValue())) {
+					pressed_input.put(current.getKey(), true);
+				}
+			}
+			return pressed_input;
 		} else {
 			return null;
 		}
@@ -37,7 +61,8 @@ public class InputController {
 	
 	public static boolean LoadKeyMapping(String keyMapConfig_location) {
 		keymap = new HashMap<String, Integer>();
-		input = new HashMap<String, Boolean>();
+		pressed_input = new HashMap<String, Boolean>();
+		held_input = new HashMap<String, Boolean>();
 		File keyMapFile = new File(keyMapConfig_location);
 		try {
 			Scanner scan = new Scanner(keyMapFile);
@@ -66,12 +91,14 @@ public class InputController {
 				
 				lineScanner.close();
 				keymap.put(command, key);
-				input.put(command, false);
+				pressed_input.put(command, false);
+				held_input.put(command, false);
 			}
 			scan.close();
 		} catch (Exception e) {
 			keymap = null;
-			input = null;
+			pressed_input = null;
+			held_input = null;
 		}
 		
 		return true;

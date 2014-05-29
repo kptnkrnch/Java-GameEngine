@@ -1,11 +1,13 @@
 package engine;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import input.InputController;
 import entities.Camera;
 import exceptions.CameraNotFoundException;
 import exceptions.PlayerNotFoundException;
+import gameplay.ActionController;
 import gameplay.MovementController;
 import graphics.GraphicsController;
 
@@ -69,6 +71,10 @@ public class Main extends BasicGame {
 		world.LoadEntityDictionary("res/dictionaries/EntityDictionary.dict");
 		MapLoader.LoadMap(world, "res/maps/Map02.map");
 		InputController.LoadKeyMapping("res/config/keymap.conf");
+		Entity npc = EntityFactory.CreateEntity(EntityDictionary.NPC, 384, 160, 32, 32);
+		npc.dialog = new ArrayList<String>();
+		npc.dialog.add("HELLO WORLD");
+		world.AddEntity(npc);
 		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.PLAYER, 288, 128, 32, 32));
 		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));
 		try {
@@ -76,6 +82,7 @@ public class Main extends BasicGame {
 			Camera.Follow(player);
 		} catch (PlayerNotFoundException e) {
 		}
+		SoundController.LoadMusic("res/sounds/Track-03.ogg");
 	}
 	
 	/**
@@ -84,9 +91,15 @@ public class Main extends BasicGame {
 	 */
 	@Override
 	public void update(GameContainer gc, int fps_scaler) throws SlickException {
+		if (!SoundController.IsPlaying()) {
+			SoundController.PlayMusic(true);
+		}
 		Input input = gc.getInput();
-		HashMap<String, Boolean> pressed = InputController.HandleInput(input);
-		MovementController.HandleMovement(world, pressed, fps_scaler);
+		
+		HashMap<String, Boolean> held_keys = InputController.HandleHeldInput(input);
+		HashMap<String, Boolean> pressed_keys = InputController.HandlePressedInput(input);
+		MovementController.HandleMovement(world, held_keys, fps_scaler);
+		ActionController.HandleEntityAction(world, pressed_keys, fps_scaler);
 		world.tile_dictionary.UpdateAnimations(fps_scaler);
 		world.UpdateEntityAnimations(fps_scaler);
 		

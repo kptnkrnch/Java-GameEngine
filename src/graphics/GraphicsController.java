@@ -11,6 +11,7 @@ import engine.Main;
 import engine.Tile;
 import engine.World;
 import entities.Camera;
+import entities.Dialog;
 import exceptions.CameraNotFoundException;
 
 public class GraphicsController {
@@ -30,6 +31,8 @@ public class GraphicsController {
 			
 			HandleEntityAnimations(world, g);
 			EntityCollisionDebug(world, g);
+			
+			DrawDialogText(world, g);
 			
 		} catch (CameraNotFoundException e) {
 			System.err.println("Error! Camera entity does not exist!");
@@ -61,12 +64,12 @@ public class GraphicsController {
 		for (int y = 0; y < world.height; y++) {
 			for (int x = 0; x < world.width; x++) {
 				Tile temp = world.GetTile(x, y);
-				if (VIEWPORT_BOX.intersects(temp.bounding_box)) {
+				if (VIEWPORT_BOX.intersects(temp.collision_box)) {
 					g.drawAnimation(world.tile_dictionary.GetImage(temp.type), temp.x, temp.y);
 					if (Main.debug_mode) {
 						if (temp.IsSolid()) {
-							g.drawRect(temp.bounding_box.x, temp.bounding_box.y, 
-									temp.bounding_box.width, temp.bounding_box.height);
+							g.drawRect(temp.collision_box.x, temp.collision_box.y, 
+									temp.collision_box.width, temp.collision_box.height);
 						}
 					}
 				}
@@ -143,10 +146,10 @@ public class GraphicsController {
 			for (int y = 0; y < world.height; y++) {
 				for (int x = 0; x < world.width; x++) {
 					Tile temp = world.GetTile(x, y);
-					if (VIEWPORT_BOX.intersects(temp.bounding_box)) {
+					if (VIEWPORT_BOX.intersects(temp.collision_box)) {
 						if (temp.IsSolid()) {
-							g.drawRect(temp.bounding_box.x, temp.bounding_box.y, 
-									temp.bounding_box.width, temp.bounding_box.height);
+							g.drawRect(temp.collision_box.x, temp.collision_box.y, 
+									temp.collision_box.width, temp.collision_box.height);
 						}
 					}
 				}
@@ -166,6 +169,15 @@ public class GraphicsController {
 						}
 					}
 				}
+			}
+		}
+	}
+	
+	private static void DrawDialogText(World world, Graphics g) {
+		for (int i = 0; i < world.entities.size(); i++) {
+			Entity temp = world.GetEntity(i);
+			if (temp.type == EntityDictionary.DIALOG_BOX) {
+				g.drawString(Dialog.text.get(Dialog.dialog_pos), temp.x + 10, temp.y + 10);
 			}
 		}
 	}
