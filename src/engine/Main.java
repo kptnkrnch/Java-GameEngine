@@ -67,7 +67,7 @@ public class Main extends BasicGame {
 		world = new World();
 		world.LoadTileDictionary("res/dictionaries/TileDictionary.dict");
 		world.LoadEntityDictionary("res/dictionaries/EntityDictionary.dict");
-		MapLoader.LoadMap(world, "res/maps/Map01.map");
+		MapLoader.LoadMap(world, "res/maps/Map02.map");
 		InputController.LoadKeyMapping("res/config/keymap.conf");
 		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.PLAYER, 288, 128, 32, 32));
 		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));

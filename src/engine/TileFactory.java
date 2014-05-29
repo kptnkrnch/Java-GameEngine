@@ -18,6 +18,19 @@ public class TileFactory {
 			break;
 		case TileDictionary.BEACH_TOP:
 			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize);
+			break;
+		case TileDictionary.TREE_TOPLEFT: //tree tile
+			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize, true);
+			break;
+		case TileDictionary.TREE_TOPRIGHT: //tree tile
+			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize, true);
+			break;
+		case TileDictionary.TREE_BOTLEFT: //tree tile
+			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize, true);
+			break;
+		case TileDictionary.TREE_BOTRIGHT: //tree tile
+			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize, true);
+			break;
 		}
 		
 		return tile;

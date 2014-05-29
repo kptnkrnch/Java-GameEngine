@@ -124,23 +124,23 @@
 										map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"3\"></a></td>";
 									break;
 									case '4':
-										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/03_40px.bmp\" />";
+										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/beach_top.png\" />";
 										map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"4\"></a></td>";
 									break;
 									case '5':
-										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/04_40px.bmp\" />";
+										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree_topleft.png\" />";
 										map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"5\"></a></td>";
 									break;
 									case '6':
-										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/05_40px.bmp\" />";
+										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree_topright.png\" />";
 										map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"6\"></a></td>";
 									break;
 									case '7':
-										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/06_40px.bmp\" />";
+										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree_botleft.png\" />";
 										map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"7\"></a></td>";
 									break;
 									case '8':
-										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/07_40px.bmp\" />";
+										map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree_botright.png\" />";
 										map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"8\"></a></td>";
 									break;
 									case '9':
@@ -249,23 +249,23 @@
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"3\"></a></td>";
 							break;
 							case '4':
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/03_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/beach_top.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"4\"></a></td>";
 							break;
 							case '5':
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/04_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree_topleft.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"5\"></a></td>";
 							break;
 							case '6':
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/05_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree_topright.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"6\"></a></td>";
 							break;
 							case '7':
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/06_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree_botleft.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"7\"></a></td>";
 							break;
 							case '8':
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/07_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree_botright.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"8\"></a></td>";
 							break;
 							case '9':
@@ -358,90 +358,90 @@
 			function ChangeTile(id) {
 				var image = '#img-' + id;
 				var tiletype = '#tiletype-' + id;
-				var tool = $("#current-tool").val();
+				var tool = parseInt($("#current-tool").val());
 				
 				switch(tool) {
-					case '1':
+					case 1:
 						$(image).attr("src", "tiles/grass.png");
 						$(tiletype).val('1');
 					break;
-					case '2':
+					case 2:
 						$(image).attr("src", "tiles/tree.png");
 						$(tiletype).val('2');
 					break;
-					case '3':
+					case 3:
 						$(image).attr("src", "tiles/water.png");
 						$(tiletype).val('3');
 					break;
-					case '4':
-						$(image).attr("src", "tiles/03_40px.bmp");
+					case 4:
+						$(image).attr("src", "tiles/beach_top.png");
 						$(tiletype).val('4');
 					break;
-					case '5':
-						$(image).attr("src", "tiles/04_40px.bmp");
+					case 5:
+						$(image).attr("src", "tiles/tree_topleft.png");
 						$(tiletype).val('5');
 					break;
-					case '6':
-						$(image).attr("src", "tiles/05_40px.bmp");
+					case 6:
+						$(image).attr("src", "tiles/tree_topright.png");
 						$(tiletype).val('6');
 					break;
-					case '7':
-						$(image).attr("src", "tiles/06_40px.bmp");
+					case 7:
+						$(image).attr("src", "tiles/tree_botleft.png");
 						$(tiletype).val('7');
 					break;
-					case '8':
-						$(image).attr("src", "tiles/07_40px.bmp");
+					case 8:
+						$(image).attr("src", "tiles/tree_botright.png");
 						$(tiletype).val('8');
 					break;
-					case '9':
+					case 9:
 						$(image).attr("src", "tiles/08_40px.bmp");
 						$(tiletype).val('9');
 					break;
-					case '10':
+					case 10:
 						$(image).attr("src", "tiles/09_40px.bmp");
 						$(tiletype).val('10');
 					break;
-					case '11':
+					case 11:
 						$(image).attr("src", "tiles/10_40px.bmp");
 						$(tiletype).val('11');
 					break;
-					case '12':
+					case 12:
 						$(image).attr("src", "tiles/11_40px.bmp");
 						$(tiletype).val('12');
 					break;
-					case '13':
+					case 13:
 						$(image).attr("src", "tiles/12_40px.bmp");
 						$(tiletype).val('13');
 					break;
-					case '14':
+					case 14:
 						$(image).attr("src", "tiles/13_40px.bmp");
 						$(tiletype).val('14');
 					break;
-					case '15':
+					case 15:
 						$(image).attr("src", "tiles/14_40px.bmp");
 						$(tiletype).val('15');
 					break;
-					case '16':
+					case 16:
 						$(image).attr("src", "tiles/15_40px.bmp");
 						$(tiletype).val('16');
 					break;
-					case '17':
+					case 17:
 						$(image).attr("src", "tiles/16_40px.bmp");
 						$(tiletype).val('17');
 					break;
-					case '18':
+					case 18:
 						$(image).attr("src", "tiles/17_40px.bmp");
 						$(tiletype).val('18');
 					break;
-					case '19':
+					case 19:
 						$(image).attr("src", "tiles/18_40px.bmp");
 						$(tiletype).val('19');
 					break;
-					case '20':
+					case 20:
 						$(image).attr("src", "tiles/19_40px.bmp");
 						$(tiletype).val('20');
 					break;
-					case '21':
+					case 21:
 						$(image).attr("src", "tiles/20_40px.bmp");
 						$(tiletype).val('21');
 					break;
@@ -474,87 +474,87 @@
 			 */
 			function SetTool(tool) {
 				switch(tool) {
-					case '1':
+					case 1:
 						$("#selected-tool").attr("src", "tiles/grass.png");
 						$("#current-tool").val(tool);
 					break;
-					case '2':
+					case 2:
 						$("#selected-tool").attr("src", "tiles/tree.png");
 						$("#current-tool").val(tool);
 					break;
-					case '3':
+					case 3:
 						$("#selected-tool").attr("src", "tiles/water.png");
 						$("#current-tool").val(tool);
 					break;
-					case '4':
-						$("#selected-tool").attr("src", "tiles/03_40px.bmp");
+					case 4:
+						$("#selected-tool").attr("src", "tiles/beach_top.png");
 						$("#current-tool").val(tool);
 					break;
-					case '5':
-						$("#selected-tool").attr("src", "tiles/04_40px.bmp");
+					case 5:
+						$("#selected-tool").attr("src", "tiles/tree_topleft.png");
 						$("#current-tool").val(tool);
 					break;
-					case '6':
-						$("#selected-tool").attr("src", "tiles/05_40px.bmp");
+					case 6:
+						$("#selected-tool").attr("src", "tiles/tree_topright.png");
 						$("#current-tool").val(tool);
 					break;
-					case '7':
-						$("#selected-tool").attr("src", "tiles/06_40px.bmp");
+					case 7:
+						$("#selected-tool").attr("src", "tiles/tree_botleft.png");
 						$("#current-tool").val(tool);
 					break;
-					case '8':
-						$("#selected-tool").attr("src", "tiles/07_40px.bmp");
+					case 8:
+						$("#selected-tool").attr("src", "tiles/tree_botright.png");
 						$("#current-tool").val(tool);
 					break;
-					case '9':
+					case 9:
 						$("#selected-tool").attr("src", "tiles/08_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
-					case '10':
+					case 10:
 						$("#selected-tool").attr("src", "tiles/09_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
-					case '11':
+					case 11:
 						$("#selected-tool").attr("src", "tiles/10_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
-					case '12':
+					case 12:
 						$("#selected-tool").attr("src", "tiles/11_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
-					case '13':
+					case 13:
 						$("#selected-tool").attr("src", "tiles/12_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
-					case '14':
+					case 14:
 						$("#selected-tool").attr("src", "tiles/13_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
-					case '15':
+					case 15:
 						$("#selected-tool").attr("src", "tiles/14_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
-					case '16':
+					case 16:
 						$("#selected-tool").attr("src", "tiles/15_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
-					case '17':
+					case 17:
 						$("#selected-tool").attr("src", "tiles/16_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
-					case '18':
+					case 18:
 						$("#selected-tool").attr("src", "tiles/17_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
-					case '19':
+					case 19:
 						$("#selected-tool").attr("src", "tiles/18_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
-					case '20':
+					case 20:
 						$("#selected-tool").attr("src", "tiles/19_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
-					case '21':
+					case 21:
 						$("#selected-tool").attr("src", "tiles/20_40px.bmp");
 						$("#current-tool").val(tool);
 					break;
@@ -651,23 +651,23 @@
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"3\"></a></td>";
 							break;
 							case 4:
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/03_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/beach_top.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"4\"></a></td>";
 							break;
 							case 5:
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/04_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree_topleft.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"5\"></a></td>";
 							break;
 							case 6:
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/05_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree_topright.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"6\"></a></td>";
 							break;
 							case 7:
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/06_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree_botleft.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"7\"></a></td>";
 							break;
 							case 8:
-								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/07_40px.bmp\" />";
+								map += "<img id=\"img-" + x + "-" + y + "\" src=\"tiles/tree_botright.png\" />";
 								map += "<input type=\"hidden\" id=\"tiletype-" + x + "-" + y + "\" value=\"8\"></a></td>";
 							break;
 							case 9:
@@ -958,19 +958,20 @@
 			</table>
 			<table id="tools">
 				<tr>
-					<td><a href="javascript:void(0)" onclick="SetTool('1');"><img src="tiles/grass.png" /></a></td>
-					<td><a href="javascript:void(0)" onclick="SetTool('2');"><img src="tiles/tree.png" /></a></td>
-					<td><a href="javascript:void(0)" onclick="SetTool('3');"><img src="tiles/water.png" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool(1);"><img src="tiles/grass.png" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool(2);"><img src="tiles/tree.png" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool(3);"><img src="tiles/water.png" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool(4);"><img src="tiles/beach_top.png" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool(5);"><img src="tiles/tree_topleft.png" /></a></td>
+				</tr>
+				<tr>
+					<td><a href="javascript:void(0)" onclick="SetTool(6)"><img src="tiles/tree_topright.png" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool(7)"><img src="tiles/tree_botleft.png" /></a></td>
+					<td><a href="javascript:void(0)" onclick="SetTool(8)"><img src="tiles/tree_botright.png" /></a></td>
+					<td></td>
 					<td></td>
 				</tr>
 				<!--<tr>
-					<td><a href="javascript:void(0)" onclick="SetTool('6')"><img src="tiles/05_40px.bmp" /></a></td>
-					<td><a href="javascript:void(0)" onclick="SetTool('7')"><img src="tiles/06_40px.bmp" /></a></td>
-					<td><a href="javascript:void(0)" onclick="SetTool('8')"><img src="tiles/07_40px.bmp" /></a></td>
-					<td><a href="javascript:void(0)" onclick="SetTool('9')"><img src="tiles/08_40px.bmp" /></a></td>
-					<td><a href="javascript:void(0)" onclick="SetTool('10')"><img src="tiles/09_40px.bmp" /></a></td>
-				</tr>
-				<tr>
 					<td><a href="javascript:void(0)" onclick="SetTool('11')"><img src="tiles/10_40px.bmp" /></a></td>
 					<td><a href="javascript:void(0)" onclick="SetTool('12')"><img src="tiles/11_40px.bmp" /></a></td>
 					<td><a href="javascript:void(0)" onclick="SetTool('13')"><img src="tiles/12_40px.bmp" /></a></td>

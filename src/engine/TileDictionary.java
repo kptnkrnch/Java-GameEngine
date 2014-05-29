@@ -15,6 +15,10 @@ public class TileDictionary {
 	public static final int TREE = 2;
 	public static final int WATER = 3;
 	public static final int BEACH_TOP = 4;
+	public static final int TREE_TOPLEFT = 5;
+	public static final int TREE_TOPRIGHT = 6;
+	public static final int TREE_BOTLEFT = 7;
+	public static final int TREE_BOTRIGHT = 8;
 	
 	public Animation[] tiles;
 	public int[] types;
