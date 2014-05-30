@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.Animation;
 
+import pathing.Path;
+import pathing.PathFinder;
+
 public class Entity {
 	public int id;
 	public int x;
@@ -33,6 +36,9 @@ public class Entity {
 	public Animation up_anim;
 	public boolean animating;
 	
+	public PathFinder pathFinder;
+	public Path path;
+	
 	public Entity(Entity temp) {
 		this.id = temp.id;
 		this.x = temp.x;
@@ -56,6 +62,9 @@ public class Entity {
 		this.up_anim = temp.up_anim;
 		this.last_animation = temp.last_animation;
 		this.animating = temp.animating;
+		
+		this.pathFinder = temp.pathFinder;
+		this.path = temp.path;
 	}
 
 	public Entity(int type, int x, int y, int width, int height) {
@@ -82,6 +91,9 @@ public class Entity {
 		this.up_anim = null;
 		this.last_animation = Direction.NONE;
 		this.animating = false;
+		
+		this.pathFinder = new PathFinder();
+		this.path = new Path();
 	}
 	
 	public boolean IsMoveable() {

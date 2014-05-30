@@ -15,7 +15,7 @@ public class EntityFactory {
 		case EntityDictionary.NPC:
 			return CreateNPC(x, y, width, height);
 		case EntityDictionary.ENEMY:
-			return null;
+			return CreateEnemy(x, y, width, height);
 		}
 		
 		return null;
@@ -88,6 +88,24 @@ public class EntityFactory {
 		
 		try {
 			down[0] = new Image("res/sprites/npc.png");
+		} catch (SlickException e1) {
+		}
+		e.down_anim = new Animation(down, 1);
+		
+		return e;
+	}
+	
+	private static Entity CreateEnemy(int x, int y, int width, int height) {
+		Entity e = new Entity(EntityDictionary.ENEMY, x, y, width, height);
+		e.speed = 0.1f;
+		e.controlled = false;
+		e.solid = true;
+		e.moveable = true;
+		
+		Image[] down = new Image[1];
+		
+		try {
+			down[0] = new Image("res/sprites/enemy.png");
 		} catch (SlickException e1) {
 		}
 		e.down_anim = new Animation(down, 1);

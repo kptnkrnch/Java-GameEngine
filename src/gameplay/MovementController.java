@@ -6,6 +6,7 @@ import engine.Entity;
 import engine.EntityDictionary;
 import engine.World;
 import entities.Camera;
+import entities.Enemy;
 import entities.Player;
 
 public class MovementController {
@@ -26,6 +27,7 @@ public class MovementController {
 				case EntityDictionary.NPC:
 					break;
 				case EntityDictionary.ENEMY:
+					Enemy.MoveEnemy(world, e, fps_scaler);
 					break;
 				}
 			}

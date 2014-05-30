@@ -75,6 +75,7 @@ public class Main extends BasicGame {
 		npc.dialog = new ArrayList<String>();
 		npc.dialog.add("HELLO WORLD");
 		world.AddEntity(npc);
+		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.ENEMY, 384, 416, 32, 32));
 		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.PLAYER, 288, 128, 32, 32));
 		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));
 		try {
