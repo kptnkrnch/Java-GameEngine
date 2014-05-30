@@ -23,18 +23,21 @@ public class Dialog {
 		}
 	}
 	
-	public static void UpdateDialog(World world) {
+	public static boolean UpdateDialog(World world) {
 		if (text != null) {
 			if (dialog_pos + 1 != text.size()) {
 				dialog_pos++;
+				return true;
 			} else {
 				for (int i = 0; i < world.entities.size(); i++) {
 					if (world.entities.get(i).type == EntityDictionary.DIALOG_BOX) {
 						world.RemoveEntity(i);
 						Dialog.NPC_ID = -1;
+						return false;
 					}
 				}
 			}
 		}
+		return false;
 	}
 }

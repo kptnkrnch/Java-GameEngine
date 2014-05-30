@@ -1,7 +1,6 @@
 package entities;
 
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import engine.Direction;
@@ -13,7 +12,7 @@ import gameplay.CollisionController;
 public class Player {
 
 	public static void MovePlayer(World world, Entity player, HashMap<String, Boolean> input, int fps_scaler) {
-		if (input != null && player != null && player.type == EntityDictionary.PLAYER) {
+		if (input != null && player != null && player.type == EntityDictionary.PLAYER && !player.IsTalking()) {
 			
 			float speed = player.speed;
 			int[] collisions = null;
@@ -328,7 +327,7 @@ public class Player {
 			if (interaction_box.intersects(temp.collision_box)) {
 				switch (temp.type) {
 				case EntityDictionary.NPC:
-					NPC.Speak(world, temp);
+					player.SetTalking(NPC.Speak(world, temp));
 					break;
 				}
 			}

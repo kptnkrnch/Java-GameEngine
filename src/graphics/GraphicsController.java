@@ -3,6 +3,8 @@ package graphics;
 import java.awt.Rectangle;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 import engine.Direction;
 import engine.Entity;
@@ -78,14 +80,6 @@ public class GraphicsController {
 	}
 	
 	private static void HandleEntityAnimations(World world, Graphics g) {
-		/*for (int i = 0; i < world.GetEntityCount(); i++) {
-			Entity temp = world.GetEntity(i);
-			if (VIEWPORT_BOX.intersects(temp.bounding_box)) {
-				if (temp.type != EntityDictionary.CAMERA) {
-					g.drawImage(world.entity_dictionary.GetImage(temp.type), temp.x, temp.y);
-				}
-			}
-		}*/
 		/*NOTE: Animation function StopAt() does not seem to work.
 		 * -- it cannot be restarted! --*/
 		for (int i = 0; i < world.GetEntityCount(); i++) {
@@ -136,6 +130,18 @@ public class GraphicsController {
 						break;	
 					}
 				}
+			}
+			Image image;
+			try {
+				image = new Image("res/sprites/npc.png");
+				if (temp.path != null) {
+					for (int n = 0; n < temp.path.targetCount; n++) {
+						g.drawImage(image, temp.path.targetX.get(n), temp.path.targetY.get(n));
+					}
+				}
+			} catch (SlickException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			world.entities.set(i, temp);
 		}

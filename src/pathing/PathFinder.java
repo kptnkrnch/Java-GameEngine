@@ -1,4 +1,5 @@
 package pathing;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -24,7 +25,6 @@ public class PathFinder {
 		found = false;
 		finding = false;
 	}
-	
 	
 	public void run() {
 		this.finding = true;
@@ -56,16 +56,53 @@ public class PathFinder {
 	/* Takes in game coordinates, not tile coordinates */
 	public void SetStart(int x, int y) {
 		if (map != null) {
-			startX = (int)Math.round(Math.floor((double)x / tilesize));
-			startY = (int)Math.round(Math.floor((double)y / tilesize));
+			int tempX = x / tilesize;
+			int tempY = y / tilesize;
+			Rectangle start_box = new Rectangle(x + (tilesize / 2) - 2, y + (tilesize / 2) - 2, 4, 4);
+			boolean found = false;
+			for (int i = tempX - 1; i <= tempX + 1; i++) {
+				for (int n = tempY - 1; n <= tempY + 1; n++) {
+					Rectangle tile_box = new Rectangle(i * tilesize, n * tilesize, tilesize, tilesize);
+					if (tile_box.contains(start_box)) {
+						startX = i;
+						startY = n;
+						found = true;
+					}
+				}
+			}
+			if (!found) {
+				startX = x / tilesize;
+				startY = y / tilesize;
+			}
+			//startX = (x + tilesize / 2) / tilesize;
+			//startY = (y + tilesize / 2) / tilesize;
+			
 		}
 	}
 	
 	/* Takes in game coordinates, not tile coordinates */
 	public void SetTarget(int x, int y) {
 		if (map != null) {
-			targetX = (int)Math.round(Math.floor((double)x / tilesize));
-			targetY = (int)Math.round(Math.floor((double)y / tilesize));
+			int tempX = x / tilesize;
+			int tempY = y / tilesize;
+			Rectangle start_box = new Rectangle(x + (tilesize / 2) - 2, y + (tilesize / 2) - 2, 4, 4);
+			boolean found = false;
+			for (int i = tempX - 1; i <= tempX + 1; i++) {
+				for (int n = tempY - 1; n <= tempY + 1; n++) {
+					Rectangle tile_box = new Rectangle(i * tilesize, n * tilesize, tilesize, tilesize);
+					if (tile_box.contains(start_box)) {
+						targetX = i;
+						targetY = n;
+						found = true;
+					}
+				}
+			}
+			if (!found) {
+				targetX = x / tilesize;
+				targetY = y / tilesize;
+			}
+			//targetX = (x + tilesize) / tilesize;
+			//targetY = (y + tilesize) / tilesize;
 		}
 	}
 	
@@ -117,58 +154,62 @@ public class PathFinder {
 	}
 	
 	public PathTile CalculateTotalCost(PathTile[][] map, int x, int y, ArrayList<PathTile> open, ArrayList<PathTile> closed) {
-		PathTile current = map[x][y];
-		PathTile temp;
-		
-		temp = GetNorth(map, x, y);
-		if (temp != null && !temp.solid) {
-			if (!closed.contains(temp) && !open.contains(temp)) {
-				temp.g = current.g + 1;
-				temp.f = temp.g + temp.h;
-				temp.parent = current;
-				map[temp.x][temp.y] = temp;
-				open.add(temp);
+		if (x < map.length && y < map[0].length) {
+			PathTile current = map[x][y];
+			PathTile temp;
+			
+			temp = GetNorth(map, x, y);
+			if (temp != null && !temp.solid) {
+				if (!closed.contains(temp) && !open.contains(temp)) {
+					temp.g = current.g + 1;
+					temp.f = temp.g + temp.h;
+					temp.parent = current;
+					map[temp.x][temp.y] = temp;
+					open.add(temp);
+				}
 			}
+			
+			temp = GetSouth(map, x, y);
+			if (temp != null && !temp.solid) {
+				if (!closed.contains(temp) && !open.contains(temp)) {
+					temp.g = current.g + 1;
+					temp.f = temp.g + temp.h;
+					temp.parent = current;
+					map[temp.x][temp.y] = temp;
+					open.add(temp);
+				}
+			}
+			
+			temp = GetEast(map, x, y);
+			if (temp != null && !temp.solid) {
+				if (!closed.contains(temp) && !open.contains(temp)) {
+					temp.g = current.g + 1;
+					temp.f = temp.g + temp.h;
+					temp.parent = current;
+					map[temp.x][temp.y] = temp;
+					open.add(temp);
+				}
+			}
+			
+			temp = GetWest(map, x, y);
+			if (temp != null && !temp.solid) {
+				if (!closed.contains(temp) && !open.contains(temp)) {
+					temp.g = current.g + 1;
+					temp.f = temp.g + temp.h;
+					temp.parent = current;
+					map[temp.x][temp.y] = temp;
+					open.add(temp);
+				}
+			}
+			
+			
+			open.remove(current);
+			closed.add(current);
+			
+			return current;
 		}
 		
-		temp = GetSouth(map, x, y);
-		if (temp != null && !temp.solid) {
-			if (!closed.contains(temp) && !open.contains(temp)) {
-				temp.g = current.g + 1;
-				temp.f = temp.g + temp.h;
-				temp.parent = current;
-				map[temp.x][temp.y] = temp;
-				open.add(temp);
-			}
-		}
-		
-		temp = GetEast(map, x, y);
-		if (temp != null && !temp.solid) {
-			if (!closed.contains(temp) && !open.contains(temp)) {
-				temp.g = current.g + 1;
-				temp.f = temp.g + temp.h;
-				temp.parent = current;
-				map[temp.x][temp.y] = temp;
-				open.add(temp);
-			}
-		}
-		
-		temp = GetWest(map, x, y);
-		if (temp != null && !temp.solid) {
-			if (!closed.contains(temp) && !open.contains(temp)) {
-				temp.g = current.g + 1;
-				temp.f = temp.g + temp.h;
-				temp.parent = current;
-				map[temp.x][temp.y] = temp;
-				open.add(temp);
-			}
-		}
-		
-		
-		open.remove(current);
-		closed.add(current);
-		
-		return current;
+		return null;
 	}
 	
 	public PathTile FindLeastCost(PathTile[][] map, ArrayList<PathTile> open, ArrayList<PathTile> closed) {
@@ -204,18 +245,31 @@ public class PathFinder {
 				}
 				current = current.parent;
 			}
-			
+			int sx = this.startX;
+			int sy = this.startY;
 			for (int i = temp.size() - 1; i >= 0; i--) {
 				PathTile tempTile = temp.get(i);
 				
-				if (tempTile.x < this.startX) {
-					path.AddTarget(tempTile.x * tilesize, tempTile.x * tilesize, Direction.LEFT);
-				} else if (tempTile.x > this.startX) {
-					path.AddTarget(tempTile.x * tilesize, tempTile.x * tilesize, Direction.RIGHT);
-				} else if (tempTile.y < this.startY) {
-					path.AddTarget(tempTile.x * tilesize, tempTile.x * tilesize, Direction.UP);
-				} else if (tempTile.y > this.startY) {
-					path.AddTarget(tempTile.x * tilesize, tempTile.x * tilesize, Direction.DOWN);
+				if (tempTile.x < sx) {
+					path.AddTarget(tempTile.x * tilesize, tempTile.y * tilesize, Direction.LEFT);
+				} else if (tempTile.x > sx) {
+					path.AddTarget(tempTile.x * tilesize, tempTile.y * tilesize, Direction.RIGHT);
+				} else if (tempTile.y < sy) {
+					path.AddTarget(tempTile.x * tilesize, tempTile.y * tilesize, Direction.UP);
+				} else if (tempTile.y > sy) {
+					path.AddTarget(tempTile.x * tilesize, tempTile.y * tilesize, Direction.DOWN);
+				}
+				
+				sx = tempTile.x;
+				sy = tempTile.y;
+			}
+			
+			for (int x = 0; x < map.length; x++) {
+				for (int y = 0; y < map[0].length; y++) {
+					map[x][y].parent = null;
+					map[x][y].f = 0;
+					map[x][y].g = 0;
+					map[x][y].onPath = false;
 				}
 			}
 			
@@ -232,6 +286,14 @@ public class PathFinder {
 	
 	public boolean IsFinding() {
 		return this.finding;
+	}
+	
+	public boolean IsMapLoaded() {
+		if (map == null) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 }

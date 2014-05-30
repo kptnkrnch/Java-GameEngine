@@ -1,5 +1,6 @@
 package pathing;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import engine.Direction;
@@ -12,6 +13,7 @@ public class Path {
 	public ArrayList<Integer> direction;
 	public int currentTarget;
 	public int targetCount;
+	public boolean complete;
 	
 	public Path() {
 		targetX = new ArrayList<Integer>();
@@ -19,10 +21,18 @@ public class Path {
 		direction = new ArrayList<Integer>();
 		currentTarget = 0;
 		targetCount = 0;
+		complete = false;
 	}
 	
 	public int GetNextDirection() {
-		return direction.get(currentTarget);
+		if (this.direction.size() > 0 && this.currentTarget < this.direction.size()) {
+			if (this.currentTarget == 1) {
+				System.out.println("HERE");
+			}
+			return direction.get(currentTarget);
+		} else {
+			return Direction.NONE;
+		}
 	}
 	
 	public void AddTarget(int x, int y, int direction) {
@@ -32,25 +42,102 @@ public class Path {
 		this.targetCount += 1;
 	}
 	
-	public int getDistance(Entity e) {
-		int distance = 0;
+	public boolean AtCurrentTarget(Entity entity) {
+		if (this.direction.size() > 0 && this.targetX.size() > 0 && this.targetY.size() > 0
+				&& this.currentTarget < this.direction.size() && this.currentTarget < this.targetX.size()
+				&& this.currentTarget < this.targetY.size()) {
+			int direction = this.direction.get(currentTarget);
+			int curTargetX = this.targetX.get(currentTarget);
+			int curTargetY = this.targetY.get(currentTarget);
+			
+			switch(direction) {
+			case Direction.LEFT:
+				if (entity.collision_box.x <= curTargetX) {
+					return true;
+				}
+				break;
+			case Direction.RIGHT:
+				if (entity.collision_box.x >= curTargetX) {
+					return true;
+				}
+				break;
+			case Direction.UP:
+				if (entity.collision_box.y <= curTargetY) {
+					return true;
+				}
+				break;
+			case Direction.DOWN:
+				if (entity.collision_box.y >= curTargetY) {
+					return true;
+				}
+				break;
+			}
+		}
+		return false;
+	}
+	
+	public boolean Update(Entity entity) {
+		if (this.direction.size() > 0 && this.targetX.size() > 0 && this.targetY.size() > 0
+				&& this.currentTarget < this.direction.size() && this.currentTarget < this.targetX.size()
+				&& this.currentTarget < this.targetY.size()) {
+			int direction = this.direction.get(currentTarget);
+			int curTargetX = this.targetX.get(currentTarget);
+			int curTargetY = this.targetY.get(currentTarget);
+			
+			switch(direction) {
+			case Direction.LEFT:
+				if (entity.collision_box.x <= curTargetX) {
+					currentTarget++;
+					//entity.SetPosition(curTargetX, curTargetY);
+					return true;
+				}
+				break;
+			case Direction.RIGHT:
+				if (entity.collision_box.x >= curTargetX) {
+					currentTarget++;
+					//entity.SetPosition(curTargetX, curTargetY);
+					return true;
+				}
+				break;
+			case Direction.UP:
+				if (entity.collision_box.y <= curTargetY) {
+					currentTarget++;
+					//entity.SetPosition(curTargetX, curTargetY);
+					return true;
+				}
+				break;
+			case Direction.DOWN:
+				if (entity.collision_box.y >= curTargetY) {
+					currentTarget++;
+					//entity.SetPosition(curTargetX, curTargetY);
+					return true;
+				}
+				break;
+			}
+			
+			if (currentTarget == targetCount) {
+				complete = true;
+			}
+			return false;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean IsComplete() {
+		return this.complete;
+	}
+	
+	public Point GetCurrentTargetCoordinates() {
+		Point p = null;
 		
-		switch (direction.get(currentTarget)) {
-		case Direction.LEFT:
-			distance = Math.abs(e.collision_box.x - targetX.get(currentTarget));
-			break;
-		case Direction.RIGHT:
-			distance = Math.abs(e.collision_box.x - targetX.get(currentTarget));
-			break;
-		case Direction.UP:
-			distance = Math.abs(e.collision_box.y - targetY.get(currentTarget));
-			break;
-		case Direction.DOWN:
-			distance = Math.abs(e.collision_box.y - targetY.get(currentTarget));
-			break;
+		if (this.direction.size() > 0 && this.targetX.size() > 0 && this.targetY.size() > 0
+				&& this.currentTarget < this.direction.size() && this.currentTarget < this.targetX.size()
+				&& this.currentTarget < this.targetY.size()) {
+			p = new Point(this.targetX.get(currentTarget), this.targetY.get(currentTarget));
 		}
 		
-		return distance;
+		return p;
 	}
 	
 }

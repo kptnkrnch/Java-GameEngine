@@ -25,6 +25,7 @@ public class Entity {
 	public Rectangle image_box;
 	
 	public ArrayList<String> dialog;
+	public boolean talking;
 	
 	public int last_direction;
 	private float last_distance;
@@ -35,6 +36,7 @@ public class Entity {
 	public Animation down_anim;
 	public Animation up_anim;
 	public boolean animating;
+	public Animation[] animation;
 	
 	public PathFinder pathFinder;
 	public Path path;
@@ -62,9 +64,12 @@ public class Entity {
 		this.up_anim = temp.up_anim;
 		this.last_animation = temp.last_animation;
 		this.animating = temp.animating;
+		this.animation = temp.animation;
 		
 		this.pathFinder = temp.pathFinder;
 		this.path = temp.path;
+		
+		this.talking = temp.talking;
 	}
 
 	public Entity(int type, int x, int y, int width, int height) {
@@ -91,9 +96,12 @@ public class Entity {
 		this.up_anim = null;
 		this.last_animation = Direction.NONE;
 		this.animating = false;
+		this.animation = null;
 		
 		this.pathFinder = new PathFinder();
-		this.path = new Path();
+		this.path = null;
+		
+		talking = false;
 	}
 	
 	public boolean IsMoveable() {
@@ -189,8 +197,8 @@ public class Entity {
 	public void SetPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
-		this.collision_box.x = this.x;
-		this.collision_box.y = this.y;
+		this.collision_box.x = this.x + 1;
+		this.collision_box.y = this.y + 1;
 	}
 	
 	public boolean Intersects(Tile tile) {
@@ -218,6 +226,9 @@ public class Entity {
 		this.last_direction = temp.last_direction;
 		this.last_distance = temp.last_distance;
 		this.last_animation = temp.last_animation;
+		this.path = temp.path;
+		this.pathFinder = temp.pathFinder;
+		this.animation = temp.animation;
 	}
 	
 	public void UpdateAnimations(int fps_scaler) {
@@ -235,8 +246,22 @@ public class Entity {
 		}
 	}
 	
+	public void UpdateAnimation(int fps_scaler) {
+		if (this.animation != null && last_animation > 0 && last_animation <= this.animation.length) {
+			this.animation[last_animation - 1].update(fps_scaler);
+		}
+	}
+	
 	public boolean IsAnimating() {
 		return this.animating;
+	}
+	
+	public void SetTalking(boolean talking) {
+		this.talking = talking;
+	}
+	
+	public boolean IsTalking() {
+		return this.talking;
 	}
 	
 }
