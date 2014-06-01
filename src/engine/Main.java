@@ -69,13 +69,20 @@ public class Main extends BasicGame {
 		world = new World();
 		world.LoadTileDictionary("res/dictionaries/TileDictionary.dict");
 		world.LoadEntityDictionary("res/dictionaries/EntityDictionary.dict");
-		MapLoader.LoadMap(world, "res/maps/Map02.map");
+		MapLoader.LoadMap(world, "res/maps/Map01.map");
 		InputController.LoadKeyMapping("res/config/keymap.conf");
 		Entity npc = EntityFactory.CreateEntity(EntityDictionary.NPC, 384, 160, 32, 32);
 		npc.dialog = new ArrayList<String>();
-		npc.dialog.add("HELLO WORLD");
+		npc.dialog.add("Hello Kurt");
 		world.AddEntity(npc);
 		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.ENEMY, 384, 416, 32, 32));
+		/*world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.ENEMY, 384 + 32, 416, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.ENEMY, 384 + 64, 416, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.ENEMY, 384 + 96, 416, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.ENEMY, 384 + 128, 416, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.ENEMY, 384 + 32, 416 + 32, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.ENEMY, 384 + 64, 416 + 32, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.ENEMY, 384 + 96, 416 + 32, 32, 32));*/
 		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.PLAYER, 288, 128, 32, 32));
 		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));
 		try {
@@ -106,6 +113,16 @@ public class Main extends BasicGame {
 		
 		if (input.isKeyPressed(Input.KEY_F1)) {
 			debug_mode = !debug_mode;
+		}
+		
+		if (input.isKeyDown(Input.KEY_F2)) {
+			for (int i = 0; i < world.entities.size(); i++) {
+				Entity e = world.entities.get(i);
+				if (e.type == EntityDictionary.ENEMY) {
+					e.SetPosition(e.x + 30, e.y);
+				}
+				world.entities.set(i, e);
+			}
 		}
 	}
 

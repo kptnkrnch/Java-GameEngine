@@ -131,7 +131,7 @@ public class GraphicsController {
 					}
 				}
 			}
-			Image image;
+			/*Image image;
 			try {
 				image = new Image("res/sprites/npc.png");
 				if (temp.path != null) {
@@ -142,7 +142,7 @@ public class GraphicsController {
 			} catch (SlickException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 			world.entities.set(i, temp);
 		}
 	}

@@ -58,26 +58,15 @@ public class Enemy {
 						case Direction.LEFT:
 							temp.Move(direction, temp.speed, fps_scaler);
 							
-							if (enemy.path.AtCurrentTarget(enemy)) {
-								Point p = enemy.path.GetCurrentTargetCoordinates();
-								//enemy.SetPosition(p.x, p.y);
-							}
-							
 							collisions = CollisionController.CheckEntityCollision(world, temp);
 							if (collisions != null) {
 								temp.UndoLastMove();
 								temp.x += 1;
 								SetCollisionBox(temp, temp.x, temp.y);
 							}
-							enemy.path.Update(enemy);
 							break;
 						case Direction.RIGHT:
 							temp.Move(direction, temp.speed, fps_scaler);
-							
-							if (enemy.path.AtCurrentTarget(enemy)) {
-								Point p = enemy.path.GetCurrentTargetCoordinates();
-								//enemy.SetPosition(p.x, p.y);
-							}
 							
 							collisions = CollisionController.CheckEntityCollision(world, temp);
 							if (collisions != null) {
@@ -85,15 +74,9 @@ public class Enemy {
 								temp.x -= 1;
 								SetCollisionBox(temp, temp.x, temp.y);
 							}
-							enemy.path.Update(enemy);
 							break;
 						case Direction.UP:
 							temp.Move(direction, temp.speed, fps_scaler);
-							
-							if (enemy.path.AtCurrentTarget(enemy)) {
-								Point p = enemy.path.GetCurrentTargetCoordinates();
-								//enemy.SetPosition(p.x, p.y);
-							}
 							
 							collisions = CollisionController.CheckEntityCollision(world, temp);
 							if (collisions != null) {
@@ -101,15 +84,9 @@ public class Enemy {
 								temp.y += 1;
 								SetCollisionBox(temp, temp.x, temp.y);
 							}
-							enemy.path.Update(enemy);
 							break;
 						case Direction.DOWN:
 							temp.Move(direction, temp.speed, fps_scaler);
-							
-							if (enemy.path.AtCurrentTarget(enemy)) {
-								Point p = enemy.path.GetCurrentTargetCoordinates();
-								//enemy.SetPosition(p.x, p.y);
-							}
 							
 							collisions = CollisionController.CheckEntityCollision(world, temp);
 							if (collisions != null) {
@@ -117,8 +94,17 @@ public class Enemy {
 								temp.y -= 1;
 								SetCollisionBox(temp, temp.x, temp.y);
 							}
-							enemy.path.Update(enemy);
 							break;
+						}
+						
+						if (collisions != null) {
+							for (int i = 0; i < collisions.length; i++) {
+								if (collisions[i] != EntityDictionary.PLAYER && collisions[i] != EntityDictionary.CAMERA) {
+									PathFindingController.HandlePathFinding(world, temp, target.x, target.y);
+									temp.path = temp.pathFinder.FindPath();
+									break;
+								}
+							}
 						}
 						
 						enemy.Copy(temp);
