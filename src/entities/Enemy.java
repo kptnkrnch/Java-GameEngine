@@ -10,8 +10,11 @@ import engine.Entity;
 import engine.EntityDictionary;
 import engine.World;
 import gameplay.CollisionController;
+import gameplay.CombatCalculator;
 
 public class Enemy {
+	
+	public static int BASE_COOLDOWN = 1000;
 	
 	public static void MoveEnemy(World world, Entity enemy, int targetX, int targetY) {
 		PathFindingController.HandlePathFinding(world, enemy, targetX, targetY);
@@ -36,16 +39,16 @@ public class Enemy {
 		}
 		
 		if (target != null || !enemy.path.IsComplete()) {
-			if (enemy.path == null) {
+			if (enemy.path == null && target != null) {
 				PathFindingController.HandlePathFinding(world, enemy, target.x, target.y);
 			}
 			if (enemy.pathFinder.IsFound()) {
-				if (enemy.path != null) {
+				if (enemy.path != null && target != null) {
 					if (enemy.path.Update(enemy)) {
 						PathFindingController.HandlePathFinding(world, enemy, target.x, target.y);
 						enemy.path = enemy.pathFinder.FindPath();
 					}
-				} else {
+				} else if (target != null) {
 					PathFindingController.HandlePathFinding(world, enemy, target.x, target.y);
 					enemy.path = enemy.pathFinder.FindPath();
 				}
@@ -97,11 +100,30 @@ public class Enemy {
 							break;
 						}
 						
-						if (collisions != null) {
+						if (collisions != null && target != null) {
 							for (int i = 0; i < collisions.length; i++) {
 								if (collisions[i] != EntityDictionary.PLAYER && collisions[i] != EntityDictionary.CAMERA) {
 									PathFindingController.HandlePathFinding(world, temp, target.x, target.y);
 									temp.path = temp.pathFinder.FindPath();
+									break;
+								}
+							}
+						}
+						
+						if (collisions != null) {
+							for (int i = 0; i < collisions.length; i++) {
+								switch(collisions[i]) {
+								case EntityDictionary.PLAYER:
+									if (temp.c_cooldown <= 0) {
+										for (int n = 0; n < world.entities.size(); n++) {
+											Entity player = world.GetEntity(n);
+											if (player.type == EntityDictionary.PLAYER) {
+												player.c_health -= CombatCalculator.CalculateDamage(temp, player);
+												temp.c_cooldown = CombatCalculator.CalculateCooldown(temp, BASE_COOLDOWN);
+												break;
+											}
+										}
+									}
 									break;
 								}
 							}

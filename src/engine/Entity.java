@@ -4,6 +4,8 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 import pathing.Path;
 import pathing.PathFinder;
@@ -24,13 +26,16 @@ public class Entity {
 	public Rectangle collision_box;
 	public Rectangle image_box;
 	
+	/* Dialog section */
 	public ArrayList<String> dialog;
 	public boolean talking;
 	
+	/* Movement section */
 	public int last_direction;
 	private float last_distance;
-	public int last_animation;
 	
+	/* Graphics section */
+	public int last_animation;
 	public Animation left_anim;
 	public Animation right_anim;
 	public Animation down_anim;
@@ -38,8 +43,20 @@ public class Entity {
 	public boolean animating;
 	public Animation[] animation;
 	
+	/* AI section */
 	public PathFinder pathFinder;
 	public Path path;
+	
+	/* Combat section */
+	public int c_max_health;
+	public int c_health;
+	public int c_attack;
+	public int c_defence;
+	public int c_speed;
+	public int c_cooldown;
+	
+	public boolean attacking = false;
+	public Animation attack;
 	
 	public Entity(Entity temp) {
 		this.id = temp.id;
@@ -70,6 +87,16 @@ public class Entity {
 		this.path = temp.path;
 		
 		this.talking = temp.talking;
+		
+		this.c_health = temp.c_health;
+		this.c_max_health = temp.c_max_health;
+		this.c_attack = temp.c_attack;
+		this.c_defence = temp.c_defence;
+		this.c_speed = temp.c_speed;
+		this.c_cooldown = temp.c_cooldown;
+		
+		this.attacking = temp.attacking;
+		this.attack = temp.attack;
 	}
 
 	public Entity(int type, int x, int y, int width, int height) {
@@ -101,7 +128,31 @@ public class Entity {
 		this.pathFinder = new PathFinder();
 		this.path = null;
 		
-		talking = false;
+		this.talking = false;
+		
+		this.c_max_health = 1;
+		this.c_health = 1;
+		this.c_attack = 0;
+		this.c_speed = 0;
+		this.c_defence = 0;
+		this.c_cooldown = 0;
+		Image sword[] = new Image[5];
+		try {
+			sword[0] = new Image("res/sprites/sword_right/sword_right_01.png");
+			sword[1] = new Image("res/sprites/sword_right/sword_right_02.png");
+			sword[2] = new Image("res/sprites/sword_right/sword_right_03.png");
+			sword[3] = new Image("res/sprites/sword_right/sword_right_04.png");
+			sword[4] = new Image(1,1);
+			int[] dur = new int[5];
+			dur[0] = 100;
+			dur[1] = 200;
+			dur[2] = 200;
+			dur[3] = 300;
+			dur[4] = 100;
+			this.attack = new Animation(sword, dur);
+			this.attack.stop();
+		} catch (SlickException e) {
+		}
 	}
 	
 	public boolean IsMoveable() {
@@ -226,9 +277,23 @@ public class Entity {
 		this.last_direction = temp.last_direction;
 		this.last_distance = temp.last_distance;
 		this.last_animation = temp.last_animation;
+		
 		this.path = temp.path;
 		this.pathFinder = temp.pathFinder;
+		
 		this.animation = temp.animation;
+		
+		this.talking = temp.talking;
+		
+		this.c_health = temp.c_health;
+		this.c_max_health = temp.c_max_health;
+		this.c_attack = temp.c_attack;
+		this.c_defence = temp.c_defence;
+		this.c_speed = temp.c_speed;
+		this.c_cooldown = temp.c_cooldown;
+		
+		this.attacking = temp.attacking;
+		this.attack = temp.attack;
 	}
 	
 	public void UpdateAnimations(int fps_scaler) {

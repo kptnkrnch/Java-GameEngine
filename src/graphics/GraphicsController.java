@@ -2,6 +2,7 @@ package graphics;
 
 import java.awt.Rectangle;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -18,10 +19,9 @@ import exceptions.CameraNotFoundException;
 
 public class GraphicsController {
 	
-	private static int VIEWPORT_X = 0;
-	private static int VIEWPORT_Y = 0;
-	private static Rectangle VIEWPORT_BOX = new Rectangle(VIEWPORT_X, VIEWPORT_Y, Main.ResX, Main.ResY);
-	
+	public static int VIEWPORT_X = 0;
+	public static int VIEWPORT_Y = 0;
+	public static Rectangle VIEWPORT_BOX = new Rectangle(VIEWPORT_X, VIEWPORT_Y, Main.ResX, Main.ResY);
 	
 	public static void RenderWorld(World world, Graphics g) {
 		
@@ -34,6 +34,8 @@ public class GraphicsController {
 			HandleEntityAnimations(world, g);
 			EntityCollisionDebug(world, g);
 			
+			GUIController.DrawMenus(world, g);
+			
 			DrawDialogText(world, g);
 			
 		} catch (CameraNotFoundException e) {
@@ -45,17 +47,29 @@ public class GraphicsController {
 		int cameraID = world.FindCamera();
 		Entity camera = world.GetEntity(cameraID);
 		
-		if (Camera.IsMoveableX(world)) {
-			g.translate(-(camera.x - Main.ResX / 2), 0);
-			VIEWPORT_X = (camera.x - Main.ResX / 2);
-		} else if (camera.x > world.width * world.tilesize / 2) {
-			g.translate(-(world.width * world.tilesize - Main.ResX), 0);
+		int world_width = world.width * world.tilesize;
+		int world_height = world.height * world.tilesize;
+		
+		if (Main.ResX < world_width) {
+			if (Camera.IsMoveableX(world)) {
+				g.translate(-(camera.x - Main.ResX / 2), 0);
+				VIEWPORT_X = (camera.x - Main.ResX / 2);
+			} else if (camera.x > world.width * world.tilesize / 2) {
+				g.translate(-(world.width * world.tilesize - Main.ResX), 0);
+			}
+		} else {
+			g.translate(((Main.ResX - world_width) / 2), 0);
 		}
-		if (Camera.IsMoveableY(world)) {
-			g.translate(0, -(camera.y - Main.ResY / 2));
-			VIEWPORT_Y = (camera.y - Main.ResY / 2);
-		} else if (camera.y > world.height * world.tilesize / 2) {
-			g.translate(0, -(world.height * world.tilesize - Main.ResY));
+		
+		if (Main.ResY < world_height) {
+			if (Camera.IsMoveableY(world)) {
+				g.translate(0, -(camera.y - Main.ResY / 2));
+				VIEWPORT_Y = (camera.y - Main.ResY / 2);
+			} else if (camera.y > world.height * world.tilesize / 2) {
+				g.translate(0, -(world.height * world.tilesize - Main.ResY));
+			}
+		} else {
+			g.translate(0, ((Main.ResY - world_height) / 2));
 		}
 		
 		VIEWPORT_BOX.x = VIEWPORT_X;
@@ -102,6 +116,20 @@ public class GraphicsController {
 							temp.right_anim.setCurrentFrame(0);
 						} else if (temp.right_anim.isStopped() && !temp.IsAnimating()) {
 							temp.right_anim.start();
+						}
+						if (!temp.attack.isStopped()) {
+							g.drawAnimation(temp.attack, temp.x + 32, temp.y + 12);
+						}
+						if (temp.attacking) {
+							if (temp.attack.isStopped()) {
+								temp.attack.start();
+								temp.attack.setLooping(false);
+							}
+							if (temp.attack.getFrame() == temp.attack.getFrameCount() - 1) {
+								temp.attack.stop();
+								temp.attack.setCurrentFrame(0);
+								temp.attacking = false;
+							}
 						}
 						g.drawAnimation(temp.right_anim, temp.x, temp.y);
 						break;

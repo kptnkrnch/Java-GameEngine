@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import engine.Entity;
 import engine.EntityDictionary;
 import engine.EntityFactory;
+import engine.Main;
+import engine.States;
 import engine.World;
 
 public class Dialog {
@@ -20,6 +22,7 @@ public class Dialog {
 			NPC_ID = id;
 			Entity entity = EntityFactory.CreateDialog(x, y);
 			world.AddEntity(entity);
+			Main.SetState(States.TALKING);
 		}
 	}
 	
@@ -33,6 +36,7 @@ public class Dialog {
 					if (world.entities.get(i).type == EntityDictionary.DIALOG_BOX) {
 						world.RemoveEntity(i);
 						Dialog.NPC_ID = -1;
+						Main.SetState(States.RUNNING);
 						return false;
 					}
 				}

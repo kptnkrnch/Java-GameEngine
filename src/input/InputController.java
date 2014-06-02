@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
+import org.lwjgl.input.Controller;
 import org.newdawn.slick.Input;
 
 public class InputController {
@@ -13,7 +14,7 @@ public class InputController {
 	private static HashMap<String, Boolean> pressed_input = null;
 	private static HashMap<String, Integer> keymap = null;
 	
-	public static HashMap<String, Boolean> HandleHeldInput(Input input_obj) {
+	public static HashMap<String, Boolean> HandleHeldInput(Input input_obj, Controller controller) {
 		if (keymap != null) {
 			
 			/* Resets the input pressed map */
@@ -30,13 +31,23 @@ public class InputController {
 					held_input.put(current.getKey(), true);
 				}
 			}
+			
+			HashMap<String, Boolean> tempmap = JoystickController.GetControllerHeldInput(controller);
+			Iterator<Entry<String, Boolean>> tempIterator = tempmap.entrySet().iterator();
+			while (tempIterator.hasNext()) {
+				Entry<String, Boolean> current = tempIterator.next();
+				if (current.getValue()) {
+					held_input.put(current.getKey(), true);
+				}
+			}
+			
 			return held_input;
 		} else {
 			return null;
 		}
 	}
 	
-	public static HashMap<String, Boolean> HandlePressedInput(Input input_obj) {
+	public static HashMap<String, Boolean> HandlePressedInput(Input input_obj, Controller controller) {
 		if (keymap != null) {
 			
 			/* Resets the input pressed map */
@@ -53,6 +64,16 @@ public class InputController {
 					pressed_input.put(current.getKey(), true);
 				}
 			}
+			
+			HashMap<String, Boolean> tempmap = JoystickController.GetControllerPressedInput(controller);
+			Iterator<Entry<String, Boolean>> tempIterator = tempmap.entrySet().iterator();
+			while (tempIterator.hasNext()) {
+				Entry<String, Boolean> current = tempIterator.next();
+				if (current.getValue()) {
+					pressed_input.put(current.getKey(), true);
+				}
+			}
+			
 			return pressed_input;
 		} else {
 			return null;

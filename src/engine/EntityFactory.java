@@ -28,6 +28,13 @@ public class EntityFactory {
 		e.solid = true;
 		e.moveable = true;
 		
+		/* COMBAT SECTION */
+		e.c_max_health = 100;
+		e.c_health = 100;
+		e.c_attack = 10;
+		e.c_defence = 5;
+		e.c_speed = 50;
+		
 		Image[] left = new Image[4];
 		Image[] right = new Image[4];
 		Image[] up = new Image[3];
@@ -101,6 +108,13 @@ public class EntityFactory {
 		e.controlled = false;
 		e.solid = true;
 		e.moveable = true;
+		
+		/* COMBAT SECTION */
+		e.c_max_health = 50;
+		e.c_health = 50;
+		e.c_attack = 10;
+		e.c_defence = 3;
+		e.c_speed = 5;
 		
 		Image[] down = new Image[1];
 		

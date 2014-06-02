@@ -12,12 +12,15 @@ public class World {
 	public int tilesize;
 	public Tile[][] tile;
 	public ArrayList<Entity> entities;
+	public ArrayList<Menu> menus;
+	private int currentID;
 	public TileDictionary tile_dictionary;
 	public EntityDictionary entity_dictionary;
 	
 	public World() {
 		this.tile_dictionary = new TileDictionary();
 		this.entity_dictionary = new EntityDictionary();
+		currentID = 0;
 	}
 	
 	public void Init(int width, int height, int tilesize) {
@@ -26,6 +29,7 @@ public class World {
 		this.tilesize = tilesize;
 		this.tile = new Tile[width][height];
 		this.entities = new ArrayList<Entity>();
+		this.menus = new ArrayList<Menu>();
 	}
 	
 	public boolean LoadTileDictionary(String dictionary_location) {
@@ -53,17 +57,13 @@ public class World {
 	}
 	
 	public void AddEntity(Entity entity) {
-		entity.id = this.entities.size();
+		entity.id = currentID;
+		currentID += 1;
 		this.entities.add(entity);
 	}
 	
 	public void RemoveEntity(int index) {
 		this.entities.remove(index);
-		for (int i = 0; i < this.entities.size(); i++) {
-			Entity temp = this.entities.get(i);
-			temp.id = i;
-			this.entities.set(i, temp);
-		}
 	}
 	
 	public int FindPlayer() throws PlayerNotFoundException {
@@ -107,6 +107,22 @@ public class World {
 			Entity temp = entities.get(i);
 			temp.UpdateAnimations(fps_scaler);
 			entities.set(i, temp);
+		}
+	}
+	
+	public void AddMenu(Menu menu) {
+		this.menus.add(menu);
+	}
+	
+	public int GetMenuCount() {
+		return this.menus.size();
+	}
+	
+	public Menu GetMenu(int index) {
+		if (index >= 0 && index < menus.size()) {
+			return menus.get(index);
+		} else {
+			return null;
 		}
 	}
 }
