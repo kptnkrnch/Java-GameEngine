@@ -1,5 +1,7 @@
 package graphics;
 
+import java.awt.Rectangle;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
@@ -9,15 +11,24 @@ import engine.Main;
 import engine.Menu;
 import engine.States;
 import engine.World;
+import exceptions.PlayerNotFoundException;
 
 public class GUIController {
 	
 	public static void DrawMenus(World world, Graphics g) {
-		DrawGUIContainer(world, g);
+		try {
+			Entity player = world.GetEntity(world.FindPlayer());
+			Rectangle infoPanelBox = new Rectangle(GraphicsController.VIEWPORT_X, GraphicsController.VIEWPORT_Y, 400, 96);
+			if (!infoPanelBox.intersects(player.collision_box)) {
+				DrawPlayerInfoPanel(world, g);
+			}
+		} catch (PlayerNotFoundException e) {
+		}
+		
 		DrawPauseScreen(world, g);
 	}
 	
-	public static void DrawGUIContainer(World world, Graphics g) {
+	public static void DrawPlayerInfoPanel(World world, Graphics g) {
 		for (int i = 0; i < world.GetMenuCount(); i++) {
 			Menu temp = world.GetMenu(i);
 			if (temp.name.contentEquals("infopanel") && temp.background != null

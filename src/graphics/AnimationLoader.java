@@ -10,6 +10,16 @@ public class AnimationLoader {
 	public Image[] frames;
 	public boolean loaded;
 	
+	public static final String LEFT = "left";
+	public static final String RIGHT = "right";
+	public static final String UP = "up";
+	public static final String DOWN = "down";
+	public static final String SHOOT_LEFT = "shoot_left";
+	public static final String SHOOT_RIGHT = "shoot_right";
+	public static final String SHOOT_UP = "shoot_up";
+	public static final String SHOOT_DOWN = "shoot_down";
+	public static final String SHOOT = "shoot_";
+	
 	public AnimationLoader() {
 		loaded = false;
 		durations = null;

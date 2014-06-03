@@ -2,6 +2,7 @@ package graphics;
 
 import java.awt.Rectangle;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -15,6 +16,7 @@ import engine.Tile;
 import engine.World;
 import entities.Camera;
 import entities.Dialog;
+import entities.Player;
 import exceptions.CameraNotFoundException;
 
 public class GraphicsController {
@@ -100,77 +102,130 @@ public class GraphicsController {
 			Entity temp = world.GetEntity(i);
 			if (VIEWPORT_BOX.intersects(temp.collision_box)) {
 				if (temp.type != EntityDictionary.CAMERA) {
-					switch(temp.last_animation) {
-					case Direction.LEFT:
-						if (temp.last_direction == Direction.NONE) {
-							temp.left_anim.stop();
-							temp.left_anim.setCurrentFrame(0);
-						} else if (temp.left_anim.isStopped() && !temp.IsAnimating()) {
-							temp.left_anim.start();
-						}
-						g.drawAnimation(temp.left_anim, temp.x, temp.y);
-						break;
-					case Direction.RIGHT:
-						if (temp.last_direction == Direction.NONE) {
-							temp.right_anim.stop();
-							temp.right_anim.setCurrentFrame(0);
-						} else if (temp.right_anim.isStopped() && !temp.IsAnimating()) {
-							temp.right_anim.start();
-						}
-						if (!temp.attack.isStopped()) {
-							g.drawAnimation(temp.attack, temp.x + 32, temp.y + 12);
-						}
-						if (temp.attacking) {
-							if (temp.attack.isStopped()) {
-								temp.attack.start();
-								temp.attack.setLooping(false);
+					if (temp.animation == null) {
+						switch(temp.last_animation) {
+						case Direction.LEFT:
+							if (temp.last_direction == Direction.NONE) {
+								temp.left_anim.stop();
+								temp.left_anim.setCurrentFrame(0);
+							} else if (temp.left_anim.isStopped() && !temp.IsAnimating()) {
+								temp.left_anim.start();
 							}
-							if (temp.attack.getFrame() == temp.attack.getFrameCount() - 1) {
-								temp.attack.stop();
-								temp.attack.setCurrentFrame(0);
-								temp.attacking = false;
+							g.drawAnimation(temp.left_anim, temp.x, temp.y);
+							break;
+						case Direction.RIGHT:
+							if (temp.last_direction == Direction.NONE) {
+								temp.right_anim.stop();
+								temp.right_anim.setCurrentFrame(0);
+							} else if (temp.right_anim.isStopped() && !temp.IsAnimating()) {
+								temp.right_anim.start();
 							}
-						}
-						g.drawAnimation(temp.right_anim, temp.x, temp.y);
-						break;
-					case Direction.UP:
-						if (temp.last_direction == Direction.NONE) {
-							temp.up_anim.stop();
-							temp.up_anim.setCurrentFrame(0);
-						} else if (temp.up_anim.isStopped() && !temp.IsAnimating()) {
-							temp.up_anim.start();
-						}
-						g.drawAnimation(temp.up_anim, temp.x, temp.y);
-						break;
-					case Direction.DOWN:
-						if (temp.last_direction == Direction.NONE) {
+							if (!temp.attack.isStopped()) {
+								g.drawAnimation(temp.attack, temp.x + 32, temp.y + 12);
+							}
+							if (temp.attacking) {
+								if (temp.attack.isStopped()) {
+									temp.attack.start();
+									temp.attack.setLooping(false);
+								}
+								if (temp.attack.getFrame() == temp.attack.getFrameCount() - 1) {
+									temp.attack.stop();
+									temp.attack.setCurrentFrame(0);
+									temp.attacking = false;
+								}
+							}
+							g.drawAnimation(temp.right_anim, temp.x, temp.y);
+							break;
+						case Direction.UP:
+							if (temp.last_direction == Direction.NONE) {
+								temp.up_anim.stop();
+								temp.up_anim.setCurrentFrame(0);
+							} else if (temp.up_anim.isStopped() && !temp.IsAnimating()) {
+								temp.up_anim.start();
+							}
+							g.drawAnimation(temp.up_anim, temp.x, temp.y);
+							break;
+						case Direction.DOWN:
+							if (temp.last_direction == Direction.NONE) {
+								temp.down_anim.stop();
+								temp.down_anim.setCurrentFrame(0);
+							} else if (temp.down_anim.isStopped() && !temp.IsAnimating()) {
+								temp.down_anim.start();
+							}
+							g.drawAnimation(temp.down_anim, temp.x, temp.y);
+							break;
+						default:
 							temp.down_anim.stop();
 							temp.down_anim.setCurrentFrame(0);
-						} else if (temp.down_anim.isStopped() && !temp.IsAnimating()) {
-							temp.down_anim.start();
+							g.drawAnimation(temp.down_anim, temp.x, temp.y);
+							break;	
 						}
-						g.drawAnimation(temp.down_anim, temp.x, temp.y);
-						break;
-					default:
-						temp.down_anim.stop();
-						temp.down_anim.setCurrentFrame(0);
-						g.drawAnimation(temp.down_anim, temp.x, temp.y);
-						break;	
+					} else {
+						Animation animation = temp.animation.get(temp.last_animation_name);
+
+						switch(temp.last_animation_name) {
+						case AnimationLoader.LEFT:
+							if (!temp.attacking) {
+								if (temp.last_direction == Direction.NONE) {
+									animation.stop();
+									animation.setCurrentFrame(0);
+								} else if (animation.isStopped() && !temp.IsAnimating()) {
+									animation.start();
+								}
+								g.drawAnimation(animation, temp.x, temp.y);
+							} else {
+								temp = HandleActionAnimation(world, g, temp);
+							}
+							break;
+						case AnimationLoader.RIGHT:
+							if (!temp.attacking) {
+								if (temp.last_direction == Direction.NONE) {
+									animation.stop();
+									animation.setCurrentFrame(0);
+								} else if (animation.isStopped() && !temp.IsAnimating()) {
+									animation.start();
+								}
+								g.drawAnimation(animation, temp.x, temp.y);
+							} else {
+								temp = HandleActionAnimation(world, g, temp);
+							}
+							break;
+						case AnimationLoader.UP:
+							if (!temp.attacking) {
+								if (temp.last_direction == Direction.NONE) {
+									animation.stop();
+									animation.setCurrentFrame(0);
+								} else if (animation.isStopped() && !temp.IsAnimating()) {
+									animation.start();
+								}
+								g.drawAnimation(animation, temp.x, temp.y);
+							} else {
+								temp = HandleActionAnimation(world, g, temp);
+							}
+							break;
+						case AnimationLoader.DOWN:
+							if (!temp.attacking) {
+								if (temp.last_direction == Direction.NONE) {
+									animation.stop();
+									animation.setCurrentFrame(0);
+								} else if (animation.isStopped() && !temp.IsAnimating()) {
+									animation.start();
+								}
+								g.drawAnimation(animation, temp.x, temp.y);
+							} else {
+								temp = HandleActionAnimation(world, g, temp);
+							}
+							break;
+						default:
+							animation.stop();
+							animation.setCurrentFrame(0);
+							g.drawAnimation(animation, temp.x, temp.y);
+							break;
+						}
 					}
 				}
 			}
-			/*Image image;
-			try {
-				image = new Image("res/sprites/npc.png");
-				if (temp.path != null) {
-					for (int n = 0; n < temp.path.targetCount; n++) {
-						g.drawImage(image, temp.path.targetX.get(n), temp.path.targetY.get(n));
-					}
-				}
-			} catch (SlickException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
+
 			world.entities.set(i, temp);
 		}
 	}
@@ -214,6 +269,28 @@ public class GraphicsController {
 				g.drawString(Dialog.text.get(Dialog.dialog_pos), temp.x + 10, temp.y + 10);
 			}
 		}
+	}
+	
+	private static Entity HandleActionAnimation(World world, Graphics g, Entity temp) {
+		Animation animation = null;
+		switch(temp.type) {
+		case EntityDictionary.PLAYER:
+			animation = temp.animation.get(AnimationLoader.SHOOT + temp.last_animation_name);
+			animation.setLooping(false);
+			if (animation != null) {
+				if (animation.isStopped() && temp.attacking && animation.getFrame() == 0) {
+					animation.restart();
+				}
+				if (animation.isStopped()) {
+					temp.attacking = false;
+					animation.setCurrentFrame(0);
+					Player.ShootBullet(world, temp);
+				}
+				g.drawAnimation(animation, temp.x, temp.y);
+			}
+			break;
+		}
+		return temp;
 	}
 	
 }

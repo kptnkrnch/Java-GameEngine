@@ -13,7 +13,7 @@ public class World {
 	public Tile[][] tile;
 	public ArrayList<Entity> entities;
 	public ArrayList<Menu> menus;
-	private int currentID;
+	private long currentID;
 	public TileDictionary tile_dictionary;
 	public EntityDictionary entity_dictionary;
 	
@@ -63,7 +63,9 @@ public class World {
 	}
 	
 	public void RemoveEntity(int index) {
-		this.entities.remove(index);
+		if (index > 0 && index < this.entities.size()) {
+			this.entities.remove(index);
+		}
 	}
 	
 	public int FindPlayer() throws PlayerNotFoundException {
@@ -124,5 +126,16 @@ public class World {
 		} else {
 			return null;
 		}
+	}
+	
+	/* returns -1 on fail */
+	public int FindEntity(long entityID) {		
+		for (int i = 0; i < entities.size(); i++) {
+			if (entities.get(i).id == entityID) {
+				return i;
+			}
+		}
+		
+		return -1;
 	}
 }

@@ -1,6 +1,7 @@
 package gameplay;
 
 import java.awt.Rectangle;
+import java.util.HashMap;
 
 import engine.Entity;
 import engine.EntityDictionary;
@@ -32,19 +33,17 @@ public class CollisionController {
 		}
 	}
 	
-	public static int[] CheckEntityCollision(World world, Entity temp_entity) {
-		int[] collision_list = new int[9];
+	/* HashMap return value is EntityID (key) and EntityType (value) */
+	public static HashMap<Long, Integer> CheckEntityCollision(World world, Entity temp_entity) {
+		HashMap<Long, Integer> collision_list = new HashMap<Long, Integer>();
 		int collision_count = 0;
-		
-		for (int i = 0; i < 9; i++) {
-			collision_list[i] = -1;
-		}
 		
 		for (int i = 0; i < world.entities.size(); i++) {
 			Entity temp = world.GetEntity(i);
 			if (temp.IsSolid() && temp.id != temp_entity.id && temp.type != EntityDictionary.CAMERA) {
 				if (temp_entity.Intersects(temp)) {
-					collision_list[collision_count++] = temp.type;
+					collision_list.put(temp.id, temp.type);
+					collision_count++;
 				}
 			}
 		}

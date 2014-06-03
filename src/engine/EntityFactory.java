@@ -4,14 +4,17 @@ import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import entities.Player;
+import graphics.AnimationLoader;
+
 public class EntityFactory {
 	
-	public static Entity CreateEntity(int type, int x, int y, int width, int height) {
+	public static Entity CreateEntity(World world, int type, int x, int y, int width, int height) {
 		switch (type) {
 		case EntityDictionary.CAMERA:
 			return CreateCamera(x, y);
 		case EntityDictionary.PLAYER:
-			return CreatePlayer(x, y, width, height);
+			return CreatePlayer(world, x, y, width, height);
 		case EntityDictionary.NPC:
 			return CreateNPC(x, y, width, height);
 		case EntityDictionary.ENEMY:
@@ -21,7 +24,7 @@ public class EntityFactory {
 		return null;
 	}
 	
-	private static Entity CreatePlayer(int x, int y, int width, int height) {
+	private static Entity CreatePlayer(World world, int x, int y, int width, int height) {
 		Entity e = new Entity(EntityDictionary.PLAYER, x, y, width, height);
 		e.speed = 0.2f;
 		e.controlled = true;
@@ -71,6 +74,11 @@ public class EntityFactory {
 		e.up_anim.setPingPong(true);
 		e.down_anim = new Animation(down, 300);
 		e.down_anim.setPingPong(true);
+		
+		String src = world.entity_dictionary.GetAnimationSource(EntityDictionary.PLAYER);
+		e.animation = world.entity_dictionary.LoadAnimations(src);
+		
+		Player.SetCollisionBox(e, e.x, e.y);
 		
 		return e;
 	}
@@ -141,6 +149,37 @@ public class EntityFactory {
 		} catch (SlickException e1) {
 		}
 		e.down_anim = new Animation(down, 1);
+		
+		return e;
+	}
+	
+	public static Entity CreateBullet(World world, int x, int y, String animation, int c_attack) {
+		Entity e = new Entity(EntityDictionary.BULLET, x, y, 6, 6);
+		e.speed = 0.4f;
+		e.controlled = false;
+		e.solid = true;
+		e.moveable = true;
+		e.last_animation_name = animation;
+		e.c_attack = c_attack;
+		
+		switch(animation) {
+		case AnimationLoader.LEFT:
+			e.last_direction = Direction.LEFT;
+			break;
+		case AnimationLoader.RIGHT:
+			e.last_direction = Direction.RIGHT;
+			break;
+		case AnimationLoader.UP:
+			e.last_direction = Direction.UP;
+			break;
+		case AnimationLoader.DOWN:
+			e.last_direction = Direction.DOWN;
+			break;
+		}
+		
+		
+		String src = world.entity_dictionary.GetAnimationSource(EntityDictionary.BULLET);
+		e.animation = world.entity_dictionary.LoadAnimations(src);
 		
 		return e;
 	}

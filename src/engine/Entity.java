@@ -1,7 +1,12 @@
 package engine;
 
+import graphics.AnimationLoader;
+
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
@@ -11,7 +16,7 @@ import pathing.Path;
 import pathing.PathFinder;
 
 public class Entity {
-	public int id;
+	public long id;
 	public int x;
 	public int y;
 	public int width;
@@ -36,12 +41,13 @@ public class Entity {
 	
 	/* Graphics section */
 	public int last_animation;
+	public String last_animation_name;
 	public Animation left_anim;
 	public Animation right_anim;
 	public Animation down_anim;
 	public Animation up_anim;
 	public boolean animating;
-	public Animation[] animation;
+	public HashMap<String, Animation> animation;
 	
 	/* AI section */
 	public PathFinder pathFinder;
@@ -82,6 +88,7 @@ public class Entity {
 		this.last_animation = temp.last_animation;
 		this.animating = temp.animating;
 		this.animation = temp.animation;
+		this.last_animation_name = temp.last_animation_name;
 		
 		this.pathFinder = temp.pathFinder;
 		this.path = temp.path;
@@ -124,6 +131,7 @@ public class Entity {
 		this.last_animation = Direction.NONE;
 		this.animating = false;
 		this.animation = null;
+		this.last_animation_name = AnimationLoader.DOWN;
 		
 		this.pathFinder = new PathFinder();
 		this.path = null;
@@ -277,6 +285,7 @@ public class Entity {
 		this.last_direction = temp.last_direction;
 		this.last_distance = temp.last_distance;
 		this.last_animation = temp.last_animation;
+		this.last_animation_name = temp.last_animation_name;
 		
 		this.path = temp.path;
 		this.pathFinder = temp.pathFinder;
@@ -296,7 +305,7 @@ public class Entity {
 		this.attack = temp.attack;
 	}
 	
-	public void UpdateAnimations(int fps_scaler) {
+	/*public void UpdateAnimations(int fps_scaler) {
 		if (left_anim != null) {
 			left_anim.update(fps_scaler);
 		}
@@ -309,11 +318,17 @@ public class Entity {
 		if (up_anim != null) {
 			up_anim.update(fps_scaler);
 		}
-	}
+	}*/
 	
-	public void UpdateAnimation(int fps_scaler) {
-		if (this.animation != null && last_animation > 0 && last_animation <= this.animation.length) {
-			this.animation[last_animation - 1].update(fps_scaler);
+	public void UpdateAnimations(int fps_scaler) {
+		if (this.animation != null) {
+			Iterator<Entry<String, Animation>> tempIterator = this.animation.entrySet().iterator();
+			while (tempIterator.hasNext()) {
+				Entry<String, Animation> current = tempIterator.next();
+				Animation cur_anim = current.getValue();
+				cur_anim.update(fps_scaler);
+				this.animation.put(current.getKey(), cur_anim);
+			}
 		}
 	}
 	

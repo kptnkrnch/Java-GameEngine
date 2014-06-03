@@ -33,8 +33,8 @@ import sound.SoundController;
 public class Main extends BasicGame {
 	
 	private World world;
-	public static final int ResX = 1600;
-	public static final int ResY = 900;
+	public static final int ResX = 800;
+	public static final int ResY = 600;
 	public static boolean debug_mode = false;
 	public static Controller controller = null;
 	
@@ -50,7 +50,7 @@ public class Main extends BasicGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		AppGameContainer app = new AppGameContainer(new Main("Default Engine"));
-		app.setDisplayMode(ResX, ResY, false);
+		app.setDisplayMode(ResX, ResY, true);
 		app.setIcon("res/icon/icon.png");
 		app.setShowFPS(false);
 		app.setVSync(false);
@@ -74,31 +74,37 @@ public class Main extends BasicGame {
 	@Override
 	public void init(GameContainer gc) throws SlickException {
 		
-		/* Finding Xbox 360 controller */
-		for (int i = 0; i < Controllers.getControllerCount(); i++) {
-			Controller temp = Controllers.getController(i);
-			if (temp.getName().contains("XBOX 360")) {
-				controller = temp;
-				System.out.println(temp.getName());
-				break;
-			}
-		}
-		
 		world = new World();
 		world.LoadTileDictionary("res/dictionaries/TileDictionary.dict");
 		world.LoadEntityDictionary("res/dictionaries/EntityDictionary.dict");
+		
+		//world.entity_dictionary.LoadAnimations("res/sprites/player/player.anim");
+		
 		MapLoader.LoadMap(world, "res/maps/Map01.map");
+		
 		InputController.LoadKeyMapping("res/config/keymap.conf");
-		JoystickController.LoadKeyMapping("res/config/joymap.conf");
-		Entity npc = EntityFactory.CreateEntity(EntityDictionary.NPC, 384, 160, 32, 32);
+		String controller_name = JoystickController.LoadKeyMapping("res/config/joymap.conf");
+		if (controller_name != null) {
+			/* Finding controller */
+			for (int i = 0; i < Controllers.getControllerCount(); i++) {
+				Controller temp = Controllers.getController(i);
+				if (temp.getName().contains(controller_name)) {
+					controller = temp;
+					System.out.println(temp.getName());
+					break;
+				}
+			}
+		}
+		
+		Entity npc = EntityFactory.CreateEntity(world, EntityDictionary.NPC, 384, 160, 32, 32);
 		Menu menu = new Menu("infopanel", "res/gui/info_panel.png");
 		world.AddMenu(menu);
 		npc.dialog = new ArrayList<String>();
 		npc.dialog.add("Hello World");
 		world.AddEntity(npc);
-		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.ENEMY, 384, 416, 32, 32));
-		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.PLAYER, 288, 128, 32, 32));
-		world.AddEntity(EntityFactory.CreateEntity(EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.ENEMY, 384, 416, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.PLAYER, 288, 128, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));
 		try {
 			int player = world.FindPlayer();
 			Camera.Follow(player);

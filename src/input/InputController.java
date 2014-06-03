@@ -33,11 +33,13 @@ public class InputController {
 			}
 			
 			HashMap<String, Boolean> tempmap = JoystickController.GetControllerHeldInput(controller);
-			Iterator<Entry<String, Boolean>> tempIterator = tempmap.entrySet().iterator();
-			while (tempIterator.hasNext()) {
-				Entry<String, Boolean> current = tempIterator.next();
-				if (current.getValue()) {
-					held_input.put(current.getKey(), true);
+			if (tempmap != null) {
+				Iterator<Entry<String, Boolean>> tempIterator = tempmap.entrySet().iterator();
+				while (tempIterator.hasNext()) {
+					Entry<String, Boolean> current = tempIterator.next();
+					if (current.getValue()) {
+						held_input.put(current.getKey(), true);
+					}
 				}
 			}
 			
@@ -66,11 +68,13 @@ public class InputController {
 			}
 			
 			HashMap<String, Boolean> tempmap = JoystickController.GetControllerPressedInput(controller);
-			Iterator<Entry<String, Boolean>> tempIterator = tempmap.entrySet().iterator();
-			while (tempIterator.hasNext()) {
-				Entry<String, Boolean> current = tempIterator.next();
-				if (current.getValue()) {
-					pressed_input.put(current.getKey(), true);
+			if (tempmap != null) {
+				Iterator<Entry<String, Boolean>> tempIterator = tempmap.entrySet().iterator();
+				while (tempIterator.hasNext()) {
+					Entry<String, Boolean> current = tempIterator.next();
+					if (current.getValue()) {
+						pressed_input.put(current.getKey(), true);
+					}
 				}
 			}
 			

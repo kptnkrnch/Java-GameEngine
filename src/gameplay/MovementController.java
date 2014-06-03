@@ -7,6 +7,7 @@ import engine.EntityDictionary;
 import engine.Main;
 import engine.States;
 import engine.World;
+import entities.Bullet;
 import entities.Camera;
 import entities.Enemy;
 import entities.Player;
@@ -27,6 +28,9 @@ public class MovementController {
 					world.SetEntity(i, e);
 					break;
 				case EntityDictionary.NPC:
+					break;
+				case EntityDictionary.BULLET:
+					Bullet.Move(world, e, fps_scaler);
 					break;
 				case EntityDictionary.ENEMY:
 					Enemy.MoveEnemy(world, e, fps_scaler);

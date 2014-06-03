@@ -11,6 +11,7 @@ import org.newdawn.slick.SlickException;
 
 public class TileDictionary {
 	
+	public static final int NONE = -1;
 	public static final int GRASS = 1;
 	public static final int TREE = 2;
 	public static final int WATER = 3;

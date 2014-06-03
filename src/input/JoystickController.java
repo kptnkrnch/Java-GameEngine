@@ -31,281 +31,298 @@ public class JoystickController {
 	private static final float SENSITIVITY = 0.30f;
 	
 	private static void Init(Controller controller) {
-		if (controller.getButtonCount() > 0) {
-			key_released = new boolean[MAX_BUTTON_COUNT];
-			for (int i = 0; i < MAX_BUTTON_COUNT; i++) {
-				key_released[i] = true;
+		if (controller != null) {
+			if (controller.getButtonCount() > 0) {
+				key_released = new boolean[MAX_BUTTON_COUNT];
+				for (int i = 0; i < MAX_BUTTON_COUNT; i++) {
+					key_released[i] = true;
+				}
 			}
 		}
 	}
 	
 	public static HashMap<String, Boolean> GetControllerHeldInput(Controller controller) {
-		if (key_released == null) {
-			Init(controller);
-		}
-		if (joymap != null) {
-			
-			Iterator<Entry<String, Boolean>> inputIterator = held_input.entrySet().iterator();
-			while (inputIterator.hasNext()) {
-				Entry<String, Boolean> current = inputIterator.next();
-				held_input.put(current.getKey(), false);
+		if (controller != null) {
+			if (key_released == null) {
+				Init(controller);
 			}
-			
-			/* BUTTONS SECTION */
-			for (int i = 0; i < controller.getButtonCount(); i++) {
-				if (controller.isButtonPressed(i)) {
-					//System.out.println(controller.getButtonName(i));
-					String command = joymap.get(i);
+			if (joymap != null) {
+				//System.out.println("DPAD X: " + controller.getPovX());
+				//System.out.println("DPAD Y: " + controller.getPovY());
+				//System.out.println();
+				Iterator<Entry<String, Boolean>> inputIterator = held_input.entrySet().iterator();
+				while (inputIterator.hasNext()) {
+					Entry<String, Boolean> current = inputIterator.next();
+					held_input.put(current.getKey(), false);
+				}
+				
+				/* BUTTONS SECTION */
+				for (int i = 0; i < controller.getButtonCount(); i++) {
+					if (controller.isButtonPressed(i)) {
+						//System.out.println(controller.getButtonName(i));
+						String command = joymap.get(i);
+						if (command != null && command.length() > 0) {
+							held_input.put(command, true);
+						}
+					}
+				}
+				
+				/* LEFT ANALOG SECTION*/
+				if (controller.getXAxisValue() > SENSITIVITY) { //right
+					//14
+					String command = joymap.get(14);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+					}
+				} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
+					//15
+					String command = joymap.get(15);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
 					}
 				}
+				if (controller.getYAxisValue() < -SENSITIVITY) { //up
+					//16
+					String command = joymap.get(16);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+					}
+				} else if (controller.getYAxisValue() > SENSITIVITY) { //down
+					//17
+					String command = joymap.get(17);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+					}
+				}
+				
+				/* RIGHT ANALOG SECTION*/
+				if (controller.getXAxisValue() > SENSITIVITY) { //right
+					//18
+					String command = joymap.get(18);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+					}
+				} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
+					//19
+					String command = joymap.get(19);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+					}
+				}
+				if (controller.getYAxisValue() < -SENSITIVITY) { //up
+					//20
+					String command = joymap.get(20);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+					}
+				} else if (controller.getYAxisValue() > SENSITIVITY) { //down
+					//21
+					String command = joymap.get(21);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+					}
+				}
+				
+				/* DPAD SECTION*/
+				if (controller.getPovX() < -SENSITIVITY) { //left dpad
+					//10
+					String command = joymap.get(10);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+						//System.out.println(command);
+					}
+				} else if (controller.getPovX() > SENSITIVITY) { //right dpad
+					//11
+					String command = joymap.get(11);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+						//System.out.println(command);
+					}
+				}
+				if (controller.getPovY() < -SENSITIVITY) { //up dpad
+					//12
+					String command = joymap.get(12);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+						//System.out.println(command);
+					}
+				} else if (controller.getPovY() > SENSITIVITY) { //down dpad
+					//13
+					String command = joymap.get(13);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+						//System.out.println(command);
+					}
+				}
+				
+				/* TRIGGERS SECTION */
+				if (controller.getZAxisValue() > SENSITIVITY) { //left trigger
+					//22
+					String command = joymap.get(22);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+					}
+				} else if (controller.getZAxisValue() < -SENSITIVITY) { //right trigger
+					//23
+					String command = joymap.get(23);
+					if (command != null && command.length() > 0) {
+						held_input.put(command, true);
+					}
+				}
+				
+				return held_input;
 			}
-			
-			/* LEFT ANALOG SECTION*/
-			if (controller.getXAxisValue() > SENSITIVITY) { //right
-				//14
-				String command = joymap.get(14);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
-				//15
-				String command = joymap.get(15);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			}
-			if (controller.getYAxisValue() < -SENSITIVITY) { //up
-				//16
-				String command = joymap.get(16);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			} else if (controller.getYAxisValue() > SENSITIVITY) { //down
-				//17
-				String command = joymap.get(17);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			}
-			
-			/* RIGHT ANALOG SECTION*/
-			if (controller.getXAxisValue() > SENSITIVITY) { //right
-				//18
-				String command = joymap.get(18);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
-				//19
-				String command = joymap.get(19);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			}
-			if (controller.getYAxisValue() < -SENSITIVITY) { //up
-				//20
-				String command = joymap.get(20);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			} else if (controller.getYAxisValue() > SENSITIVITY) { //down
-				//21
-				String command = joymap.get(21);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			}
-			
-			/* DPAD SECTION*/
-			if (controller.getPovX() < -SENSITIVITY) { //left dpad
-				//10
-				String command = joymap.get(10);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			} else if (controller.getPovY() > SENSITIVITY) { //right dpad
-				//11
-				String command = joymap.get(11);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			}
-			if (controller.getPovY() < -SENSITIVITY) { //up dpad
-				//12
-				String command = joymap.get(12);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			} else if (controller.getPovY() > SENSITIVITY) { //down dpad
-				//13
-				String command = joymap.get(13);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			}
-			
-			/* TRIGGERS SECTION */
-			if (controller.getZAxisValue() > SENSITIVITY) { //left trigger
-				//22
-				String command = joymap.get(22);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			} else if (controller.getZAxisValue() < -SENSITIVITY) { //right trigger
-				//23
-				String command = joymap.get(23);
-				if (command != null && command.length() > 0) {
-					held_input.put(command, true);
-				}
-			}
-			
-			return held_input;
 		}
 		
 		return null;
 	}
 	
 	public static HashMap<String, Boolean> GetControllerPressedInput(Controller controller) {
-		if (key_released == null) {
-			Init(controller);
-		}
-		if (joymap != null) {
-			
-			Iterator<Entry<String, Boolean>> inputIterator = pressed_input.entrySet().iterator();
-			while (inputIterator.hasNext()) {
-				Entry<String, Boolean> current = inputIterator.next();
-				pressed_input.put(current.getKey(), false);
+		if (controller != null) {
+			if (key_released == null) {
+				Init(controller);
 			}
-			
-			/* BUTTONS SECTION */			
-			for (int i = 0; i < controller.getButtonCount(); i++) {
-				if (controller.isButtonPressed(i)) {
-					if (key_released[i]) {
-						String command = joymap.get(i);
-						if (command != null && command.length() > 0) {
-							pressed_input.put(command, true);
+			if (joymap != null) {
+				
+				Iterator<Entry<String, Boolean>> inputIterator = pressed_input.entrySet().iterator();
+				while (inputIterator.hasNext()) {
+					Entry<String, Boolean> current = inputIterator.next();
+					pressed_input.put(current.getKey(), false);
+				}
+				
+				/* BUTTONS SECTION */			
+				for (int i = 0; i < controller.getButtonCount(); i++) {
+					if (controller.isButtonPressed(i)) {
+						if (key_released[i]) {
+							String command = joymap.get(i);
+							if (command != null && command.length() > 0) {
+								pressed_input.put(command, true);
+							}
+							key_released[i] = false;
 						}
-						key_released[i] = false;
+					} else {
+						key_released[i] = true;
 					}
-				} else {
-					key_released[i] = true;
 				}
+				
+				/* LEFT ANALOG SECTION*/
+				if (controller.getXAxisValue() > SENSITIVITY) { //right
+					//14
+					String command = joymap.get(14);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
+					//15
+					String command = joymap.get(15);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				}
+				if (controller.getYAxisValue() < -SENSITIVITY) { //up
+					//16
+					String command = joymap.get(16);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				} else if (controller.getYAxisValue() > SENSITIVITY) { //down
+					//17
+					String command = joymap.get(17);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				}
+				
+				/* RIGHT ANALOG SECTION*/
+				if (controller.getXAxisValue() > SENSITIVITY) { //right
+					//18
+					String command = joymap.get(18);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
+					//19
+					String command = joymap.get(19);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				}
+				if (controller.getYAxisValue() < -SENSITIVITY) { //up
+					//20
+					String command = joymap.get(20);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				} else if (controller.getYAxisValue() > SENSITIVITY) { //down
+					//21
+					String command = joymap.get(21);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				}
+				
+				/* DPAD SECTION*/
+				if (controller.getPovX() < -SENSITIVITY) { //left dpad
+					//10
+					String command = joymap.get(10);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				} else if (controller.getPovY() > SENSITIVITY) { //right dpad
+					//11
+					String command = joymap.get(11);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				}
+				if (controller.getPovY() < -SENSITIVITY) { //up dpad
+					//12
+					String command = joymap.get(12);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				} else if (controller.getPovY() > SENSITIVITY) { //down dpad
+					//13
+					String command = joymap.get(13);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				}
+				
+				/* TRIGGERS SECTION */
+				if (controller.getZAxisValue() > SENSITIVITY) { //left trigger
+					//22
+					String command = joymap.get(22);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				} else if (controller.getZAxisValue() < -SENSITIVITY) { //right trigger
+					//23
+					String command = joymap.get(23);
+					if (command != null && command.length() > 0) {
+						pressed_input.put(command, true);
+					}
+				}
+				
+				return pressed_input;
 			}
-			
-			/* LEFT ANALOG SECTION*/
-			if (controller.getXAxisValue() > SENSITIVITY) { //right
-				//14
-				String command = joymap.get(14);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
-				//15
-				String command = joymap.get(15);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			}
-			if (controller.getYAxisValue() < -SENSITIVITY) { //up
-				//16
-				String command = joymap.get(16);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			} else if (controller.getYAxisValue() > SENSITIVITY) { //down
-				//17
-				String command = joymap.get(17);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			}
-			
-			/* RIGHT ANALOG SECTION*/
-			if (controller.getXAxisValue() > SENSITIVITY) { //right
-				//18
-				String command = joymap.get(18);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
-				//19
-				String command = joymap.get(19);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			}
-			if (controller.getYAxisValue() < -SENSITIVITY) { //up
-				//20
-				String command = joymap.get(20);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			} else if (controller.getYAxisValue() > SENSITIVITY) { //down
-				//21
-				String command = joymap.get(21);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			}
-			
-			/* DPAD SECTION*/
-			if (controller.getPovX() < -SENSITIVITY) { //left dpad
-				//10
-				String command = joymap.get(10);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			} else if (controller.getPovY() > SENSITIVITY) { //right dpad
-				//11
-				String command = joymap.get(11);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			}
-			if (controller.getPovY() < -SENSITIVITY) { //up dpad
-				//12
-				String command = joymap.get(12);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			} else if (controller.getPovY() > SENSITIVITY) { //down dpad
-				//13
-				String command = joymap.get(13);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			}
-			
-			/* TRIGGERS SECTION */
-			if (controller.getZAxisValue() > SENSITIVITY) { //left trigger
-				//22
-				String command = joymap.get(22);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			} else if (controller.getZAxisValue() < -SENSITIVITY) { //right trigger
-				//23
-				String command = joymap.get(23);
-				if (command != null && command.length() > 0) {
-					pressed_input.put(command, true);
-				}
-			}
-			
-			return pressed_input;
 		}
 		
 		return null;
 	}
 	
-	public static boolean LoadKeyMapping(String keyMapConfig_location) {
+	public static String LoadKeyMapping(String keyMapConfig_location) {
 		joymap = new HashMap<Integer, String>();
 		pressed_input = new HashMap<String, Boolean>();
 		held_input = new HashMap<String, Boolean>();
 		File keyMapFile = new File(keyMapConfig_location);
+		String controller_name = null;
 		try {
 			Scanner scan = new Scanner(keyMapFile);
+			if (scan.hasNextLine()) {
+				String line = scan.nextLine();
+				controller_name = line.trim();
+			}
 			while(scan.hasNextLine()) {
 				String line = scan.nextLine();
 				String command = null;
@@ -341,7 +358,7 @@ public class JoystickController {
 			held_input = null;
 		}
 		
-		return true;
+		return controller_name;
 	}
 	
 }
