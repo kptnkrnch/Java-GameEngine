@@ -5,7 +5,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 import entities.Player;
-import graphics.AnimationLoader;
+import graphics.AnimationController;
 
 public class EntityFactory {
 	
@@ -16,9 +16,9 @@ public class EntityFactory {
 		case EntityDictionary.PLAYER:
 			return CreatePlayer(world, x, y, width, height);
 		case EntityDictionary.NPC:
-			return CreateNPC(x, y, width, height);
+			return CreateNPC(world, x, y, width, height);
 		case EntityDictionary.ENEMY:
-			return CreateEnemy(x, y, width, height);
+			return CreateEnemy(world, x, y, width, height);
 		}
 		
 		return null;
@@ -37,43 +37,9 @@ public class EntityFactory {
 		e.c_attack = 10;
 		e.c_defence = 5;
 		e.c_speed = 50;
-		
-		Image[] left = new Image[4];
-		Image[] right = new Image[4];
-		Image[] up = new Image[3];
-		Image[] down = new Image[3];
-		
-		try {
-			left[0] = new Image("res/sprites/player/josh_walk_left_1.png");
-			left[1] = new Image("res/sprites/player/josh_walk_left_2.png");
-			left[2] = new Image("res/sprites/player/josh_walk_left_3.png");
-			left[3] = new Image("res/sprites/player/josh_walk_left_4.png");
-			
-			right[0] = new Image("res/sprites/player/josh_walk_right_1.png");
-			right[1] = new Image("res/sprites/player/josh_walk_right_2.png");
-			right[2] = new Image("res/sprites/player/josh_walk_right_3.png");
-			right[3] = new Image("res/sprites/player/josh_walk_right_4.png");
-			
-			down[0] = new Image("res/sprites/player/josh_walk_front_1.png");
-			down[1] = new Image("res/sprites/player/josh_walk_front_2.png");
-			down[2] = new Image("res/sprites/player/josh_walk_front_3.png");
-			
-			up[0] = new Image("res/sprites/player/josh_walk_back_1.png");
-			up[1] = new Image("res/sprites/player/josh_walk_back_2.png");
-			up[2] = new Image("res/sprites/player/josh_walk_back_3.png");
-		} catch (SlickException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		e.left_anim = new Animation(left, 300);
-		e.left_anim.setPingPong(true);
-		e.right_anim = new Animation(right, 300);
-		e.right_anim.setPingPong(true);
-		e.up_anim = new Animation(up, 300);
-		e.up_anim.setPingPong(true);
-		e.down_anim = new Animation(down, 300);
-		e.down_anim.setPingPong(true);
+		e.c_critical_chance = 20;
+		e.c_critical_damage = 0.50f;
+		e.c_dodge_chance = 10;
 		
 		String src = world.entity_dictionary.GetAnimationSource(EntityDictionary.PLAYER);
 		e.animation = world.entity_dictionary.LoadAnimations(src);
@@ -92,25 +58,20 @@ public class EntityFactory {
 		return e;
 	}
 	
-	private static Entity CreateNPC(int x, int y, int width, int height) {
+	private static Entity CreateNPC(World world, int x, int y, int width, int height) {
 		Entity e = new Entity(EntityDictionary.NPC, x, y, width, height);
 		e.speed = 0f;
 		e.controlled = false;
 		e.solid = true;
 		e.moveable = false;
 		
-		Image[] down = new Image[1];
-		
-		try {
-			down[0] = new Image("res/sprites/npc.png");
-		} catch (SlickException e1) {
-		}
-		e.down_anim = new Animation(down, 1);
+		String src = world.entity_dictionary.GetAnimationSource(EntityDictionary.NPC);
+		e.animation = world.entity_dictionary.LoadAnimations(src);
 		
 		return e;
 	}
 	
-	private static Entity CreateEnemy(int x, int y, int width, int height) {
+	private static Entity CreateEnemy(World world, int x, int y, int width, int height) {
 		Entity e = new Entity(EntityDictionary.ENEMY, x, y, width, height);
 		e.speed = 0.1f;
 		e.controlled = false;
@@ -123,56 +84,51 @@ public class EntityFactory {
 		e.c_attack = 10;
 		e.c_defence = 3;
 		e.c_speed = 5;
+		e.c_critical_chance = 5;
+		e.c_critical_damage = 0.20f;
+		e.c_dodge_chance = 10;
 		
-		Image[] down = new Image[1];
-		
-		try {
-			down[0] = new Image("res/sprites/enemy.png");
-		} catch (SlickException e1) {
-		}
-		e.down_anim = new Animation(down, 1);
+		String src = world.entity_dictionary.GetAnimationSource(EntityDictionary.ENEMY);
+		e.animation = world.entity_dictionary.LoadAnimations(src);
 		
 		return e;
 	}
 	
-	public static Entity CreateDialog(int x, int y) {
+	public static Entity CreateDialog(World world, int x, int y) {
 		Entity e = new Entity(EntityDictionary.DIALOG_BOX, x, y, 240, 160);
 		e.speed = 0f;
 		e.controlled = false;
 		e.solid = false;
 		e.moveable = false;
 		
-		Image[] down = new Image[1];
-		
-		try {
-			down[0] = new Image("res/sprites/dialog_box.png");
-		} catch (SlickException e1) {
-		}
-		e.down_anim = new Animation(down, 1);
+		String src = world.entity_dictionary.GetAnimationSource(EntityDictionary.DIALOG_BOX);
+		e.animation = world.entity_dictionary.LoadAnimations(src);
 		
 		return e;
 	}
 	
-	public static Entity CreateBullet(World world, int x, int y, String animation, int c_attack) {
+	public static Entity CreateBullet(World world, int x, int y, String animation, Entity creator) {
 		Entity e = new Entity(EntityDictionary.BULLET, x, y, 6, 6);
 		e.speed = 0.4f;
 		e.controlled = false;
 		e.solid = true;
 		e.moveable = true;
 		e.last_animation_name = animation;
-		e.c_attack = c_attack;
+		e.c_attack = creator.c_attack;
+		e.c_critical_chance = creator.c_critical_chance;
+		e.c_critical_damage = creator.c_critical_damage;
 		
 		switch(animation) {
-		case AnimationLoader.LEFT:
+		case AnimationController.LEFT:
 			e.last_direction = Direction.LEFT;
 			break;
-		case AnimationLoader.RIGHT:
+		case AnimationController.RIGHT:
 			e.last_direction = Direction.RIGHT;
 			break;
-		case AnimationLoader.UP:
+		case AnimationController.UP:
 			e.last_direction = Direction.UP;
 			break;
-		case AnimationLoader.DOWN:
+		case AnimationController.DOWN:
 			e.last_direction = Direction.DOWN;
 			break;
 		}

@@ -33,12 +33,16 @@ import sound.SoundController;
 public class Main extends BasicGame {
 	
 	private World world;
-	public static final int ResX = 800;
-	public static final int ResY = 600;
+	public static int ScreenResX = 1280;
+	public static int ScreenResY = 720;
+	public static int ResX = 960;
+	public static int ResY = 540;
 	public static boolean debug_mode = false;
 	public static Controller controller = null;
+	public static boolean FULLSCREEN = false;
+	public static boolean VSYNC = false;
 	
-	public static int game_state = 0;
+	public static int game_state = States.PAUSED;
 	
 	public Main(String title) {
 		super(title);
@@ -50,10 +54,12 @@ public class Main extends BasicGame {
 	 */
 	public static void main(String[] args) throws SlickException {
 		AppGameContainer app = new AppGameContainer(new Main("Default Engine"));
-		app.setDisplayMode(ResX, ResY, true);
+		ResX = ScreenResX;
+		ResY = ScreenResY;
+		app.setDisplayMode(ScreenResX, ScreenResY, FULLSCREEN);
 		app.setIcon("res/icon/icon.png");
 		app.setShowFPS(false);
-		app.setVSync(false);
+		app.setVSync(VSYNC);
 		app.start();
 	}
 	

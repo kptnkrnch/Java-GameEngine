@@ -41,7 +41,7 @@ public class Enemy {
 			}
 		}
 		
-		if (target != null || !enemy.path.IsComplete()) {
+		if (target != null) {
 			if (enemy.path == null && target != null) {
 				PathFindingController.HandlePathFinding(world, enemy, target.collision_box.x, target.collision_box.y);
 			}
@@ -55,7 +55,7 @@ public class Enemy {
 					PathFindingController.HandlePathFinding(world, enemy, target.collision_box.x, target.collision_box.y);
 					enemy.path = enemy.pathFinder.FindPath();
 				}
-				if (enemy.path != null) {
+				if (enemy.path != null && !enemy.path.IsComplete()) {
 					HashMap<Long, Integer> entity_collisions = null;
 					if (!enemy.path.IsComplete()) {
 						int direction = enemy.path.GetNextDirection();

@@ -12,7 +12,7 @@ import engine.EntityFactory;
 import engine.World;
 import gameplay.CollisionController;
 import gameplay.CombatCalculator;
-import graphics.AnimationLoader;
+import graphics.AnimationController;
 
 public class Player {
 	
@@ -67,7 +67,7 @@ public class Player {
 				if (temp.last_animation != Direction.LEFT && temp.last_animation != Direction.UP) {
 					temp.last_animation = Direction.LEFT;
 					if (!temp.attacking) {
-						temp.last_animation_name = AnimationLoader.LEFT;
+						temp.last_animation_name = AnimationController.LEFT;
 					}
 				}
 				
@@ -112,7 +112,7 @@ public class Player {
 				if (temp.last_animation != Direction.LEFT && temp.last_animation != Direction.DOWN) {
 					temp.last_animation = Direction.LEFT;
 					if (!temp.attacking) {
-						temp.last_animation_name = AnimationLoader.LEFT;
+						temp.last_animation_name = AnimationController.LEFT;
 					}
 				}
 				
@@ -157,7 +157,7 @@ public class Player {
 				if (temp.last_animation != Direction.RIGHT && temp.last_animation != Direction.UP) {
 					temp.last_animation = Direction.RIGHT;
 					if (!temp.attacking) {
-						temp.last_animation_name = AnimationLoader.RIGHT;
+						temp.last_animation_name = AnimationController.RIGHT;
 					}
 				}
 				
@@ -202,7 +202,7 @@ public class Player {
 				if (temp.last_animation != Direction.RIGHT && temp.last_animation != Direction.DOWN) {
 					temp.last_animation = Direction.RIGHT;
 					if (!temp.attacking) {
-						temp.last_animation_name = AnimationLoader.RIGHT;
+						temp.last_animation_name = AnimationController.RIGHT;
 					}
 				}
 				
@@ -227,7 +227,7 @@ public class Player {
 				
 				temp.last_animation = Direction.LEFT;
 				if (!temp.attacking) {
-					temp.last_animation_name = AnimationLoader.LEFT;
+					temp.last_animation_name = AnimationController.LEFT;
 				}
 				
 			} else if (input.get("KEY_RIGHT")) {
@@ -251,7 +251,7 @@ public class Player {
 				
 				temp.last_animation = Direction.RIGHT;
 				if (!temp.attacking) {
-					temp.last_animation_name = AnimationLoader.RIGHT;
+					temp.last_animation_name = AnimationController.RIGHT;
 				}
 				
 			} else if (input.get("KEY_UP")) {
@@ -275,7 +275,7 @@ public class Player {
 				
 				temp.last_animation = Direction.UP;
 				if (!temp.attacking) {
-					temp.last_animation_name = AnimationLoader.UP;
+					temp.last_animation_name = AnimationController.UP;
 				}
 				
 			} else if (input.get("KEY_DOWN")) {
@@ -299,7 +299,7 @@ public class Player {
 				
 				temp.last_animation = Direction.DOWN;
 				if (!temp.attacking) {
-					temp.last_animation_name = AnimationLoader.DOWN;
+					temp.last_animation_name = AnimationController.DOWN;
 				}
 				
 			} else {
@@ -421,25 +421,25 @@ public class Player {
 	
 	public static void ShootBullet(World world, Entity player) {
 		switch (player.last_animation_name) {
-		case AnimationLoader.RIGHT:
+		case AnimationController.RIGHT:
 			world.AddEntity(EntityFactory.CreateBullet(world, 
 					player.collision_box.x + player.collision_box.width,
-					player.collision_box.y + 16, player.last_animation_name, player.c_attack));
+					player.collision_box.y + 12, player.last_animation_name, player));
 			break;
-		case AnimationLoader.LEFT:
+		case AnimationController.LEFT:
 			world.AddEntity(EntityFactory.CreateBullet(world, 
 					player.collision_box.x,
-					player.collision_box.y + 16, player.last_animation_name, player.c_attack));
+					player.collision_box.y + 12, player.last_animation_name, player));
 			break;
-		case AnimationLoader.UP:
+		case AnimationController.UP:
 			world.AddEntity(EntityFactory.CreateBullet(world, 
-					player.collision_box.x + player.collision_box.width - 6,
-					player.collision_box.y, player.last_animation_name, player.c_attack));
+					player.collision_box.x + player.collision_box.width - 7,
+					player.collision_box.y, player.last_animation_name, player));
 			break;
-		case AnimationLoader.DOWN:
+		case AnimationController.DOWN:
 			world.AddEntity(EntityFactory.CreateBullet(world, 
 					player.collision_box.x + 4,
-					player.collision_box.y + 16, player.last_animation_name, player.c_attack));
+					player.collision_box.y + 16, player.last_animation_name, player));
 			break;
 		}
 	}

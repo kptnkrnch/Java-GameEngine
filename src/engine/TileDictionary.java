@@ -1,6 +1,6 @@
 package engine;
 
-import graphics.AnimationLoader;
+import graphics.AnimationController;
 
 import java.io.File;
 import java.util.Scanner;
@@ -155,7 +155,7 @@ public class TileDictionary {
 					}
 					if (lineScanner.hasNext()) {
 						String anim_src = lineScanner.next();
-						AnimationLoader loader = new AnimationLoader(anim_src);
+						AnimationController loader = new AnimationController(anim_src);
 						if (loader.IsLoaded()) {
 							tiles[i] = new Animation(loader.frames, loader.durations);
 						} else {

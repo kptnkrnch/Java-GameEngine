@@ -164,7 +164,7 @@ public class GraphicsController {
 						Animation animation = temp.animation.get(temp.last_animation_name);
 
 						switch(temp.last_animation_name) {
-						case AnimationLoader.LEFT:
+						case AnimationController.LEFT:
 							if (!temp.attacking) {
 								if (temp.last_direction == Direction.NONE) {
 									animation.stop();
@@ -177,7 +177,7 @@ public class GraphicsController {
 								temp = HandleActionAnimation(world, g, temp);
 							}
 							break;
-						case AnimationLoader.RIGHT:
+						case AnimationController.RIGHT:
 							if (!temp.attacking) {
 								if (temp.last_direction == Direction.NONE) {
 									animation.stop();
@@ -190,7 +190,7 @@ public class GraphicsController {
 								temp = HandleActionAnimation(world, g, temp);
 							}
 							break;
-						case AnimationLoader.UP:
+						case AnimationController.UP:
 							if (!temp.attacking) {
 								if (temp.last_direction == Direction.NONE) {
 									animation.stop();
@@ -203,7 +203,7 @@ public class GraphicsController {
 								temp = HandleActionAnimation(world, g, temp);
 							}
 							break;
-						case AnimationLoader.DOWN:
+						case AnimationController.DOWN:
 							if (!temp.attacking) {
 								if (temp.last_direction == Direction.NONE) {
 									animation.stop();
@@ -275,7 +275,7 @@ public class GraphicsController {
 		Animation animation = null;
 		switch(temp.type) {
 		case EntityDictionary.PLAYER:
-			animation = temp.animation.get(AnimationLoader.SHOOT + temp.last_animation_name);
+			animation = temp.animation.get(AnimationController.SHOOT + temp.last_animation_name);
 			animation.setLooping(false);
 			if (animation != null) {
 				if (animation.isStopped() && temp.attacking && animation.getFrame() == 0) {

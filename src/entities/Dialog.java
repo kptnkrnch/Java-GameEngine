@@ -20,7 +20,7 @@ public class Dialog {
 			text = new ArrayList<String>(dialog);
 			dialog_pos = 0;
 			NPC_ID = id;
-			Entity entity = EntityFactory.CreateDialog(x, y);
+			Entity entity = EntityFactory.CreateDialog(world, x, y);
 			world.AddEntity(entity);
 			Main.SetState(States.TALKING);
 		}

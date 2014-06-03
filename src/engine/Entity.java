@@ -1,6 +1,6 @@
 package engine;
 
-import graphics.AnimationLoader;
+import graphics.AnimationController;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -59,6 +59,9 @@ public class Entity {
 	public int c_attack;
 	public int c_defence;
 	public int c_speed;
+	public int c_critical_chance;
+	public int c_dodge_chance;
+	public float c_critical_damage;
 	public int c_cooldown;
 	
 	public boolean attacking = false;
@@ -100,6 +103,9 @@ public class Entity {
 		this.c_attack = temp.c_attack;
 		this.c_defence = temp.c_defence;
 		this.c_speed = temp.c_speed;
+		this.c_dodge_chance = temp.c_dodge_chance;
+		this.c_critical_chance = temp.c_critical_chance;
+		this.c_critical_damage = temp.c_critical_damage;
 		this.c_cooldown = temp.c_cooldown;
 		
 		this.attacking = temp.attacking;
@@ -131,7 +137,7 @@ public class Entity {
 		this.last_animation = Direction.NONE;
 		this.animating = false;
 		this.animation = null;
-		this.last_animation_name = AnimationLoader.DOWN;
+		this.last_animation_name = AnimationController.DOWN;
 		
 		this.pathFinder = new PathFinder();
 		this.path = null;
@@ -144,23 +150,9 @@ public class Entity {
 		this.c_speed = 0;
 		this.c_defence = 0;
 		this.c_cooldown = 0;
-		Image sword[] = new Image[5];
-		try {
-			sword[0] = new Image("res/sprites/sword_right/sword_right_01.png");
-			sword[1] = new Image("res/sprites/sword_right/sword_right_02.png");
-			sword[2] = new Image("res/sprites/sword_right/sword_right_03.png");
-			sword[3] = new Image("res/sprites/sword_right/sword_right_04.png");
-			sword[4] = new Image(1,1);
-			int[] dur = new int[5];
-			dur[0] = 100;
-			dur[1] = 200;
-			dur[2] = 200;
-			dur[3] = 300;
-			dur[4] = 100;
-			this.attack = new Animation(sword, dur);
-			this.attack.stop();
-		} catch (SlickException e) {
-		}
+		this.c_dodge_chance = 0;
+		this.c_critical_chance = 0;
+		this.c_critical_damage = 0f;
 	}
 	
 	public boolean IsMoveable() {
@@ -299,6 +291,9 @@ public class Entity {
 		this.c_attack = temp.c_attack;
 		this.c_defence = temp.c_defence;
 		this.c_speed = temp.c_speed;
+		this.c_dodge_chance = temp.c_dodge_chance;
+		this.c_critical_chance = temp.c_critical_chance;
+		this.c_critical_damage = temp.c_critical_damage;
 		this.c_cooldown = temp.c_cooldown;
 		
 		this.attacking = temp.attacking;

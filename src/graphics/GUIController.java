@@ -50,6 +50,8 @@ public class GUIController {
 							13);
 				}
 				g.setColor(new Color(255, 255, 255));
+				g.drawString(temp.c_health + "/" + temp.c_max_health, 
+						14 + GraphicsController.VIEWPORT_X, 10 + GraphicsController.VIEWPORT_Y);
 				break;
 			}
 		}

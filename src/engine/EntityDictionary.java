@@ -262,6 +262,7 @@ public class EntityDictionary {
 								
 								if (lineScanner.hasNext()) {
 									frames[n] = new Image(lineScanner.next());
+									frames[n].setFilter(Image.FILTER_NEAREST);
 								} else {
 									lineScanner.close();
 									scan.close();

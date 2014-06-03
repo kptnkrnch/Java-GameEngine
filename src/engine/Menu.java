@@ -19,6 +19,7 @@ public class Menu {
 	public Menu(String menu_name, String background_location) {
 		try {
 			background = new Image(background_location);
+			background.setFilter(Image.FILTER_NEAREST);
 			name = menu_name;
 			menuitems = new ArrayList<String>();
 		} catch (SlickException e) {
