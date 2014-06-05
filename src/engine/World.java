@@ -12,6 +12,7 @@ public class World {
 	public int tilesize;
 	public Tile[][] tile;
 	public ArrayList<Entity> entities;
+	public ArrayList<Entity> dead_entities;
 	public ArrayList<Menu> menus;
 	private long currentID;
 	public TileDictionary tile_dictionary;
@@ -29,6 +30,7 @@ public class World {
 		this.tilesize = tilesize;
 		this.tile = new Tile[width][height];
 		this.entities = new ArrayList<Entity>();
+		this.dead_entities = new ArrayList<Entity>();
 		this.menus = new ArrayList<Menu>();
 	}
 	
@@ -48,8 +50,24 @@ public class World {
 		return this.entities.size();
 	}
 	
+	public int GetDeadEntityCount() {
+		return this.dead_entities.size();
+	}
+	
 	public Entity GetEntity(int index) {
-		return this.entities.get(index);
+		if (index >= 0 && index < this.entities.size()) {
+			return this.entities.get(index);
+		} else {
+			return null;
+		}
+	}
+	
+	public Entity GetDeadEntity(int index) {
+		if (index >= 0 && index < this.dead_entities.size()) {
+			return this.dead_entities.get(index);
+		} else {
+			return null;
+		}
 	}
 	
 	public void SetEntity(int index, Entity entity) {
@@ -62,9 +80,19 @@ public class World {
 		this.entities.add(entity);
 	}
 	
+	public void AddDeadEntity(Entity entity) {
+		this.dead_entities.add(entity);
+	}
+	
 	public void RemoveEntity(int index) {
-		if (index > 0 && index < this.entities.size()) {
+		if (index >= 0 && index < this.entities.size()) {
 			this.entities.remove(index);
+		}
+	}
+	
+	public void RemoveDeadEntity(int index) {
+		if (index >= 0 && index < this.dead_entities.size()) {
+			this.dead_entities.remove(index);
 		}
 	}
 	

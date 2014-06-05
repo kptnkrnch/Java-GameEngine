@@ -3,6 +3,7 @@ package graphics;
 import input.InputController;
 
 import java.awt.Rectangle;
+import java.util.HashMap;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -31,6 +32,8 @@ public class GUIController {
 	public static final String MENU_CONTROLS = "controls";
 	
 	public static int selectedControlField = -1;
+	public static HashMap<String, Integer> tempKeyMap = new HashMap<String, Integer>();
+	public static HashMap<String, Integer> tempJoyMap = new HashMap<String, Integer>();
 	
 	public static void SetCurrentMenu(String menu) {
 		previousMenuName = currentMenuName;
@@ -147,39 +150,50 @@ public class GUIController {
 				Image focused_input = new Image("res/gui/textfield/textfield_focused.png");
 				g.drawImage(temp.background, temp.x + GraphicsController.VIEWPORT_X, 
 						temp.y + GraphicsController.VIEWPORT_Y);
-				
-				for (int i = 0; i < temp.GetMenuItemCount(); i++) {
-					MenuItem item = temp.GetMenuItem(i);
-					if (item.IsHighlighted()) {
-						g.setColor(Color.black);
-					}
-					g.drawString(item.text, item.x + GraphicsController.VIEWPORT_X,
-							item.y + GraphicsController.VIEWPORT_Y);
-					
-					if (i == selectedControlField) {
-						String key = "KEY_" + item.text;
-						String key_value = "" + InputController.GetKeyValue(key);
-						
-						g.setColor(Color.black);
-						if (InputController.GetKeyValue(key) != null) {
-							g.drawImage(focused_input, temp.x + temp.width - 100, item.y);
-							g.drawString(key_value, temp.x + temp.width - 96, item.y + 3);
+				if (tempKeyMap.isEmpty() == false) {
+					for (int i = 0; i < temp.GetMenuItemCount(); i++) {
+						MenuItem item = temp.GetMenuItem(i);
+						if (item.IsHighlighted()) {
+							g.setColor(Color.black);
+						} else {
+							g.setColor(Color.white);
 						}
-					} else {
-						String key = "KEY_" + item.text;
-						String key_value = "" + InputController.GetKeyValue(key);
+						g.drawString(item.text, item.x + GraphicsController.VIEWPORT_X,
+								item.y + GraphicsController.VIEWPORT_Y);
 						
-						g.setColor(Color.black);
-						if (InputController.GetKeyValue(key) != null) {
-							g.drawImage(unfocused_input, temp.x + temp.width - 100, item.y);
-							g.drawString(key_value, temp.x + temp.width - 96, item.y + 3);
+						if (i == selectedControlField) {
+							String key = "KEY_" + item.text;
+							String key_value = Input.getKeyName(GetKeyValue(key));
+							
+							g.setColor(Color.black);
+							if (InputController.GetKeyValue(key) != null) {
+								g.drawImage(focused_input, temp.x + temp.width - 100, item.y);
+								g.drawString(key_value, temp.x + temp.width - 96, item.y + 3);
+							}
+						} else {
+							String key = "KEY_" + item.text;
+							String key_value = Input.getKeyName(GetKeyValue(key));
+							
+							g.setColor(Color.black);
+							if (InputController.GetKeyValue(key) != null) {
+								g.drawImage(unfocused_input, temp.x + temp.width - 100, item.y);
+								g.drawString(key_value, temp.x + temp.width - 96, item.y + 3);
+							}
 						}
+						
+						g.setColor(Color.white);
 					}
-					
-					g.setColor(Color.white);
 				}
 			} catch (Exception e) {
 			}
+		}
+	}
+	
+	public static Integer GetKeyValue(String key) {
+		if (tempKeyMap.containsKey(key)) {
+			return tempKeyMap.get(key);
+		} else {
+			return null;
 		}
 	}
 	

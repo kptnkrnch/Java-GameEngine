@@ -64,6 +64,65 @@ public class MapLoader {
 					throw new Exception();
 				}
 			}
+			while(scan.hasNextLine()) {
+				String line = scan.nextLine();
+				if (line.trim().length() > 0) {
+					Scanner lineScanner = new Scanner(line);
+					String type_name = null;
+					int typeID = -1;
+					int x = -1;
+					int y = -1;
+					int width = -1;
+					int height = -1;
+					int isDialog = 0;
+					
+					if (lineScanner.hasNextInt()) {
+						typeID = lineScanner.nextInt();
+					}
+					
+					if (lineScanner.hasNextInt()) {
+						x = lineScanner.nextInt();
+					}
+					
+					if (lineScanner.hasNextInt()) {
+						y = lineScanner.nextInt();
+					}
+					
+					if (lineScanner.hasNextInt()) {
+						width = lineScanner.nextInt();
+					}
+					
+					if (lineScanner.hasNextInt()) {
+						height = lineScanner.nextInt();
+					}
+					
+					if (lineScanner.hasNextInt()) {
+						isDialog = lineScanner.nextInt();
+					}
+					if (typeID != EntityDictionary.NONE
+							&& x != -1 && y != -1 && width != -1 && height != -1) {
+						Entity entity = EntityFactory.CreateEntity(world, typeID, x, y, width, height);
+						
+						if (isDialog != 0) {
+							while (scan.hasNextLine()) {
+								line = scan.nextLine();
+								
+								if (line.trim().length() == 0) {
+								} else if (line.contains("[")) {
+								} else if (line.contains("]")) {
+									break;
+								} else {
+									entity.dialog.add(line);
+								}
+							}
+						}
+						
+						world.AddEntity(entity);
+					}
+					
+					lineScanner.close();
+				}
+			}
 			scan.close();
 		} catch (Exception e) {
 			System.err.println("Failed to load map.");

@@ -1,5 +1,6 @@
 package engine;
 
+import entityproperties.SpawnPoint;
 import graphics.AnimationController;
 import graphics.FadingText;
 
@@ -72,6 +73,9 @@ public class Entity {
 	public int hittimer = 0;
 	public Animation attack;
 	
+	/* Respawning System */
+	public SpawnPoint spawn_point;
+	
 	public Entity(Entity temp) {
 		this.id = temp.id;
 		this.x = temp.x;
@@ -102,6 +106,7 @@ public class Entity {
 		this.path = temp.path;
 		
 		this.talking = temp.talking;
+		this.dialog = temp.dialog;
 		
 		this.c_health = temp.c_health;
 		this.c_max_health = temp.c_max_health;
@@ -117,6 +122,8 @@ public class Entity {
 		this.attacking = temp.attacking;
 		this.attack = temp.attack;
 		this.hittimer = temp.hittimer;
+		
+		this.spawn_point = temp.spawn_point;
 	}
 
 	public Entity(int type, int x, int y, int width, int height) {
@@ -150,6 +157,7 @@ public class Entity {
 		this.path = null;
 		
 		this.talking = false;
+		this.dialog = new ArrayList<String>();
 		
 		this.c_max_health = 1;
 		this.c_health = 1;
@@ -162,6 +170,8 @@ public class Entity {
 		this.c_critical_damage = 0f;
 		this.hittimer = 0;
 		this.last_hit = null;
+		
+		this.spawn_point = new SpawnPoint(x, y, width, height);
 	}
 	
 	public boolean IsMoveable() {
@@ -294,6 +304,7 @@ public class Entity {
 		this.animation = temp.animation;
 		
 		this.talking = temp.talking;
+		this.dialog = temp.dialog;
 		
 		this.c_health = temp.c_health;
 		this.c_max_health = temp.c_max_health;

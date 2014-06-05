@@ -1,5 +1,7 @@
 package input;
 
+import graphics.GUIController;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -116,6 +118,7 @@ public class InputController {
 				
 				lineScanner.close();
 				keymap.put(command, key);
+				GUIController.tempKeyMap.put(command, key);
 				pressed_input.put(command, false);
 				held_input.put(command, false);
 			}
@@ -134,6 +137,14 @@ public class InputController {
 			return keymap.get(key);
 		} else {
 			return null;
+		}
+	}
+	
+	public static void SetKeyMap(HashMap<String, Integer> map) {
+		Iterator<Entry<String, Integer>> mapIterator = map.entrySet().iterator();
+		while (mapIterator.hasNext()) {
+			Entry<String, Integer> current = mapIterator.next();
+			keymap.put(current.getKey(), current.getValue());
 		}
 	}
 }

@@ -20,6 +20,7 @@ import gameplay.CombatCalculator;
 public class Enemy {
 	
 	public static int BASE_COOLDOWN = 1000;
+	public static int RESPAWN_TIME = 10000;
 	
 	public static void MoveEnemy(World world, Entity enemy, int targetX, int targetY) {
 		PathFindingController.HandlePathFinding(world, enemy, targetX, targetY);
@@ -46,6 +47,7 @@ public class Enemy {
 		if (target != null) {
 			if (enemy.path == null && target != null) {
 				PathFindingController.HandlePathFinding(world, enemy, target.collision_box.x, target.collision_box.y);
+				enemy.path = enemy.pathFinder.FindPath();
 			}
 			if (enemy.pathFinder.IsFound()) {
 				if (enemy.path != null && target != null) {

@@ -93,10 +93,12 @@ public class ActionController {
 				world.SetMenu(tempMenuIndex, temp);
 				break;
 			case GUIController.MENU_CONTROLS:
-				tempMenuIndex = world.FindMenu(GUIController.GetCurrentMenu());
-				temp = world.GetMenu(tempMenuIndex);
-				temp.DecrementMenuItem();
-				world.SetMenu(tempMenuIndex, temp);
+				if (GUIController.selectedControlField == -1) {
+					tempMenuIndex = world.FindMenu(GUIController.GetCurrentMenu());
+					temp = world.GetMenu(tempMenuIndex);
+					temp.DecrementMenuItem();
+					world.SetMenu(tempMenuIndex, temp);
+				}
 				break;
 			}
 		}
@@ -114,10 +116,12 @@ public class ActionController {
 				world.SetMenu(tempMenuIndex, temp);
 				break;
 			case GUIController.MENU_CONTROLS:
-				tempMenuIndex = world.FindMenu(GUIController.GetCurrentMenu());
-				temp = world.GetMenu(tempMenuIndex);
-				temp.IncrementMenuItem();
-				world.SetMenu(tempMenuIndex, temp);
+				if (GUIController.selectedControlField == -1) {
+					tempMenuIndex = world.FindMenu(GUIController.GetCurrentMenu());
+					temp = world.GetMenu(tempMenuIndex);
+					temp.IncrementMenuItem();
+					world.SetMenu(tempMenuIndex, temp);
+				}
 				break;
 			}
 		}

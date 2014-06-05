@@ -16,6 +16,7 @@ import exceptions.PlayerNotFoundException;
 import gameplay.ActionController;
 import gameplay.CombatSystem;
 import gameplay.MovementController;
+import graphics.GUIController;
 import graphics.GraphicsController;
 
 import org.lwjgl.input.Controller;
@@ -128,14 +129,14 @@ public class Main extends BasicGame {
 			}
 		}
 		
-		Entity npc = EntityFactory.CreateEntity(world, EntityDictionary.NPC, 384, 160, 32, 32);
+		//Entity npc = EntityFactory.CreateEntity(world, EntityDictionary.NPC, 384, 160, 32, 32);
 		//Menu menu = new Menu("info_panel", "res/gui/info_panel.png", 0, 0, 400, 96);
 		//world.AddMenu(menu);
 		world.menus = Menu.LoadMenus("res/config/menus.conf");
-		npc.dialog = new ArrayList<String>();
-		npc.dialog.add("Hello World");
-		world.AddEntity(npc);
-		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.ENEMY, 384, 416, 32, 32));
+		//npc.dialog = new ArrayList<String>();
+		//npc.dialog.add("Hello World");
+		//world.AddEntity(npc);
+		//world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.ENEMY, 384, 416, 32, 32));
 		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.PLAYER, 288, 128, 32, 32));
 		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));
 		try {
@@ -158,7 +159,6 @@ public class Main extends BasicGame {
 			//SoundController.PlayMusic(true);
 		}
 		Input input = gc.getInput();
-		
 		HashMap<String, Boolean> held_keys = InputController.HandleHeldInput(input, controller);
 		HashMap<String, Boolean> pressed_keys = InputController.HandlePressedInput(input, controller);
 		MovementController.HandleMovement(world, held_keys, fps_scaler);
@@ -168,6 +168,7 @@ public class Main extends BasicGame {
 		world.UpdateEntityHitTimers(fps_scaler);
 		CombatSystem.UpdateCooldowns(world, fps_scaler);
 		CombatSystem.CleanupDeadEntities(world);
+		CombatSystem.UpdateSpawnTimers(world, fps_scaler);
 		
 		if (input.isKeyPressed(Input.KEY_F1)) {
 			debug_mode = !debug_mode;
@@ -186,5 +187,28 @@ public class Main extends BasicGame {
 	public static int GetPreviousState() {
 		return previous_state;
 	}
-
+	
+	public void keyPressed(int key, char c) {
+		if (GetState() == States.MENU && GUIController.GetCurrentMenu() == GUIController.MENU_CONTROLS
+				&& GUIController.selectedControlField != -1) {
+			int menuID = world.FindMenu(GUIController.MENU_CONTROLS);
+			Menu temp = world.GetMenu(menuID);
+			
+			for (int i = 0; i < temp.GetMenuItemCount(); i++) {
+				MenuItem item = temp.GetMenuItem(i);
+				
+				if (i == GUIController.selectedControlField) {
+					String keyname = "KEY_" + item.text;
+					int key_value = GUIController.GetKeyValue(keyname);
+					
+					if (GUIController.GetKeyValue(keyname) != null) {
+						if (key_value != 28 && !GUIController.tempKeyMap.containsValue(key)) {
+							GUIController.tempKeyMap.put(keyname, key);
+						}
+					}
+					break;
+				}
+			}
+		}
+	}
 }

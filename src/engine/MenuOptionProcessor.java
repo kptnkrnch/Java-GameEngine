@@ -119,7 +119,9 @@ public class MenuOptionProcessor {
 				}
 				break;
 			case BACK_OPTION:
+				GUIController.selectedControlField = -1;
 				GUIController.SetCurrentMenu(GUIController.previousMenuName);
+				InputController.SetKeyMap(GUIController.tempKeyMap);
 				break;
 			}
 		}
