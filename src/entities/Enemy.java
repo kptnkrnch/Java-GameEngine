@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import org.newdawn.slick.Color;
+
 import pathing.Path;
 import pathing.PathFindingController;
 import engine.Direction;
@@ -125,7 +127,14 @@ public class Enemy {
 										for (int n = 0; n < world.entities.size(); n++) {
 											Entity player = world.GetEntity(n);
 											if (player.type == EntityDictionary.PLAYER) {
-												player.c_health -= CombatCalculator.CalculateDamage(temp, player);
+												int damage = CombatCalculator.CalculateDamage(temp, player);
+												if (damage > 0) {
+													String damage_text = "" + damage;
+													player.Hit(damage_text, CombatCalculator.IsCriticalHit());
+												} else {
+													player.SetHitText("0!", Color.red);
+												}
+												player.c_health -= damage;
 												temp.c_cooldown = CombatCalculator.CalculateCooldown(temp, BASE_COOLDOWN);
 												break;
 											}

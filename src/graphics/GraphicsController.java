@@ -21,6 +21,7 @@ import exceptions.CameraNotFoundException;
 
 public class GraphicsController {
 	
+	public static Color DEFAULT_COLOR = Color.white;
 	public static int VIEWPORT_X = 0;
 	public static int VIEWPORT_Y = 0;
 	public static Rectangle VIEWPORT_BOX = new Rectangle(VIEWPORT_X, VIEWPORT_Y, Main.ResX, Main.ResY);
@@ -172,7 +173,13 @@ public class GraphicsController {
 								} else if (animation.isStopped() && !temp.IsAnimating()) {
 									animation.start();
 								}
-								g.drawAnimation(animation, temp.x, temp.y);
+								//g.drawAnimation(animation, temp.x, temp.y);
+								if (temp.IsHit()) {
+									animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
+								} else {
+									animation.draw(temp.x, temp.y);
+								}
+								DrawDamage(temp, g);
 							} else {
 								temp = HandleActionAnimation(world, g, temp);
 							}
@@ -185,7 +192,13 @@ public class GraphicsController {
 								} else if (animation.isStopped() && !temp.IsAnimating()) {
 									animation.start();
 								}
-								g.drawAnimation(animation, temp.x, temp.y);
+								//g.drawAnimation(animation, temp.x, temp.y);
+								if (temp.IsHit()) {
+									animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
+								} else {
+									animation.draw(temp.x, temp.y);
+								}
+								DrawDamage(temp, g);
 							} else {
 								temp = HandleActionAnimation(world, g, temp);
 							}
@@ -198,7 +211,13 @@ public class GraphicsController {
 								} else if (animation.isStopped() && !temp.IsAnimating()) {
 									animation.start();
 								}
-								g.drawAnimation(animation, temp.x, temp.y);
+								//g.drawAnimation(animation, temp.x, temp.y);
+								if (temp.IsHit()) {
+									animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
+								} else {
+									animation.draw(temp.x, temp.y);
+								}
+								DrawDamage(temp, g);
 							} else {
 								temp = HandleActionAnimation(world, g, temp);
 							}
@@ -211,7 +230,13 @@ public class GraphicsController {
 								} else if (animation.isStopped() && !temp.IsAnimating()) {
 									animation.start();
 								}
-								g.drawAnimation(animation, temp.x, temp.y);
+								//g.drawAnimation(animation, temp.x, temp.y);
+								if (temp.IsHit()) {
+									animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
+								} else {
+									animation.draw(temp.x, temp.y);
+								}
+								DrawDamage(temp, g);
 							} else {
 								temp = HandleActionAnimation(world, g, temp);
 							}
@@ -219,7 +244,13 @@ public class GraphicsController {
 						default:
 							animation.stop();
 							animation.setCurrentFrame(0);
-							g.drawAnimation(animation, temp.x, temp.y);
+							//g.drawAnimation(animation, temp.x, temp.y);
+							if (temp.IsHit()) {
+								animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
+							} else {
+								animation.draw(temp.x, temp.y);
+							}
+							DrawDamage(temp, g);
 							break;
 						}
 					}
@@ -286,11 +317,27 @@ public class GraphicsController {
 					animation.setCurrentFrame(0);
 					Player.ShootBullet(world, temp);
 				}
-				g.drawAnimation(animation, temp.x, temp.y);
+				//g.drawAnimation(animation, temp.x, temp.y);
+				if (temp.IsHit()) {
+					animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
+				} else {
+					animation.draw(temp.x, temp.y);
+				}
+				DrawDamage(temp, g);
 			}
 			break;
 		}
 		return temp;
+	}
+	
+	public static void DrawDamage(Entity temp, Graphics g) {
+		if (temp.HasLastHitText()) {
+			g.setColor(temp.last_hit.text_color);
+			g.drawString(temp.last_hit.text, 
+					temp.collision_box.x + temp.collision_box.width, 
+					temp.collision_box.y - 10);
+			g.setColor(DEFAULT_COLOR);
+		}
 	}
 	
 }

@@ -112,6 +112,14 @@ public class World {
 		}
 	}
 	
+	public void UpdateEntityHitTimers(int fps_scaler) {
+		for (int i = 0; i < entities.size(); i++) {
+			Entity temp = entities.get(i);
+			temp.UpdateHitTimer(fps_scaler);
+			entities.set(i, temp);
+		}
+	}
+	
 	public void AddMenu(Menu menu) {
 		this.menus.add(menu);
 	}
@@ -128,7 +136,30 @@ public class World {
 		}
 	}
 	
-	/* returns -1 on fail */
+	public void SetMenu(int index, Menu menu) {
+		if (index >= 0 && index < menus.size()) {
+			menus.set(index, menu);
+		}
+	}
+	
+	/* returns -1 on fail 
+	 * returns menu index on success
+	 */
+	public int FindMenu(String name) {
+		int index = -1;
+		
+		for (int i = 0; i < menus.size(); i++) {
+			if (menus.get(i).name.contentEquals(name)) {
+				return i;
+			}
+		}
+		
+		return index;
+	}
+	
+	/* returns -1 on fail 
+	 * returns entity index on success
+	 * */
 	public int FindEntity(long entityID) {		
 		for (int i = 0; i < entities.size(); i++) {
 			if (entities.get(i).id == entityID) {

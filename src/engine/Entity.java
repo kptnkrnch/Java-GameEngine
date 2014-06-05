@@ -1,6 +1,7 @@
 package engine;
 
 import graphics.AnimationController;
+import graphics.FadingText;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
@@ -63,8 +65,11 @@ public class Entity {
 	public int c_dodge_chance;
 	public float c_critical_damage;
 	public int c_cooldown;
+	public FadingText last_hit;
 	
 	public boolean attacking = false;
+	public boolean hit = false;
+	public int hittimer = 0;
 	public Animation attack;
 	
 	public Entity(Entity temp) {
@@ -107,9 +112,11 @@ public class Entity {
 		this.c_critical_chance = temp.c_critical_chance;
 		this.c_critical_damage = temp.c_critical_damage;
 		this.c_cooldown = temp.c_cooldown;
+		this.last_hit = temp.last_hit;
 		
 		this.attacking = temp.attacking;
 		this.attack = temp.attack;
+		this.hittimer = temp.hittimer;
 	}
 
 	public Entity(int type, int x, int y, int width, int height) {
@@ -153,6 +160,8 @@ public class Entity {
 		this.c_dodge_chance = 0;
 		this.c_critical_chance = 0;
 		this.c_critical_damage = 0f;
+		this.hittimer = 0;
+		this.last_hit = null;
 	}
 	
 	public boolean IsMoveable() {
@@ -298,6 +307,7 @@ public class Entity {
 		
 		this.attacking = temp.attacking;
 		this.attack = temp.attack;
+		this.hittimer = temp.hittimer;
 	}
 	
 	/*public void UpdateAnimations(int fps_scaler) {
@@ -337,6 +347,61 @@ public class Entity {
 	
 	public boolean IsTalking() {
 		return this.talking;
+	}
+	
+	public void SetHitText(String text) {
+		this.last_hit = new FadingText(text, 15);
+	}
+	
+	public void SetHitText(String text, Color color) {
+		this.last_hit = new FadingText(text, color, 15);
+	}
+	
+	public void Hit(String damage) {
+		this.hittimer = 100;
+		this.last_hit = new FadingText(damage, 15);
+	}
+	
+	public void Hit(String damage, boolean critical_hit) {
+		this.hittimer = 100;
+		if (critical_hit) {
+			damage += "!";
+			this.last_hit = new FadingText(damage, Color.yellow, 15);
+		} else {
+			this.last_hit = new FadingText(damage, 15);
+		}
+	}
+	
+	public void UpdateHitTimer(int fps_scaler) {
+		if (IsHit()) {
+			this.hittimer -= fps_scaler;
+		}
+		if (!IsHit()) {
+			this.hittimer = 0;
+		}
+		if (this.last_hit != null) {
+			this.last_hit.Fade();
+		}
+	}
+	
+	public boolean IsHit() {
+		if (this.hittimer > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean HasLastHitText() {
+		if (this.last_hit != null) {
+			if (!this.last_hit.IsFaded()) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 	
 }

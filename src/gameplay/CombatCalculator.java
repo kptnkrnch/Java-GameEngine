@@ -6,6 +6,12 @@ import engine.Entity;
 
 public class CombatCalculator {
 	
+	public static boolean CriticalHit = false;
+	
+	public static boolean IsCriticalHit() {
+		return CriticalHit;
+	}
+	
 	public static int CalculateDamage(Entity attacker, Entity defender) {
 		int damage = 0;
 		
@@ -14,7 +20,9 @@ public class CombatCalculator {
 			
 			if (CriticalHitCalculator(attacker)) {
 				damage += Math.round((float)attacker.c_attack * attacker.c_critical_damage);
-				System.out.println("CRITICAL HIT");
+				CriticalHit = true;
+			} else {
+				CriticalHit = false;
 			}
 			
 			damage -= defender.c_defence;
@@ -22,8 +30,6 @@ public class CombatCalculator {
 			if (damage <= 0) {
 				damage = 1;
 			}
-		} else {
-			System.out.println("DODGED");
 		}
 		
 		return damage;

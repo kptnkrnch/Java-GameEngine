@@ -128,4 +128,12 @@ public class InputController {
 		
 		return true;
 	}
+	
+	public static Integer GetKeyValue(String key) {
+		if (keymap.containsKey(key)) {
+			return keymap.get(key);
+		} else {
+			return null;
+		}
+	}
 }

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import org.newdawn.slick.Color;
+
 import engine.Entity;
 import engine.EntityDictionary;
 import engine.TileDictionary;
@@ -54,6 +56,7 @@ public class Bullet {
 	public static Entity HandleEntityCollisions(World world, Entity bullet, HashMap<Long, Integer> collisions) {
 		int bulletIndex = -1;
 		int enemyIndex = -1;
+		int damage = 0;
 		Iterator<Entry<Long, Integer>> iterator = collisions.entrySet().iterator();
 		while(iterator.hasNext()) {
 			Entry<Long, Integer> current = iterator.next();
@@ -63,7 +66,15 @@ public class Bullet {
 			case EntityDictionary.ENEMY:
 				enemyIndex = world.FindEntity(current.getKey());
 				Entity enemy = world.GetEntity(enemyIndex);
-				enemy.c_health -= CombatCalculator.CalculateDamage(bullet, enemy);
+				damage = CombatCalculator.CalculateDamage(bullet, enemy);
+				
+				if (damage > 0) {
+					String damage_text = "" + damage;
+					enemy.Hit(damage_text, CombatCalculator.IsCriticalHit());
+				} else {
+					enemy.SetHitText("0!", Color.red);
+				}
+				enemy.c_health -= damage;
 				world.SetEntity(enemyIndex, enemy);
 				
 				bulletIndex = world.FindEntity(bullet.id);
