@@ -42,7 +42,7 @@ import org.newdawn.slick.util.ResourceLoader;
 import sound.SoundController;
 
 public class Main extends BasicGame {
-	
+	public static boolean debug = true;
 	public static GameContainer game_container;
 	public static World world;
 	public static int ScreenResX = 800;
@@ -165,12 +165,14 @@ public class Main extends BasicGame {
 		ActionController.HandleEntityAction(world, pressed_keys, fps_scaler);
 		world.tile_dictionary.UpdateAnimations(fps_scaler);
 		world.UpdateEntityAnimations(fps_scaler);
-		world.UpdateEntityHitTimers(fps_scaler);
-		CombatSystem.UpdateCooldowns(world, fps_scaler);
-		CombatSystem.CleanupDeadEntities(world);
-		CombatSystem.UpdateSpawnTimers(world, fps_scaler);
+		if (GetState() == States.RUNNING) {
+			world.UpdateEntityHitTimers(fps_scaler);
+			CombatSystem.UpdateCooldowns(world, fps_scaler);
+			CombatSystem.CleanupDeadEntities(world);
+			CombatSystem.UpdateSpawnTimers(world, fps_scaler);
+		}
 		
-		if (input.isKeyPressed(Input.KEY_F1)) {
+		if (debug && input.isKeyPressed(Input.KEY_F1)) {
 			debug_mode = !debug_mode;
 		}
 	}

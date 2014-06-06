@@ -1,5 +1,6 @@
 package engine;
 
+import java.awt.Point;
 import java.io.File;
 import java.util.Scanner;
 
@@ -75,6 +76,7 @@ public class MapLoader {
 					int width = -1;
 					int height = -1;
 					int isDialog = 0;
+					int isPatrolPath = 0;
 					
 					if (lineScanner.hasNextInt()) {
 						typeID = lineScanner.nextInt();
@@ -99,6 +101,11 @@ public class MapLoader {
 					if (lineScanner.hasNextInt()) {
 						isDialog = lineScanner.nextInt();
 					}
+					
+					if (lineScanner.hasNextInt()) {
+						isPatrolPath = lineScanner.nextInt();
+					}
+					
 					if (typeID != EntityDictionary.NONE
 							&& x != -1 && y != -1 && width != -1 && height != -1) {
 						Entity entity = EntityFactory.CreateEntity(world, typeID, x, y, width, height);
@@ -108,11 +115,42 @@ public class MapLoader {
 								line = scan.nextLine();
 								
 								if (line.trim().length() == 0) {
+									break;
 								} else if (line.contains("[")) {
 								} else if (line.contains("]")) {
 									break;
 								} else {
 									entity.dialog.add(line);
+								}
+							}
+						}
+						
+						if (isPatrolPath != 0) {
+							while (scan.hasNextLine()) {
+								line = scan.nextLine();
+								lineScanner = new Scanner(line);
+								
+								if (line.trim().length() == 0) {
+									break;
+								} else if (line.contains("{")) {
+								} else if (line.contains("}")) {
+									break;
+								} else {
+									int patrolX = -1;
+									int patrolY = -1;
+									
+									if (lineScanner.hasNextInt()) {
+										patrolX = lineScanner.nextInt();
+									}
+									
+									if (lineScanner.hasNextInt()) {
+										patrolY = lineScanner.nextInt();
+									}
+									
+									if (patrolX >= 0 && patrolY >= 0 && patrolX < world.width && patrolY < world.height) {
+										Point point = new Point(patrolX * world.tilesize, patrolY * world.tilesize);
+										entity.AddPatrolPoint(point);
+									}
 								}
 							}
 						}

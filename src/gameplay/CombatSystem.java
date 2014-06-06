@@ -59,8 +59,11 @@ public class CombatSystem {
 					temp.c_health = temp.c_max_health;
 					temp.x = temp.spawn_point.x;
 					temp.y = temp.spawn_point.y;
+					temp.collision_box.x = temp.x;
+					temp.collision_box.y = temp.y;
 					temp.movx = temp.x;
 					temp.movy = temp.y;
+					temp.hittimer = 0;
 					temp.pathFinder = new PathFinder();
 					
 					switch(temp.type) {

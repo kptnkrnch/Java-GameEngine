@@ -161,23 +161,50 @@ public class GUIController {
 						g.drawString(item.text, item.x + GraphicsController.VIEWPORT_X,
 								item.y + GraphicsController.VIEWPORT_Y);
 						
+						String key = "KEY_" + item.text;
+						String key_value = Input.getKeyName(GetKeyValue(key));
+						
+						if (key_value.contains("LCONTROL")) {
+							key_value = "LCTRL";
+						} else if (key_value.contains("RCONTROL")) {
+							key_value = "RCTRL";
+						} else if (key_value.contains("APOSTROPHE")) {
+							key_value = "'";
+						} else if (key_value.contains("LBRACKET")) {
+							key_value = "[";
+						} else if (key_value.contains("RBRACKET")) {
+							key_value = "]";
+						} else if (key_value.contains("BACKSLASH")) {
+							key_value = "\\";
+						} else if (key_value.contains("SUBTRACT")) {
+							key_value = "-";
+						} else if (key_value.contains("SLASH")) {
+							key_value = "/";
+						} else if (key_value.contains("ADD")) {
+							key_value = "+";
+						} else if (key_value.contains("SEMICOLON")) {
+							key_value = ";";
+						} else if (key_value.contains("MULTIPLY")) {
+							key_value = "*";
+						} else if (key_value.contains("DIVIDE")) {
+							key_value = "/";
+						}
+						
 						if (i == selectedControlField) {
-							String key = "KEY_" + item.text;
-							String key_value = Input.getKeyName(GetKeyValue(key));
-							
 							g.setColor(Color.black);
 							if (InputController.GetKeyValue(key) != null) {
-								g.drawImage(focused_input, temp.x + temp.width - 100, item.y);
-								g.drawString(key_value, temp.x + temp.width - 96, item.y + 3);
+								g.drawImage(focused_input, temp.x + temp.width - 100 + GraphicsController.VIEWPORT_X, 
+										item.y + GraphicsController.VIEWPORT_Y);
+								g.drawString(key_value, temp.x + temp.width - 96 + GraphicsController.VIEWPORT_X, 
+										item.y + 3 + GraphicsController.VIEWPORT_Y);
 							}
 						} else {
-							String key = "KEY_" + item.text;
-							String key_value = Input.getKeyName(GetKeyValue(key));
-							
 							g.setColor(Color.black);
 							if (InputController.GetKeyValue(key) != null) {
-								g.drawImage(unfocused_input, temp.x + temp.width - 100, item.y);
-								g.drawString(key_value, temp.x + temp.width - 96, item.y + 3);
+								g.drawImage(unfocused_input, temp.x + temp.width - 100 + GraphicsController.VIEWPORT_X, 
+										item.y + GraphicsController.VIEWPORT_Y);
+								g.drawString(key_value, temp.x + temp.width - 96 + GraphicsController.VIEWPORT_X, 
+										item.y + 3 + GraphicsController.VIEWPORT_Y);
 							}
 						}
 						

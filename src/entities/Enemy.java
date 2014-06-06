@@ -20,12 +20,116 @@ import gameplay.CombatCalculator;
 public class Enemy {
 	
 	public static int BASE_COOLDOWN = 1000;
-	public static int RESPAWN_TIME = 10000;
+	public static int RESPAWN_TIME = 20000;
+	public static int VIEW_RADIUS = 5;
 	
-	public static void MoveEnemy(World world, Entity enemy, int targetX, int targetY) {
-		PathFindingController.HandlePathFinding(world, enemy, targetX, targetY);
-		if (enemy.pathFinder.IsFound()) {
-			
+	public static void MoveEnemy(World world, Entity enemy, int targetX, int targetY, int fps_scaler) {
+		if (enemy.path == null) {
+			PathFindingController.HandlePathFinding(world, enemy, targetX, targetY);
+			enemy.path = enemy.pathFinder.FindPath();
+		}
+		if (enemy.pathFinder.IsFound() && enemy.path != null) {
+			if (enemy.path != null && enemy.path.IsComplete()) {
+				enemy.path = null;
+			}
+			if (enemy.path != null) {
+				if (enemy.path.Update(enemy) && enemy.path.IsComplete()) {
+					enemy.IncrementPatrolPoint();
+					PathFindingController.HandlePathFinding(world, enemy, targetX, targetY);
+					enemy.path = enemy.pathFinder.FindPath();
+				}
+			}
+			if (enemy.path != null && !enemy.path.IsComplete()) {
+				HashMap<Long, Integer> entity_collisions = null;
+				if (!enemy.path.IsComplete()) {
+					int direction = enemy.path.GetNextDirection();
+					Entity temp = new Entity(enemy);
+					switch(direction) {
+					case Direction.LEFT:
+						temp.Move(direction, temp.speed, fps_scaler);
+						
+						entity_collisions = CollisionController.CheckEntityCollision(world, temp);
+						if (entity_collisions != null) {
+							temp.UndoLastMove();
+							temp.x += 1;
+							SetCollisionBox(temp, temp.x, temp.y);
+						}
+						break;
+					case Direction.RIGHT:
+						temp.Move(direction, temp.speed, fps_scaler);
+						
+						entity_collisions = CollisionController.CheckEntityCollision(world, temp);
+						if (entity_collisions != null) {
+							temp.UndoLastMove();
+							temp.x -= 1;
+							SetCollisionBox(temp, temp.x, temp.y);
+						}
+						break;
+					case Direction.UP:
+						temp.Move(direction, temp.speed, fps_scaler);
+						
+						entity_collisions = CollisionController.CheckEntityCollision(world, temp);
+						if (entity_collisions != null) {
+							temp.UndoLastMove();
+							temp.y += 1;
+							SetCollisionBox(temp, temp.x, temp.y);
+						}
+						break;
+					case Direction.DOWN:
+						temp.Move(direction, temp.speed, fps_scaler);
+						
+						entity_collisions = CollisionController.CheckEntityCollision(world, temp);
+						if (entity_collisions != null) {
+							temp.UndoLastMove();
+							temp.y -= 1;
+							SetCollisionBox(temp, temp.x, temp.y);
+						}
+						break;
+					}
+					
+					if (entity_collisions != null) {
+						Iterator<Entry<Long, Integer>> iterator = entity_collisions.entrySet().iterator();
+						while(iterator.hasNext()) {
+							Entry<Long, Integer> current = iterator.next();
+							if (current.getValue() != EntityDictionary.PLAYER && current.getValue() != EntityDictionary.CAMERA) {
+								PathFindingController.HandlePathFinding(world, temp, targetX, targetY);
+								temp.path = temp.pathFinder.FindPath();
+								break;
+							}
+						}
+					}
+					
+					if (entity_collisions != null) {
+						Iterator<Entry<Long, Integer>> iterator = entity_collisions.entrySet().iterator();
+						while(iterator.hasNext()) {
+							Entry<Long, Integer> current = iterator.next();
+							switch(current.getValue()) {
+							case EntityDictionary.PLAYER:
+								if (temp.c_cooldown <= 0) {
+									for (int n = 0; n < world.entities.size(); n++) {
+										Entity player = world.GetEntity(n);
+										if (player.type == EntityDictionary.PLAYER) {
+											int damage = CombatCalculator.CalculateDamage(temp, player);
+											if (damage > 0) {
+												String damage_text = "" + damage;
+												player.Hit(damage_text, CombatCalculator.IsCriticalHit());
+											} else {
+												player.SetHitText("0!", Color.red);
+											}
+											player.c_health -= damage;
+											temp.c_cooldown = CombatCalculator.CalculateCooldown(temp, BASE_COOLDOWN);
+											break;
+										}
+									}
+								}
+								break;
+							}
+						}
+					}
+					
+					enemy.Copy(temp);
+				}
+			}
 		}
 	}
 	
@@ -35,15 +139,19 @@ public class Enemy {
 			Entity temp = world.GetEntity(i);
 			if (temp.type == EntityDictionary.PLAYER) {
 				Rectangle fov = CalculateFieldOfView(enemy);
-				target = temp;
-				break;
-				/*if (fov.intersects(temp.collision_box)) {
+				if (fov.intersects(temp.collision_box)) {
 					target = temp;
 					break;
-				}*/
+				} else if (enemy.IsHit()) {
+					target = temp;
+					enemy.path = null;
+					break;
+				}
 			}
 		}
-		
+		if (enemy.path != null && enemy.path.IsComplete()) {
+			enemy.path = null;
+		}
 		if (target != null) {
 			if (enemy.path == null && target != null) {
 				PathFindingController.HandlePathFinding(world, enemy, target.collision_box.x, target.collision_box.y);
@@ -151,10 +259,12 @@ public class Enemy {
 					}
 				}
 			}
+		} else {
+			MoveEnemy(world, enemy, enemy.GetCurrentPatrolPoint().x, enemy.GetCurrentPatrolPoint().y, fps_scaler);
 		}
 	}
 	
-	public static Rectangle CalculateFieldOfView(Entity enemy) {
+	/*public static Rectangle CalculateFieldOfView(Entity enemy) {
 		Rectangle fov = null;
 		
 		switch (enemy.last_animation) {
@@ -189,6 +299,19 @@ public class Enemy {
 					32 * 7);
 			break;
 		}
+		
+		return fov;
+	}*/
+	
+	public static Rectangle CalculateFieldOfView(Entity enemy) {
+		Rectangle fov = null;
+		
+		int x = enemy.collision_box.x - enemy.collision_box.width * VIEW_RADIUS;
+		int y = enemy.collision_box.y - enemy.collision_box.height * VIEW_RADIUS;
+		int width = enemy.collision_box.width * VIEW_RADIUS * 2;
+		int height = enemy.collision_box.height * VIEW_RADIUS * 2;
+		
+		fov = new Rectangle(x, y, width, height);
 		
 		return fov;
 	}

@@ -26,9 +26,6 @@ public class Path {
 	
 	public int GetNextDirection() {
 		if (this.direction.size() > 0 && this.currentTarget < this.direction.size()) {
-			if (this.currentTarget == 1) {
-				System.out.println("HERE");
-			}
 			return direction.get(currentTarget);
 		} else {
 			return Direction.NONE;
@@ -89,6 +86,9 @@ public class Path {
 				if (entity.collision_box.x <= curTargetX) {
 					currentTarget++;
 					//entity.SetPosition(curTargetX, curTargetY);
+					if (currentTarget == targetCount) {
+						complete = true;
+					}
 					return true;
 				}
 				break;
@@ -96,6 +96,9 @@ public class Path {
 				if (entity.collision_box.x >= curTargetX) {
 					currentTarget++;
 					//entity.SetPosition(curTargetX, curTargetY);
+					if (currentTarget == targetCount) {
+						complete = true;
+					}
 					return true;
 				}
 				break;
@@ -103,6 +106,9 @@ public class Path {
 				if (entity.collision_box.y <= curTargetY) {
 					currentTarget++;
 					//entity.SetPosition(curTargetX, curTargetY);
+					if (currentTarget == targetCount) {
+						complete = true;
+					}
 					return true;
 				}
 				break;
@@ -110,13 +116,12 @@ public class Path {
 				if (entity.collision_box.y >= curTargetY) {
 					currentTarget++;
 					//entity.SetPosition(curTargetX, curTargetY);
+					if (currentTarget == targetCount) {
+						complete = true;
+					}
 					return true;
 				}
 				break;
-			}
-			
-			if (currentTarget == targetCount) {
-				complete = true;
 			}
 			return false;
 		} else {

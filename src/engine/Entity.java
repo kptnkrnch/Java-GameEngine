@@ -4,6 +4,7 @@ import entityproperties.SpawnPoint;
 import graphics.AnimationController;
 import graphics.FadingText;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +77,10 @@ public class Entity {
 	/* Respawning System */
 	public SpawnPoint spawn_point;
 	
+	/* Patrolling System */
+	public int currentPoint;
+	public ArrayList<Point> patrol_points;
+	
 	public Entity(Entity temp) {
 		this.id = temp.id;
 		this.x = temp.x;
@@ -124,6 +129,9 @@ public class Entity {
 		this.hittimer = temp.hittimer;
 		
 		this.spawn_point = temp.spawn_point;
+		
+		this.currentPoint = temp.currentPoint;
+		this.patrol_points = temp.patrol_points;
 	}
 
 	public Entity(int type, int x, int y, int width, int height) {
@@ -172,6 +180,9 @@ public class Entity {
 		this.last_hit = null;
 		
 		this.spawn_point = new SpawnPoint(x, y, width, height);
+		
+		this.currentPoint = 0;
+		this.patrol_points = new ArrayList<Point>();
 	}
 	
 	public boolean IsMoveable() {
@@ -319,6 +330,11 @@ public class Entity {
 		this.attacking = temp.attacking;
 		this.attack = temp.attack;
 		this.hittimer = temp.hittimer;
+		
+		this.spawn_point = temp.spawn_point;
+		
+		this.currentPoint = temp.currentPoint;
+		this.patrol_points = temp.patrol_points;
 	}
 	
 	/*public void UpdateAnimations(int fps_scaler) {
@@ -415,4 +431,27 @@ public class Entity {
 		}
 	}
 	
+	public Point GetCurrentPatrolPoint() {
+		if (this.patrol_points != null && this.patrol_points.size() > 0) {
+			return this.patrol_points.get(currentPoint);
+		} else {
+			return null;
+		}
+	}
+	
+	public void AddPatrolPoint(Point point) {
+		if (this.patrol_points != null && point != null) {
+			this.patrol_points.add(point);
+		}
+	}
+	
+	public void IncrementPatrolPoint() {
+		if (this.patrol_points != null && this.patrol_points.size() > 0) {
+			if (this.currentPoint >= this.patrol_points.size() - 1) {
+				this.currentPoint = 0;
+			} else {
+				this.currentPoint += 1;
+			}
+		}
+	}
 }
