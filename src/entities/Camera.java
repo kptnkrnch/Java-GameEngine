@@ -3,17 +3,18 @@ package entities;
 import engine.Entity;
 import engine.Main;
 import engine.World;
+import graphics.GraphicsController;
 
 public class Camera {
 	
-	private static int followingID = -1;
+	private static long followingID = -1;
 	
-	public static void Follow(int entityID) {
+	public static void Follow(long entityID) {
 		followingID = entityID;
 	}
 	
 	public static void MoveCamera(World world, Entity camera) {
-		if (followingID != -1) {
+		if (followingID != -1 && !GraphicsController.room_changed) {
 			Entity following = FindEntity(world, followingID);
 			if (following != null) {
 				camera.SetPosition(following.x + following.width / 2, following.y + following.height / 2);
@@ -51,7 +52,7 @@ public class Camera {
 		}
 	}
 	
-	private static Entity FindEntity(World world, int followingID) {
+	private static Entity FindEntity(World world, long followingID) {
 		for (int i = 0; i < world.GetEntityCount(); i++) {
 			Entity temp = world.GetEntity(i);
 			if (temp.id == followingID) {

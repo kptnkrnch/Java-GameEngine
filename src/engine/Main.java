@@ -16,6 +16,7 @@ import exceptions.PlayerNotFoundException;
 import gameplay.ActionController;
 import gameplay.CombatSystem;
 import gameplay.MovementController;
+import graphics.EffectsController;
 import graphics.GUIController;
 import graphics.GraphicsController;
 
@@ -59,6 +60,8 @@ public class Main extends BasicGame {
 	
 	public static int previous_state = States.PAUSED;
 	public static int game_state = States.PAUSED;
+	
+	public static int input_device = InputController.KEYBOARD;
 	
 	public Main(String title) {
 		super(title);
@@ -111,6 +114,7 @@ public class Main extends BasicGame {
 		world.LoadTileDictionary("res/dictionaries/TileDictionary.dict");
 		world.LoadEntityDictionary("res/dictionaries/EntityDictionary.dict");
 		
+		EffectsController.Init();
 		//world.entity_dictionary.LoadAnimations("res/sprites/player/player.anim");
 		
 		MapLoader.LoadMap(world, "res/maps/Map01.map");
@@ -121,7 +125,7 @@ public class Main extends BasicGame {
 			/* Finding controller */
 			for (int i = 0; i < Controllers.getControllerCount(); i++) {
 				Controller temp = Controllers.getController(i);
-				if (temp.getName().contains(controller_name)) {
+				if (temp.getName().toLowerCase().contains(controller_name)) {
 					controller = temp;
 					System.out.println(temp.getName());
 					break;
@@ -171,6 +175,7 @@ public class Main extends BasicGame {
 			CombatSystem.CleanupDeadEntities(world);
 			CombatSystem.UpdateSpawnTimers(world, fps_scaler);
 		}
+		EffectsController.UpdateEffects(fps_scaler);
 		
 		if (debug && input.isKeyPressed(Input.KEY_F1)) {
 			debug_mode = !debug_mode;
@@ -192,7 +197,7 @@ public class Main extends BasicGame {
 	
 	public void keyPressed(int key, char c) {
 		if (GetState() == States.MENU && GUIController.GetCurrentMenu() == GUIController.MENU_CONTROLS
-				&& GUIController.selectedControlField != -1) {
+				&& GUIController.selectedControlField != -1 && Main.CurrentController() == InputController.KEYBOARD) {
 			int menuID = world.FindMenu(GUIController.MENU_CONTROLS);
 			Menu temp = world.GetMenu(menuID);
 			
@@ -212,5 +217,13 @@ public class Main extends BasicGame {
 				}
 			}
 		}
+	}
+	
+	public static void SetController(int controller) {
+		input_device = controller;
+	}
+	
+	public static int CurrentController() {
+		return input_device;
 	}
 }

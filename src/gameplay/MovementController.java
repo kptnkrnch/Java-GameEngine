@@ -11,6 +11,7 @@ import entities.Bullet;
 import entities.Camera;
 import entities.Enemy;
 import entities.Player;
+import graphics.GraphicsController;
 
 public class MovementController {
 	
@@ -25,7 +26,9 @@ public class MovementController {
 					break;
 				case EntityDictionary.PLAYER:
 					Player.MovePlayer(world, e, input, fps_scaler);
-					world.SetEntity(i, e);
+					if (!GraphicsController.room_changed) {
+						world.SetEntity(i, e);
+					}
 					break;
 				case EntityDictionary.NPC:
 					break;

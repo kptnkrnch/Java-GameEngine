@@ -27,10 +27,11 @@ public class Menu {
 		this.height = height;
 	}
 	
-	public Menu(String menu_name, String background_location, int x, int y, int width, int height) {
+	public Menu(String menu_name, String background_location, int x, int y, int width, int height, float alpha) {
 		try {
 			background = new Image(background_location);
 			background.setFilter(Image.FILTER_NEAREST);
+			background.setAlpha(alpha);
 			name = menu_name;
 			menuitems = new ArrayList<MenuItem>();
 			this.x = x;
@@ -137,6 +138,7 @@ public class Menu {
 							int width = 0;
 							int height = 0;
 							int hasItems = 0;
+							float alpha = 1.0f;
 							boolean centerX = false;
 							boolean centerY = false;
 							
@@ -172,6 +174,10 @@ public class Menu {
 								}
 							}
 							
+							if (lineScanner.hasNextFloat()) {
+								alpha = lineScanner.nextFloat();
+							}
+							
 							if (lineScanner.hasNextInt()) {
 								hasItems = lineScanner.nextInt();
 							}
@@ -180,7 +186,7 @@ public class Menu {
 								background_src = lineScanner.next();
 							}
 							
-							menu = new Menu(menu_name, background_src, x, y, width, height);
+							menu = new Menu(menu_name, background_src, x, y, width, height, alpha);
 							
 							if (hasItems != 0 && menu != null) {
 								while (scan.hasNextLine()) {

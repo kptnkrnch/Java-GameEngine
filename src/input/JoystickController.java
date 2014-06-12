@@ -8,7 +8,16 @@ import java.util.Map.Entry;
 
 import org.lwjgl.input.Controller;
 
+import engine.Main;
+import engine.Menu;
+import engine.MenuItem;
+import engine.States;
+import engine.World;
+import graphics.GUIController;
+
 public class JoystickController {
+	public static final int KEYBOARD = 0;
+	public static final int JOYSTICK = 1;
 	
 	private static HashMap<String, Boolean> held_input = null;
 	private static HashMap<String, Boolean> pressed_input = null;
@@ -54,6 +63,7 @@ public class JoystickController {
 				while (inputIterator.hasNext()) {
 					Entry<String, Boolean> current = inputIterator.next();
 					held_input.put(current.getKey(), false);
+					Main.SetController(JOYSTICK);
 				}
 				
 				/* BUTTONS SECTION */
@@ -63,6 +73,7 @@ public class JoystickController {
 						String command = joymap.get(i);
 						if (command != null && command.length() > 0) {
 							held_input.put(command, true);
+							Main.SetController(JOYSTICK);
 						}
 					}
 				}
@@ -73,12 +84,14 @@ public class JoystickController {
 					String command = joymap.get(14);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
 					//15
 					String command = joymap.get(15);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				if (controller.getYAxisValue() < -SENSITIVITY) { //up
@@ -86,12 +99,14 @@ public class JoystickController {
 					String command = joymap.get(16);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getYAxisValue() > SENSITIVITY) { //down
 					//17
 					String command = joymap.get(17);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				
@@ -101,12 +116,14 @@ public class JoystickController {
 					String command = joymap.get(18);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
 					//19
 					String command = joymap.get(19);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				if (controller.getYAxisValue() < -SENSITIVITY) { //up
@@ -114,12 +131,14 @@ public class JoystickController {
 					String command = joymap.get(20);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getYAxisValue() > SENSITIVITY) { //down
 					//21
 					String command = joymap.get(21);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				
@@ -129,14 +148,14 @@ public class JoystickController {
 					String command = joymap.get(10);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
-						//System.out.println(command);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getPovX() > SENSITIVITY) { //right dpad
 					//11
 					String command = joymap.get(11);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
-						//System.out.println(command);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				if (controller.getPovY() < -SENSITIVITY) { //up dpad
@@ -144,14 +163,14 @@ public class JoystickController {
 					String command = joymap.get(12);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
-						//System.out.println(command);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getPovY() > SENSITIVITY) { //down dpad
 					//13
 					String command = joymap.get(13);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
-						//System.out.println(command);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				
@@ -161,12 +180,14 @@ public class JoystickController {
 					String command = joymap.get(22);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getZAxisValue() < -SENSITIVITY) { //right trigger
 					//23
 					String command = joymap.get(23);
 					if (command != null && command.length() > 0) {
 						held_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				
@@ -197,6 +218,7 @@ public class JoystickController {
 							String command = joymap.get(i);
 							if (command != null && command.length() > 0) {
 								pressed_input.put(command, true);
+								Main.SetController(JOYSTICK);
 							}
 							key_released[i] = false;
 						}
@@ -211,12 +233,14 @@ public class JoystickController {
 					String command = joymap.get(14);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
 					//15
 					String command = joymap.get(15);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				if (controller.getYAxisValue() < -SENSITIVITY) { //up
@@ -224,12 +248,14 @@ public class JoystickController {
 					String command = joymap.get(16);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getYAxisValue() > SENSITIVITY) { //down
 					//17
 					String command = joymap.get(17);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				
@@ -239,12 +265,14 @@ public class JoystickController {
 					String command = joymap.get(18);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
 					//19
 					String command = joymap.get(19);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				if (controller.getYAxisValue() < -SENSITIVITY) { //up
@@ -252,12 +280,14 @@ public class JoystickController {
 					String command = joymap.get(20);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getYAxisValue() > SENSITIVITY) { //down
 					//21
 					String command = joymap.get(21);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				
@@ -267,12 +297,14 @@ public class JoystickController {
 					String command = joymap.get(10);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getPovY() > SENSITIVITY) { //right dpad
 					//11
 					String command = joymap.get(11);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				if (controller.getPovY() < -SENSITIVITY) { //up dpad
@@ -280,12 +312,14 @@ public class JoystickController {
 					String command = joymap.get(12);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getPovY() > SENSITIVITY) { //down dpad
 					//13
 					String command = joymap.get(13);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				
@@ -295,12 +329,14 @@ public class JoystickController {
 					String command = joymap.get(22);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				} else if (controller.getZAxisValue() < -SENSITIVITY) { //right trigger
 					//23
 					String command = joymap.get(23);
 					if (command != null && command.length() > 0) {
 						pressed_input.put(command, true);
+						Main.SetController(JOYSTICK);
 					}
 				}
 				
@@ -309,6 +345,74 @@ public class JoystickController {
 		}
 		
 		return null;
+	}
+	
+	public static int GetJoyInput(Controller controller) {
+		/* BUTTONS SECTION */			
+		for (int i = 0; i < controller.getButtonCount(); i++) {
+			if (controller.isButtonPressed(i)) {
+				return i;
+			}
+		}
+		
+		/* LEFT ANALOG SECTION*/
+		if (controller.getXAxisValue() > SENSITIVITY) { //right
+			//14
+			return 14;
+		} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
+			//15
+			return 15;
+		}
+		if (controller.getYAxisValue() < -SENSITIVITY) { //up
+			//16
+			return 16;
+		} else if (controller.getYAxisValue() > SENSITIVITY) { //down
+			//17
+			return 17;
+		}
+		
+		/* RIGHT ANALOG SECTION*/
+		if (controller.getXAxisValue() > SENSITIVITY) { //right
+			//18
+			return 18;
+		} else if (controller.getXAxisValue() < -SENSITIVITY) { //left
+			//19
+			return 19;
+		}
+		if (controller.getYAxisValue() < -SENSITIVITY) { //up
+			//20
+			return 20;
+		} else if (controller.getYAxisValue() > SENSITIVITY) { //down
+			//21
+			return 21;
+		}
+		
+		/* DPAD SECTION*/
+		if (controller.getPovX() < -SENSITIVITY) { //left dpad
+			//10
+			return 10;
+		} else if (controller.getPovY() > SENSITIVITY) { //right dpad
+			//11
+			return 11;
+		}
+		if (controller.getPovY() < -SENSITIVITY) { //up dpad
+			//12
+			return 12;
+		} else if (controller.getPovY() > SENSITIVITY) { //down dpad
+			//13
+			return 13;
+		}
+		
+		/* TRIGGERS SECTION */
+		if (controller.getZAxisValue() > SENSITIVITY) { //left trigger
+			//22
+			return 22;
+		} else if (controller.getZAxisValue() < -SENSITIVITY) { //right trigger
+			//23
+			return 23;
+		}
+		
+		return -1;
 	}
 	
 	public static String LoadKeyMapping(String keyMapConfig_location) {
@@ -359,6 +463,30 @@ public class JoystickController {
 		}
 		
 		return controller_name;
+	}
+	
+	public static void MapJoystickButtons(World world, Controller controller) {
+		if (Main.GetState() == States.MENU && GUIController.GetCurrentMenu() == GUIController.MENU_CONTROLS
+				&& GUIController.selectedControlField != -1 && Main.CurrentController() == JOYSTICK) {
+			int menuID = world.FindMenu(GUIController.MENU_CONTROLS);
+			Menu temp = world.GetMenu(menuID);
+			
+			for (int i = 0; i < temp.GetMenuItemCount(); i++) {
+				MenuItem item = temp.GetMenuItem(i);
+				
+				if (i == GUIController.selectedControlField) {
+					String keyname = "KEY_" + item.text;
+					int key = GetJoyInput(controller);
+					
+					if (GUIController.GetKeyValue(keyname) != null) {
+						if (!GUIController.tempJoyMap.containsValue(key)) {
+							GUIController.tempJoyMap.put(keyname, key);
+						}
+					}
+					break;
+				}
+			}
+		}
 	}
 	
 }

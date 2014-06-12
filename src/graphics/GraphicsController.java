@@ -25,6 +25,7 @@ public class GraphicsController {
 	public static int VIEWPORT_X = 0;
 	public static int VIEWPORT_Y = 0;
 	public static Rectangle VIEWPORT_BOX = new Rectangle(VIEWPORT_X, VIEWPORT_Y, Main.ResX, Main.ResY);
+	public static boolean room_changed = false;
 	
 	public static void RenderWorld(World world, Graphics g) {
 		
@@ -36,6 +37,8 @@ public class GraphicsController {
 			
 			HandleEntityAnimations(world, g);
 			EntityCollisionDebug(world, g);
+			
+			//DrawEffect(world, g, EffectsController.DUSK);
 			
 			GUIController.DrawMenus(world, g);
 			
@@ -52,27 +55,48 @@ public class GraphicsController {
 		
 		int world_width = world.width * world.tilesize;
 		int world_height = world.height * world.tilesize;
-		
-		if (Main.ResX < world_width) {
-			if (Camera.IsMoveableX(world)) {
-				g.translate(-(camera.x - Main.ResX / 2), 0);
-				VIEWPORT_X = (camera.x - Main.ResX / 2);
-			} else if (camera.x > world.width * world.tilesize / 2) {
-				g.translate(-(world.width * world.tilesize - Main.ResX), 0);
+		if (!room_changed) {
+			if (Main.ResX < world_width) {
+				if (Camera.IsMoveableX(world)) {
+					g.translate(-(camera.x - Main.ResX / 2), 0);
+					VIEWPORT_X = (camera.x - Main.ResX / 2);
+				} else if (camera.x > world.width * world.tilesize / 2) {
+					g.translate(-(world.width * world.tilesize - Main.ResX), 0);
+				}
+			} else {
+				g.translate(((Main.ResX - world_width) / 2), 0);
+				VIEWPORT_X = -((Main.ResX - world_width) / 2);
+			}
+			
+			if (Main.ResY < world_height) {
+				if (Camera.IsMoveableY(world)) {
+					g.translate(0, -(camera.y - Main.ResY / 2));
+					VIEWPORT_Y = (camera.y - Main.ResY / 2);
+				} else if (camera.y > world.height * world.tilesize / 2) {
+					g.translate(0, -(world.height * world.tilesize - Main.ResY));
+				}
+			} else {
+				g.translate(0, ((Main.ResY - world_height) / 2));
+				VIEWPORT_Y = -((Main.ResY - world_height) / 2);
 			}
 		} else {
-			g.translate(((Main.ResX - world_width) / 2), 0);
-		}
-		
-		if (Main.ResY < world_height) {
-			if (Camera.IsMoveableY(world)) {
-				g.translate(0, -(camera.y - Main.ResY / 2));
-				VIEWPORT_Y = (camera.y - Main.ResY / 2);
-			} else if (camera.y > world.height * world.tilesize / 2) {
-				g.translate(0, -(world.height * world.tilesize - Main.ResY));
+			room_changed = false;
+			int xborder = Main.ResX / 2;
+			int yborder = Main.ResY / 2;
+			
+			if (camera.x < xborder) {
+				VIEWPORT_X = 0;
+			} else if (camera.x > world_width - xborder) {
+				VIEWPORT_X = world_width - Main.ResX;
 			}
-		} else {
-			g.translate(0, ((Main.ResY - world_height) / 2));
+			
+			if (camera.y < yborder) {
+				VIEWPORT_Y = 0;
+			} else if (camera.y > world_height - yborder) {
+				VIEWPORT_Y = world_height - Main.ResY;
+			}
+			
+			
 		}
 		
 		VIEWPORT_BOX.x = VIEWPORT_X;
@@ -102,7 +126,7 @@ public class GraphicsController {
 		for (int i = 0; i < world.GetEntityCount(); i++) {
 			Entity temp = world.GetEntity(i);
 			if (VIEWPORT_BOX.intersects(temp.collision_box)) {
-				if (temp.type != EntityDictionary.CAMERA) {
+				if (temp.type != EntityDictionary.CAMERA && temp.type != EntityDictionary.ROOM_CHANGER) {
 					if (temp.animation == null) {
 						switch(temp.last_animation) {
 						case Direction.LEFT:
@@ -170,14 +194,16 @@ public class GraphicsController {
 								if (temp.last_direction == Direction.NONE) {
 									animation.stop();
 									animation.setCurrentFrame(0);
-								} else if (animation.isStopped() && !temp.IsAnimating()) {
+								} else if (animation.isStopped()){// && !temp.IsAnimating()) {
 									animation.start();
 								}
 								//g.drawAnimation(animation, temp.x, temp.y);
-								if (temp.IsHit()) {
-									animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
-								} else {
-									animation.draw(temp.x, temp.y);
+								if (temp.c_health > 0) {
+									if (temp.IsHit()) {
+										animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
+									} else {
+										animation.draw(temp.x, temp.y);
+									}
 								}
 								DrawDamage(temp, g);
 							} else {
@@ -189,14 +215,16 @@ public class GraphicsController {
 								if (temp.last_direction == Direction.NONE) {
 									animation.stop();
 									animation.setCurrentFrame(0);
-								} else if (animation.isStopped() && !temp.IsAnimating()) {
+								} else if (animation.isStopped()){// && !temp.IsAnimating()) {
 									animation.start();
 								}
 								//g.drawAnimation(animation, temp.x, temp.y);
-								if (temp.IsHit()) {
-									animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
-								} else {
-									animation.draw(temp.x, temp.y);
+								if (temp.c_health > 0) {
+									if (temp.IsHit()) {
+										animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
+									} else {
+										animation.draw(temp.x, temp.y);
+									}
 								}
 								DrawDamage(temp, g);
 							} else {
@@ -208,14 +236,16 @@ public class GraphicsController {
 								if (temp.last_direction == Direction.NONE) {
 									animation.stop();
 									animation.setCurrentFrame(0);
-								} else if (animation.isStopped() && !temp.IsAnimating()) {
+								} else if (animation.isStopped()){// && !temp.IsAnimating()) {
 									animation.start();
 								}
 								//g.drawAnimation(animation, temp.x, temp.y);
-								if (temp.IsHit()) {
-									animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
-								} else {
-									animation.draw(temp.x, temp.y);
+								if (temp.c_health > 0) {
+									if (temp.IsHit()) {
+										animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
+									} else {
+										animation.draw(temp.x, temp.y);
+									}
 								}
 								DrawDamage(temp, g);
 							} else {
@@ -227,14 +257,16 @@ public class GraphicsController {
 								if (temp.last_direction == Direction.NONE) {
 									animation.stop();
 									animation.setCurrentFrame(0);
-								} else if (animation.isStopped() && !temp.IsAnimating()) {
+								} else if (animation.isStopped()){// && !temp.IsAnimating()) {
 									animation.start();
 								}
 								//g.drawAnimation(animation, temp.x, temp.y);
-								if (temp.IsHit()) {
-									animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
-								} else {
-									animation.draw(temp.x, temp.y);
+								if (temp.c_health > 0) {
+									if (temp.IsHit()) {
+										animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
+									} else {
+										animation.draw(temp.x, temp.y);
+									}
 								}
 								DrawDamage(temp, g);
 							} else {
@@ -245,10 +277,12 @@ public class GraphicsController {
 							animation.stop();
 							animation.setCurrentFrame(0);
 							//g.drawAnimation(animation, temp.x, temp.y);
-							if (temp.IsHit()) {
-								animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
-							} else {
-								animation.draw(temp.x, temp.y);
+							if (temp.c_health > 0) {
+								if (temp.IsHit()) {
+									animation.drawFlash(temp.x, temp.y, animation.getWidth(), animation.getHeight(), Color.transparent);
+								} else {
+									animation.draw(temp.x, temp.y);
+								}
 							}
 							DrawDamage(temp, g);
 							break;
@@ -337,6 +371,20 @@ public class GraphicsController {
 					temp.collision_box.x + temp.collision_box.width, 
 					temp.collision_box.y - 10);
 			g.setColor(DEFAULT_COLOR);
+		}
+	}
+	
+	public static void DrawEffect(World world, Graphics g, int effect) {
+		for (int y = 0; y < world.height; y++) {
+			for (int x = 0; x < world.width; x++) {
+				Tile temp = world.GetTile(x, y);
+				if (VIEWPORT_BOX.intersects(temp.collision_box)) {
+					Animation temp_effect = EffectsController.GetEffect(effect);
+					if (temp_effect != null) {
+						g.drawAnimation(temp_effect, temp.x, temp.y);
+					}
+				}
+			}
 		}
 	}
 	

@@ -20,8 +20,9 @@ import gameplay.CombatCalculator;
 public class Enemy {
 	
 	public static int BASE_COOLDOWN = 1000;
-	public static int RESPAWN_TIME = 20000;
+	public static int RESPAWN_TIME = 1000;
 	public static int VIEW_RADIUS = 5;
+	public static int EXP_WORTH = 15;
 	
 	public static void MoveEnemy(World world, Entity enemy, int targetX, int targetY, int fps_scaler) {
 		if (enemy.path == null) {
@@ -105,7 +106,7 @@ public class Enemy {
 							Entry<Long, Integer> current = iterator.next();
 							switch(current.getValue()) {
 							case EntityDictionary.PLAYER:
-								if (temp.c_cooldown <= 0) {
+								if (temp.c_cooldown <= 0 && temp.c_health > 0) {
 									for (int n = 0; n < world.entities.size(); n++) {
 										Entity player = world.GetEntity(n);
 										if (player.type == EntityDictionary.PLAYER) {
@@ -152,7 +153,7 @@ public class Enemy {
 		if (enemy.path != null && enemy.path.IsComplete()) {
 			enemy.path = null;
 		}
-		if (target != null) {
+		if (target != null && enemy.c_health > 0) {
 			if (enemy.path == null && target != null) {
 				PathFindingController.HandlePathFinding(world, enemy, target.collision_box.x, target.collision_box.y);
 				enemy.path = enemy.pathFinder.FindPath();
@@ -259,7 +260,7 @@ public class Enemy {
 					}
 				}
 			}
-		} else {
+		} else if (enemy.c_health > 0) {
 			MoveEnemy(world, enemy, enemy.GetCurrentPatrolPoint().x, enemy.GetCurrentPatrolPoint().y, fps_scaler);
 		}
 	}

@@ -86,6 +86,7 @@ public class GUIController {
 					g.drawImage(temp.background, temp.x + GraphicsController.VIEWPORT_X, 
 							temp.y + GraphicsController.VIEWPORT_Y);
 					DrawHealthBar(world, g, temp.x, temp.y);
+					DrawEXPBar(world, g, temp.x, temp.y);
 				}
 			} catch (PlayerNotFoundException e) {
 			}
@@ -106,6 +107,36 @@ public class GUIController {
 				g.setColor(new Color(255, 255, 255));
 				g.drawString(temp.c_health + "/" + temp.c_max_health, 
 						menux + 14 + GraphicsController.VIEWPORT_X, menuy + 10 + GraphicsController.VIEWPORT_Y);
+			}
+		} catch (PlayerNotFoundException e) {
+		}
+	}
+	
+	public static void DrawEXPBar(World world, Graphics g, int menux, int menuy) {
+		try {
+			int entityIndex = world.FindPlayer();
+			Entity temp = world.entities.get(entityIndex);
+			if (temp != null) {
+				g.setColor(Color.yellow);
+				if (temp.c_health > 0) {
+					g.fillRect(menux + 12 + GraphicsController.VIEWPORT_X, menuy + 71 + GraphicsController.VIEWPORT_Y, 
+							(int)((188) * ((double)temp.c_exp / temp.c_exp_next)), 
+							13);
+				}
+				g.setColor(Color.white);
+				g.drawString("L: " + temp.c_level, 
+						menux + 13 + GraphicsController.VIEWPORT_X, menuy + 50 + GraphicsController.VIEWPORT_Y);
+				
+				if (temp.c_exp != 0) {
+					g.setColor(Color.darkGray);
+				} else {
+					g.setColor(Color.white);
+				}
+				
+				g.drawString(temp.c_exp + "/" + temp.c_exp_next, 
+						menux + 13 + GraphicsController.VIEWPORT_X, menuy + 68 + GraphicsController.VIEWPORT_Y);
+				
+				g.setColor(Color.white);
 			}
 		} catch (PlayerNotFoundException e) {
 		}
@@ -151,6 +182,17 @@ public class GUIController {
 				g.drawImage(temp.background, temp.x + GraphicsController.VIEWPORT_X, 
 						temp.y + GraphicsController.VIEWPORT_Y);
 				if (tempKeyMap.isEmpty() == false) {
+					
+					if (Main.CurrentController() == InputController.KEYBOARD) {
+						g.setColor(Color.white);
+						g.drawString("Controller: KEYBOARD", 15 + temp.x + GraphicsController.VIEWPORT_X, 
+								14 + temp.y + GraphicsController.VIEWPORT_Y);
+					} else {
+						g.setColor(Color.white);
+						g.drawString("Controller: JOYSTICK", 15 + temp.x + GraphicsController.VIEWPORT_X, 
+								14 + temp.y + GraphicsController.VIEWPORT_Y);
+					}
+					
 					for (int i = 0; i < temp.GetMenuItemCount(); i++) {
 						MenuItem item = temp.GetMenuItem(i);
 						if (item.IsHighlighted()) {
@@ -217,10 +259,18 @@ public class GUIController {
 	}
 	
 	public static Integer GetKeyValue(String key) {
-		if (tempKeyMap.containsKey(key)) {
-			return tempKeyMap.get(key);
+		if (Main.CurrentController() == InputController.KEYBOARD) {
+			if (tempKeyMap.containsKey(key)) {
+				return tempKeyMap.get(key);
+			} else {
+				return null;
+			}
 		} else {
-			return null;
+			if (tempJoyMap.containsKey(key)) {
+				return tempJoyMap.get(key);
+			} else {
+				return null;
+			}
 		}
 	}
 	

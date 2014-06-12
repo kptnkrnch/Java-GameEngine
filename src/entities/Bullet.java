@@ -66,19 +66,26 @@ public class Bullet {
 			case EntityDictionary.ENEMY:
 				enemyIndex = world.FindEntity(current.getKey());
 				Entity enemy = world.GetEntity(enemyIndex);
-				damage = CombatCalculator.CalculateDamage(bullet, enemy);
-				
-				if (damage > 0) {
-					String damage_text = "" + damage;
-					enemy.Hit(damage_text, CombatCalculator.IsCriticalHit());
-				} else {
-					enemy.SetHitText("0!", Color.red);
+				if (enemy.c_health > 0) {
+					damage = CombatCalculator.CalculateDamage(bullet, enemy);
+					
+					if (damage > 0) {
+						String damage_text = "" + damage;
+						enemy.Hit(damage_text, CombatCalculator.IsCriticalHit());
+					} else {
+						enemy.SetHitText("0!", Color.red);
+					}
+					enemy.c_health -= damage;
+					if (enemy.c_health <= 0) {
+						enemy.c_killerID = bullet.c_creatorID;
+						String xp = "+" + Enemy.EXP_WORTH + "xp";
+						enemy.SetHitText(xp, Color.yellow);
+					}
+					world.SetEntity(enemyIndex, enemy);
+					
+					bulletIndex = world.FindEntity(bullet.id);
+					world.RemoveEntity(bulletIndex);
 				}
-				enemy.c_health -= damage;
-				world.SetEntity(enemyIndex, enemy);
-				
-				bulletIndex = world.FindEntity(bullet.id);
-				world.RemoveEntity(bulletIndex);
 				break;
 			default:
 				bulletIndex = world.FindEntity(bullet.id);

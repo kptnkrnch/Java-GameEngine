@@ -65,8 +65,13 @@ public class Entity {
 	public int c_speed;
 	public int c_critical_chance;
 	public int c_dodge_chance;
+	public int c_level;
+	public int c_exp;
+	public int c_exp_next;
 	public float c_critical_damage;
 	public int c_cooldown;
+	public long c_creatorID;
+	public long c_killerID;
 	public FadingText last_hit;
 	
 	public boolean attacking = false;
@@ -81,8 +86,16 @@ public class Entity {
 	public int currentPoint;
 	public ArrayList<Point> patrol_points;
 	
+	/* Room Changing System */
+	public boolean changed_rooms;
+	public String room_change_direction;
+	public int target_x;
+	public int target_y;
+	public String target_map;
+	
 	public Entity(Entity temp) {
 		this.id = temp.id;
+		this.type = temp.type;
 		this.x = temp.x;
 		this.y = temp.y;
 		this.width = temp.width;
@@ -122,6 +135,11 @@ public class Entity {
 		this.c_critical_chance = temp.c_critical_chance;
 		this.c_critical_damage = temp.c_critical_damage;
 		this.c_cooldown = temp.c_cooldown;
+		this.c_level = temp.c_level;
+		this.c_exp = temp.c_exp;
+		this.c_exp_next = temp.c_exp_next;
+		this.c_creatorID = temp.c_creatorID;
+		this.c_killerID = temp.c_killerID;
 		this.last_hit = temp.last_hit;
 		
 		this.attacking = temp.attacking;
@@ -132,6 +150,12 @@ public class Entity {
 		
 		this.currentPoint = temp.currentPoint;
 		this.patrol_points = temp.patrol_points;
+		
+		this.changed_rooms = temp.changed_rooms;
+		this.room_change_direction = temp.room_change_direction;
+		this.target_x = temp.target_x;
+		this.target_y = temp.target_y;
+		this.target_map = temp.target_map;
 	}
 
 	public Entity(int type, int x, int y, int width, int height) {
@@ -176,6 +200,11 @@ public class Entity {
 		this.c_dodge_chance = 0;
 		this.c_critical_chance = 0;
 		this.c_critical_damage = 0f;
+		this.c_level = 1;
+		this.c_exp = 0;
+		this.c_exp_next = 100;
+		this.c_creatorID = -1;
+		this.c_killerID = -1;
 		this.hittimer = 0;
 		this.last_hit = null;
 		
@@ -183,6 +212,12 @@ public class Entity {
 		
 		this.currentPoint = 0;
 		this.patrol_points = new ArrayList<Point>();
+		
+		this.changed_rooms = false;
+		this.room_change_direction = AnimationController.DOWN;
+		this.target_x = 0;
+		this.target_y = 0;
+		this.target_map = null;
 	}
 	
 	public boolean IsMoveable() {
@@ -278,6 +313,8 @@ public class Entity {
 	public void SetPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
+		this.movx = x;
+		this.movy = y;
 		this.collision_box.x = this.x + 1;
 		this.collision_box.y = this.y + 1;
 	}
@@ -291,6 +328,7 @@ public class Entity {
 	}
 	
 	public void Copy(Entity temp) {
+		this.id = temp.id;
 		this.x = temp.x;
 		this.y = temp.y;
 		this.width = temp.width;
@@ -326,6 +364,11 @@ public class Entity {
 		this.c_critical_chance = temp.c_critical_chance;
 		this.c_critical_damage = temp.c_critical_damage;
 		this.c_cooldown = temp.c_cooldown;
+		this.c_level = temp.c_level;
+		this.c_exp = temp.c_exp;
+		this.c_exp_next = temp.c_exp_next;
+		this.c_creatorID = temp.c_creatorID;
+		this.c_killerID = temp.c_killerID;
 		
 		this.attacking = temp.attacking;
 		this.attack = temp.attack;
@@ -335,6 +378,12 @@ public class Entity {
 		
 		this.currentPoint = temp.currentPoint;
 		this.patrol_points = temp.patrol_points;
+		
+		this.changed_rooms = temp.changed_rooms;
+		this.room_change_direction = temp.room_change_direction;
+		this.target_x = temp.target_x;
+		this.target_y = temp.target_y;
+		this.target_map = temp.target_map;
 	}
 	
 	/*public void UpdateAnimations(int fps_scaler) {
@@ -452,6 +501,20 @@ public class Entity {
 			} else {
 				this.currentPoint += 1;
 			}
+		}
+	}
+	
+	public void AddExp(int exp) {
+		if (exp > 0) {
+			this.c_exp += exp;
+		}
+		if (this.c_exp >= this.c_exp_next) {
+			this.c_level += 1;
+			this.c_attack += Math.round((1.2 * this.c_level));
+			this.c_defence += Math.round((this.c_level));
+			this.c_speed += Math.round((0.5 * this.c_level));
+			this.c_exp -= this.c_exp_next;
+			this.c_exp_next += this.c_exp_next;
 		}
 	}
 }

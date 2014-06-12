@@ -23,12 +23,18 @@ public class CombatSystem {
 	public static void CleanupDeadEntities(World world) {
 		for (int i = 0; i < world.GetEntityCount(); i++) {
 			Entity temp = world.GetEntity(i);
+			int exp_for_index = -1;
+			Entity exp_for_entity = null;
 			
-			if (temp.c_health <= 0) {
+			if (temp.c_health <= 0 && temp.last_hit.IsFaded()) {
 				int time = 0;
 				switch(temp.type) {
 				case EntityDictionary.ENEMY:
 					time = Enemy.RESPAWN_TIME;
+					exp_for_index = world.FindEntity(temp.c_killerID);
+					exp_for_entity = world.GetEntity(exp_for_index);
+					exp_for_entity.AddExp(Enemy.EXP_WORTH);
+					world.SetEntity(exp_for_index, exp_for_entity);
 					break;
 				}
 				temp.path = null;

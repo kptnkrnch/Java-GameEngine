@@ -30,6 +30,13 @@ public class Player {
 				
 				speed = (float) (Math.sqrt(Math.pow(speed, 2) / 2));
 				
+				if (Direction.IsOpposite(Direction.ResolveAnimation(temp.room_change_direction), Direction.LEFT)) {
+					temp.changed_rooms = false;
+				}
+				if (Direction.IsOpposite(Direction.ResolveAnimation(temp.room_change_direction), Direction.UP)) {
+					temp.changed_rooms = false;
+				}
+				
 				temp.Move(Direction.LEFT, speed, fps_scaler);
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
@@ -40,7 +47,9 @@ public class Player {
 					}
 					entity_collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (entity_collisions != null) {
-						temp = HandleEntityCollisions(temp, entity_collisions);
+						temp = HandleEntityCollisions(world, temp, entity_collisions);
+					} else {
+						temp.changed_rooms = false;
 					}
 				} else {
 					temp.UndoLastMove();
@@ -57,7 +66,9 @@ public class Player {
 					}
 					entity_collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (entity_collisions != null) {
-						temp = HandleEntityCollisions(temp, entity_collisions);
+						temp = HandleEntityCollisions(world, temp, entity_collisions);
+					} else {
+						temp.changed_rooms = false;
 					}
 				} else {
 					temp.UndoLastMove();
@@ -75,6 +86,13 @@ public class Player {
 				
 				speed = (float) (Math.sqrt(Math.pow(speed, 2) / 2));
 				
+				if (Direction.IsOpposite(Direction.ResolveAnimation(temp.room_change_direction), Direction.LEFT)) {
+					temp.changed_rooms = false;
+				}
+				if (Direction.IsOpposite(Direction.ResolveAnimation(temp.room_change_direction), Direction.DOWN)) {
+					temp.changed_rooms = false;
+				}
+				
 				temp.Move(Direction.LEFT, speed, fps_scaler);
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
@@ -85,7 +103,9 @@ public class Player {
 					}
 					entity_collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (entity_collisions != null) {
-						temp = HandleEntityCollisions(temp, entity_collisions);
+						temp = HandleEntityCollisions(world, temp, entity_collisions);
+					} else {
+						temp.changed_rooms = false;
 					}
 				} else {
 					temp.UndoLastMove();
@@ -102,7 +122,9 @@ public class Player {
 					}
 					entity_collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (entity_collisions != null) {
-						temp = HandleEntityCollisions(temp, entity_collisions);
+						temp = HandleEntityCollisions(world, temp, entity_collisions);
+					} else {
+						temp.changed_rooms = false;
 					}
 				} else {
 					temp.UndoLastMove();
@@ -120,6 +142,13 @@ public class Player {
 
 				speed = (float) (Math.sqrt(Math.pow(speed, 2) / 2));
 				
+				if (Direction.IsOpposite(Direction.ResolveAnimation(temp.room_change_direction), Direction.RIGHT)) {
+					temp.changed_rooms = false;
+				}
+				if (Direction.IsOpposite(Direction.ResolveAnimation(temp.room_change_direction), Direction.UP)) {
+					temp.changed_rooms = false;
+				}
+				
 				temp.Move(Direction.RIGHT, speed, fps_scaler);
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
@@ -130,7 +159,9 @@ public class Player {
 					}
 					entity_collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (entity_collisions != null) {
-						temp = HandleEntityCollisions(temp, entity_collisions);
+						temp = HandleEntityCollisions(world, temp, entity_collisions);
+					} else {
+						temp.changed_rooms = false;
 					}
 				} else {
 					temp.UndoLastMove();
@@ -147,7 +178,9 @@ public class Player {
 					}
 					entity_collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (entity_collisions != null) {
-						temp = HandleEntityCollisions(temp, entity_collisions);
+						temp = HandleEntityCollisions(world, temp, entity_collisions);
+					} else {
+						temp.changed_rooms = false;
 					}
 				} else {
 					temp.UndoLastMove();
@@ -165,6 +198,13 @@ public class Player {
 
 				speed = (float) (Math.sqrt(Math.pow(speed, 2) / 2));
 				
+				if (Direction.IsOpposite(Direction.ResolveAnimation(temp.room_change_direction), Direction.RIGHT)) {
+					temp.changed_rooms = false;
+				}
+				if (Direction.IsOpposite(Direction.ResolveAnimation(temp.room_change_direction), Direction.DOWN)) {
+					temp.changed_rooms = false;
+				}
+				
 				temp.Move(Direction.RIGHT, speed, fps_scaler);
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
@@ -175,7 +215,9 @@ public class Player {
 					}
 					entity_collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (entity_collisions != null) {
-						temp = HandleEntityCollisions(temp, entity_collisions);
+						temp = HandleEntityCollisions(world, temp, entity_collisions);
+					} else {
+						temp.changed_rooms = false;
 					}
 				} else {
 					temp.UndoLastMove();
@@ -192,7 +234,9 @@ public class Player {
 					}
 					entity_collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (entity_collisions != null) {
-						temp = HandleEntityCollisions(temp, entity_collisions);
+						temp = HandleEntityCollisions(world, temp, entity_collisions);
+					} else {
+						temp.changed_rooms = false;
 					}
 				} else {
 					temp.UndoLastMove();
@@ -208,6 +252,10 @@ public class Player {
 				
 			} else if (input.get("KEY_LEFT")) {
 				
+				if (Direction.IsOpposite(Direction.ResolveAnimation(temp.room_change_direction), Direction.LEFT)) {
+					temp.changed_rooms = false;
+				}
+				
 				temp.Move(Direction.LEFT, speed, fps_scaler);
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
@@ -218,7 +266,9 @@ public class Player {
 					}
 					entity_collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (entity_collisions != null) {
-						temp = HandleEntityCollisions(temp, entity_collisions);
+						temp = HandleEntityCollisions(world, temp, entity_collisions);
+					} else {
+						temp.changed_rooms = false;
 					}
 				} else {
 					temp.UndoLastMove();
@@ -232,6 +282,10 @@ public class Player {
 				
 			} else if (input.get("KEY_RIGHT")) {
 				
+				if (Direction.IsOpposite(Direction.ResolveAnimation(temp.room_change_direction), Direction.RIGHT)) {
+					temp.changed_rooms = false;
+				}
+				
 				temp.Move(Direction.RIGHT, speed, fps_scaler);
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
@@ -242,7 +296,9 @@ public class Player {
 					}
 					entity_collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (entity_collisions != null) {
-						temp = HandleEntityCollisions(temp, entity_collisions);
+						temp = HandleEntityCollisions(world, temp, entity_collisions);
+					} else {
+						temp.changed_rooms = false;
 					}
 				} else {
 					temp.UndoLastMove();
@@ -256,6 +312,10 @@ public class Player {
 				
 			} else if (input.get("KEY_UP")) {
 				
+				if (Direction.IsOpposite(Direction.ResolveAnimation(temp.room_change_direction), Direction.UP)) {
+					temp.changed_rooms = false;
+				}
+				
 				temp.Move(Direction.UP, speed, fps_scaler);
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
@@ -266,7 +326,9 @@ public class Player {
 					}
 					entity_collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (entity_collisions != null) {
-						temp = HandleEntityCollisions(temp, entity_collisions);
+						temp = HandleEntityCollisions(world, temp, entity_collisions);
+					} else {
+						temp.changed_rooms = false;
 					}
 				} else {
 					temp.UndoLastMove();
@@ -280,6 +342,10 @@ public class Player {
 				
 			} else if (input.get("KEY_DOWN")) {
 				
+				if (Direction.IsOpposite(Direction.ResolveAnimation(temp.room_change_direction), Direction.DOWN)) {
+					temp.changed_rooms = false;
+				}
+				
 				temp.Move(Direction.DOWN, speed, fps_scaler);
 				SetCollisionBox(temp, temp.x, temp.y);
 				if (!CollisionController.CheckEntityOutOfBounds(world, temp)) {
@@ -290,7 +356,9 @@ public class Player {
 					}
 					entity_collisions = CollisionController.CheckEntityCollision(world, temp);
 					if (entity_collisions != null) {
-						temp = HandleEntityCollisions(temp, entity_collisions);
+						temp = HandleEntityCollisions(world, temp, entity_collisions);
+					} else {
+						temp.changed_rooms = false;
 					}
 				} else {
 					temp.UndoLastMove();
@@ -314,18 +382,32 @@ public class Player {
 		player.collision_box.y = y + 32;
 	}
 	
-	public static Entity HandleEntityCollisions(Entity player, HashMap<Long, Integer> collisions) {
+	public static Entity HandleEntityCollisions(World world, Entity player, HashMap<Long, Integer> collisions) {
+		boolean col_roomchanger = false;
 		Iterator<Entry<Long, Integer>> iterator = collisions.entrySet().iterator();
 		while (iterator.hasNext()) {
 			Entry<Long, Integer> current = iterator.next();
+			Entity temp = null;
 			switch(current.getValue()) {
 			case EntityDictionary.BULLET:
+				break;
+			case EntityDictionary.ROOM_CHANGER:
+				col_roomchanger = true;
+				if (player.changed_rooms == false) {
+					temp = world.GetEntity(world.FindEntity(current.getKey()));
+					RoomChanger.ChangeRoom(world, player, temp);
+				}
 				break;
 			default:
 				player.UndoLastMove();
 				SetCollisionBox(player, player.x, player.y);
 				break;
 			}
+		}
+		if (col_roomchanger == true) {
+			player.changed_rooms = true;
+		} else {
+			player.changed_rooms = false;
 		}
 		return player;
 	}

@@ -75,6 +75,9 @@ public class MapLoader {
 					int y = -1;
 					int width = -1;
 					int height = -1;
+					int targetX = -1;
+					int targetY = -1;
+					String targetMap = null;
 					int isDialog = 0;
 					int isPatrolPath = 0;
 					
@@ -98,64 +101,91 @@ public class MapLoader {
 						height = lineScanner.nextInt();
 					}
 					
-					if (lineScanner.hasNextInt()) {
-						isDialog = lineScanner.nextInt();
-					}
+					if (typeID != EntityDictionary.ROOM_CHANGER) {
 					
-					if (lineScanner.hasNextInt()) {
-						isPatrolPath = lineScanner.nextInt();
-					}
-					
-					if (typeID != EntityDictionary.NONE
-							&& x != -1 && y != -1 && width != -1 && height != -1) {
-						Entity entity = EntityFactory.CreateEntity(world, typeID, x, y, width, height);
-						
-						if (isDialog != 0) {
-							while (scan.hasNextLine()) {
-								line = scan.nextLine();
-								
-								if (line.trim().length() == 0) {
-									break;
-								} else if (line.contains("[")) {
-								} else if (line.contains("]")) {
-									break;
-								} else {
-									entity.dialog.add(line);
-								}
-							}
+						if (lineScanner.hasNextInt()) {
+							isDialog = lineScanner.nextInt();
 						}
 						
-						if (isPatrolPath != 0) {
-							while (scan.hasNextLine()) {
-								line = scan.nextLine();
-								lineScanner = new Scanner(line);
-								
-								if (line.trim().length() == 0) {
-									break;
-								} else if (line.contains("{")) {
-								} else if (line.contains("}")) {
-									break;
-								} else {
-									int patrolX = -1;
-									int patrolY = -1;
+						if (lineScanner.hasNextInt()) {
+							isPatrolPath = lineScanner.nextInt();
+						}
+						
+						if (typeID != EntityDictionary.NONE
+								&& x != -1 && y != -1 && width != -1 && height != -1) {
+							Entity entity = EntityFactory.CreateEntity(world, typeID, x, y, width, height);
+							
+							if (isDialog != 0) {
+								while (scan.hasNextLine()) {
+									line = scan.nextLine();
 									
-									if (lineScanner.hasNextInt()) {
-										patrolX = lineScanner.nextInt();
-									}
-									
-									if (lineScanner.hasNextInt()) {
-										patrolY = lineScanner.nextInt();
-									}
-									
-									if (patrolX >= 0 && patrolY >= 0 && patrolX < world.width && patrolY < world.height) {
-										Point point = new Point(patrolX * world.tilesize, patrolY * world.tilesize);
-										entity.AddPatrolPoint(point);
+									if (line.trim().length() == 0) {
+										break;
+									} else if (line.contains("[")) {
+									} else if (line.contains("]")) {
+										break;
+									} else {
+										entity.dialog.add(line);
 									}
 								}
 							}
+							
+							if (isPatrolPath != 0) {
+								while (scan.hasNextLine()) {
+									line = scan.nextLine();
+									lineScanner = new Scanner(line);
+									
+									if (line.trim().length() == 0) {
+										break;
+									} else if (line.contains("{")) {
+									} else if (line.contains("}")) {
+										break;
+									} else {
+										int patrolX = -1;
+										int patrolY = -1;
+										
+										if (lineScanner.hasNextInt()) {
+											patrolX = lineScanner.nextInt();
+										}
+										
+										if (lineScanner.hasNextInt()) {
+											patrolY = lineScanner.nextInt();
+										}
+										
+										if (patrolX >= 0 && patrolY >= 0 && patrolX < world.width && patrolY < world.height) {
+											Point point = new Point(patrolX * world.tilesize, patrolY * world.tilesize);
+											entity.AddPatrolPoint(point);
+										}
+									}
+								}
+							}
+							
+							world.AddEntity(entity);
 						}
-						
-						world.AddEntity(entity);
+					} else {
+						if (typeID != EntityDictionary.NONE
+								&& x != -1 && y != -1 && width != -1 && height != -1) {
+							Entity entity = EntityFactory.CreateEntity(world, typeID, x, y, width, height);
+							
+							if (lineScanner.hasNextInt()) {
+								targetX = lineScanner.nextInt();
+							}
+							
+							if (lineScanner.hasNextInt()) {
+								targetY = lineScanner.nextInt();
+							}
+							
+							if (lineScanner.hasNext()) {
+								targetMap = lineScanner.next();
+							}
+							
+							if (targetX != -1 && targetY != -1 && targetMap != null) {
+								entity.target_x = targetX;
+								entity.target_y = targetY;
+								entity.target_map = targetMap;
+								world.AddEntity(entity);
+							}
+						}
 					}
 					
 					lineScanner.close();

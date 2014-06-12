@@ -1,5 +1,6 @@
 package input;
 
+import engine.Main;
 import graphics.GUIController;
 
 import java.io.File;
@@ -12,6 +13,9 @@ import org.lwjgl.input.Controller;
 import org.newdawn.slick.Input;
 
 public class InputController {
+	public static final int KEYBOARD = 0;
+	public static final int JOYSTICK = 1;
+	
 	private static HashMap<String, Boolean> held_input = null;
 	private static HashMap<String, Boolean> pressed_input = null;
 	private static HashMap<String, Integer> keymap = null;
@@ -31,6 +35,7 @@ public class InputController {
 				Entry<String, Integer> current = mapIterator.next();
 				if (input_obj.isKeyDown(current.getValue())) {
 					held_input.put(current.getKey(), true);
+					Main.SetController(KEYBOARD);
 				}
 			}
 			
@@ -66,6 +71,7 @@ public class InputController {
 				Entry<String, Integer> current = mapIterator.next();
 				if (input_obj.isKeyPressed(current.getValue())) {
 					pressed_input.put(current.getKey(), true);
+					Main.SetController(KEYBOARD);
 				}
 			}
 			

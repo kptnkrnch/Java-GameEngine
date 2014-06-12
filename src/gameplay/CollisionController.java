@@ -17,8 +17,14 @@ public class CollisionController {
 			collision_list[i] = -1;
 		}
 		
-		final int xpos = (temp_entity.x) / world.tilesize;
-		final int ypos = (temp_entity.y) / world.tilesize;
+		int xpos = (temp_entity.x) / world.tilesize;
+		int ypos = (temp_entity.y) / world.tilesize;
+		if (xpos < 0) {
+			xpos = 0;
+		}
+		if (ypos < 0) {
+			ypos = 0;
+		}
 		for (int x = xpos; x < world.width && x < xpos + 3; x++) {
 			for (int y = ypos; y < world.height && y < ypos + 3; y++) {
 				if (world.GetTile(x, y).IsSolid() && temp_entity.Intersects(world.GetTile(x, y))) {

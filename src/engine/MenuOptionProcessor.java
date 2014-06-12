@@ -1,5 +1,10 @@
 package engine;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 import input.InputController;
 
 import org.newdawn.slick.Color;
@@ -62,10 +67,14 @@ public class MenuOptionProcessor {
 	}
 	
 	public static void HandleControlMenuOption(String option) {
+		java.nio.charset.Charset ENCODING = java.nio.charset.StandardCharsets.UTF_8;
 		if (option != null && option.length() > 0) {
 			int menuID = Main.world.FindMenu(GUIController.MENU_CONTROLS);
 			Menu temp = Main.world.GetMenu(menuID);
 			int currentOption = -1;
+			java.nio.file.Path file = null;
+			BufferedWriter writer = null;
+			Iterator<Entry<String, Integer>> mapIterator = null;
 			
 			for (int i = 0; i < temp.GetMenuItemCount(); i++) {
 				MenuItem item = temp.GetMenuItem(i);
@@ -122,6 +131,24 @@ public class MenuOptionProcessor {
 				GUIController.selectedControlField = -1;
 				GUIController.SetCurrentMenu(GUIController.previousMenuName);
 				InputController.SetKeyMap(GUIController.tempKeyMap);
+				
+				file = java.nio.file.Paths.get("res/config/keymap.conf");
+				
+				try {
+					writer = java.nio.file.Files.newBufferedWriter(file, ENCODING);
+					mapIterator = GUIController.tempKeyMap.entrySet().iterator();
+					if (mapIterator != null && writer != null) {
+						while (mapIterator.hasNext()) {
+							Entry<String, Integer> current = mapIterator.next();
+							writer.write(current.getKey() + "=" + current.getValue());
+							if (mapIterator.hasNext()) {
+								writer.newLine();
+							}
+						}
+						writer.close();
+					}
+				} catch (IOException e) {
+				}
 				break;
 			}
 		}

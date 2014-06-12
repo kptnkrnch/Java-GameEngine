@@ -19,6 +19,8 @@ public class EntityFactory {
 			return CreateNPC(world, x, y, width, height);
 		case EntityDictionary.ENEMY:
 			return CreateEnemy(world, x, y, width, height);
+		case EntityDictionary.ROOM_CHANGER:
+			return CreateRoomChanger(world, x, y, width, height);
 		}
 		
 		return null;
@@ -117,6 +119,7 @@ public class EntityFactory {
 		e.c_attack = creator.c_attack;
 		e.c_critical_chance = creator.c_critical_chance;
 		e.c_critical_damage = creator.c_critical_damage;
+		e.c_creatorID = creator.id;
 		
 		switch(animation) {
 		case AnimationController.LEFT:
@@ -137,6 +140,15 @@ public class EntityFactory {
 		String src = world.entity_dictionary.GetAnimationSource(EntityDictionary.BULLET);
 		e.animation = world.entity_dictionary.LoadAnimations(src);
 		
+		return e;
+	}
+	
+	private static Entity CreateRoomChanger(World world, int x, int y, int width, int height) {
+		Entity e = new Entity(EntityDictionary.ROOM_CHANGER, x, y, width, height);
+		e.speed = 0f;
+		e.controlled = false;
+		e.solid = true;
+		e.moveable = false;
 		return e;
 	}
 	

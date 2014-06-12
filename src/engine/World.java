@@ -21,6 +21,7 @@ public class World {
 	public World() {
 		this.tile_dictionary = new TileDictionary();
 		this.entity_dictionary = new EntityDictionary();
+		this.menus = new ArrayList<Menu>();
 		currentID = 0;
 	}
 	
@@ -31,7 +32,7 @@ public class World {
 		this.tile = new Tile[width][height];
 		this.entities = new ArrayList<Entity>();
 		this.dead_entities = new ArrayList<Entity>();
-		this.menus = new ArrayList<Menu>();
+		this.currentID = 0;
 	}
 	
 	public boolean LoadTileDictionary(String dictionary_location) {
@@ -71,13 +72,16 @@ public class World {
 	}
 	
 	public void SetEntity(int index, Entity entity) {
-		this.entities.set(index, entity);
+		if (this.entities != null && index > 0 && index < entities.size()) {
+			this.entities.set(index, entity);
+		}
 	}
 	
-	public void AddEntity(Entity entity) {
+	public int AddEntity(Entity entity) {
 		entity.id = currentID;
 		currentID += 1;
 		this.entities.add(entity);
+		return entities.size() - 1;
 	}
 	
 	public void AddDeadEntity(Entity entity) {

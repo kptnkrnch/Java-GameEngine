@@ -18,6 +18,7 @@ public class EntityDictionary {
 	public static final int ENEMY = 3;
 	public static final int DIALOG_BOX = 4;
 	public static final int BULLET = 5;
+	public static final int ROOM_CHANGER = 6;
 	
 	public Image[] sprites;
 	public String[] animation_files;
