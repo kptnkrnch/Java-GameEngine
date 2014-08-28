@@ -1,6 +1,8 @@
 package graphics;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
@@ -28,8 +30,8 @@ public class GraphicsController {
 	public static boolean room_changed = false;
 	
 	public static void RenderWorld(World world, Graphics g) {
-		
 		try {
+			g.setAntiAlias(true);
 			HandleCamera(world, g);
 			
 			HandleTileAnimations(world, g);
@@ -46,6 +48,12 @@ public class GraphicsController {
 			
 		} catch (CameraNotFoundException e) {
 			System.err.println("Error! Camera entity does not exist!");
+		}
+	}
+	
+	public static void RenderTileAnimations(World world, Graphics g) {
+		for (int i = 0; i < world.tile_dictionary.tiles.length; i++) {
+			g.drawAnimation(world.tile_dictionary.tiles[i], 0, 0);
 		}
 	}
 	
@@ -331,7 +339,28 @@ public class GraphicsController {
 		for (int i = 0; i < world.entities.size(); i++) {
 			Entity temp = world.GetEntity(i);
 			if (temp.type == EntityDictionary.DIALOG_BOX) {
-				g.drawString(Dialog.text.get(Dialog.dialog_pos), temp.x + 10, temp.y + 10);
+				int pos = 1;
+				Scanner scan = new Scanner(Dialog.text.get(Dialog.dialog_pos));
+				ArrayList<String> list = new ArrayList<String>();
+				String line = "";
+				while (scan.hasNext()) {
+					String word = scan.next();
+					String temp_line = new String(line);
+					temp_line += word + " ";
+					if (Main.font.getWidth(temp_line) > 215) {
+						list.add(new String(line));
+						line = "" + word + " ";
+						pos++;
+					} else {
+						line = new String(temp_line);
+					}
+				}
+				list.add(new String(line));
+				
+				for (int n = 0; n < list.size(); n++) {
+					g.drawString(list.get(n), temp.x + 10, temp.y + 8 + 14 * n);
+				}
+				scan.close();
 			}
 		}
 	}

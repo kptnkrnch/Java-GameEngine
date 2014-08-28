@@ -399,8 +399,11 @@ public class Player {
 				}
 				break;
 			default:
-				player.UndoLastMove();
-				SetCollisionBox(player, player.x, player.y);
+				temp = world.GetEntity(world.FindEntity(current.getKey()));
+				if (temp.c_health > 0) {
+					player.UndoLastMove();
+					SetCollisionBox(player, player.x, player.y);
+				}
 				break;
 			}
 		}

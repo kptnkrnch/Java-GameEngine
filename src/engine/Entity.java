@@ -426,25 +426,25 @@ public class Entity {
 	}
 	
 	public void SetHitText(String text) {
-		this.last_hit = new FadingText(text, 15);
+		this.last_hit = new FadingText(text, 1);
 	}
 	
 	public void SetHitText(String text, Color color) {
-		this.last_hit = new FadingText(text, color, 15);
+		this.last_hit = new FadingText(text, color, 1);
 	}
 	
 	public void Hit(String damage) {
 		this.hittimer = 100;
-		this.last_hit = new FadingText(damage, 15);
+		this.last_hit = new FadingText(damage, 1);
 	}
 	
 	public void Hit(String damage, boolean critical_hit) {
 		this.hittimer = 100;
 		if (critical_hit) {
 			damage += "!";
-			this.last_hit = new FadingText(damage, Color.yellow, 15);
+			this.last_hit = new FadingText(damage, Color.yellow, 1);
 		} else {
-			this.last_hit = new FadingText(damage, 15);
+			this.last_hit = new FadingText(damage, 1);
 		}
 	}
 	
@@ -456,7 +456,7 @@ public class Entity {
 			this.hittimer = 0;
 		}
 		if (this.last_hit != null) {
-			this.last_hit.Fade();
+			this.last_hit.Fade(fps_scaler);
 		}
 	}
 	

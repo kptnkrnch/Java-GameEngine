@@ -5,41 +5,35 @@ import org.newdawn.slick.Color;
 public class FadingText {
 	public String text;
 	public Color text_color;
-	public int fade_rate;
+	public int fade_time;
+	public int cur_fade_time;
 	
-	public FadingText(String text, int fade_rate) {
-		if (fade_rate > 0 && fade_rate <= 255) {
-			this.fade_rate = fade_rate;
-		} else {
-			this.fade_rate = 0;
-		}
+	public FadingText(String text, int fade_time) {
+		this.fade_time = fade_time * 1000;
+		this.cur_fade_time = 0;
 		this.text = text;
 		this.text_color = new Color(255, 255, 255, 255);
 	}
 	
-	public FadingText(String text, Color color, int fade_rate) {
-		if (fade_rate > 0 && fade_rate <= 255) {
-			this.fade_rate = fade_rate;
-		} else {
-			this.fade_rate = 0;
-		}
+	public FadingText(String text, Color color, int fade_time) {
+		this.fade_time = fade_time * 1000;
 		this.text = text;
 		this.text_color = new Color(color.r, color.g, color.b, 255);
 	}
 	
-	public void SetFadeRate(int rate) {
-		if (rate > 0 && rate <= 255) {
-			this.fade_rate = rate;
-		}
+	public void SetFadeTime(int fade_time) {
+		this.fade_time = fade_time;
 	}
 	
-	public void Fade() {
-		if (this.text_color != null) {
-			float fade = (float)this.fade_rate / 255 / 15;
-			if (this.text_color.getAlpha() - fade < 0) {
+	public void Fade(int fps_scaler) {
+		if (this.text_color != null && this.text_color.a > 0) {
+			this.cur_fade_time += fps_scaler;
+			float alpha = (float)(this.fade_time - this.cur_fade_time) / this.fade_time;
+			if (alpha <= 0.0001) {
 				this.text_color.a = 0;
+				this.cur_fade_time = 0;
 			} else {
-				this.text_color.a -= fade;
+				this.text_color.a = (alpha);
 			}
 		}
 	}

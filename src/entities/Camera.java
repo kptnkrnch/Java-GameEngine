@@ -17,7 +17,8 @@ public class Camera {
 		if (followingID != -1 && !GraphicsController.room_changed) {
 			Entity following = FindEntity(world, followingID);
 			if (following != null) {
-				camera.SetPosition(following.x + following.width / 2, following.y + following.height / 2);
+				camera.SetPosition(following.collision_box.x + following.collision_box.width / 2, 
+						following.collision_box.y + following.collision_box.height / 2);
 			}
 		}
 	}
@@ -27,7 +28,7 @@ public class Camera {
 		if (temp != null) {
 			int lowerlimit = Main.ResX / 2;
 			int upperlimit = (world.width * world.tilesize) - (Main.ResX / 2);
-			if (temp.x + temp.width / 2 < lowerlimit || temp.x + temp.width / 2 > upperlimit) {
+			if (temp.collision_box.x + temp.collision_box.width / 2 < lowerlimit || temp.collision_box.x + temp.collision_box.width / 2 > upperlimit) {
 				return false;
 			} else {
 				return true;
@@ -42,7 +43,7 @@ public class Camera {
 		if (temp != null) {
 			int lowerlimit = Main.ResY / 2;
 			int upperlimit = (world.height * world.tilesize) - (Main.ResY / 2);
-			if (temp.y + temp.height / 2 < lowerlimit || temp.y + temp.height / 2 > upperlimit) {
+			if (temp.collision_box.y + temp.collision_box.height / 2 < lowerlimit || temp.collision_box.y + temp.collision_box.height / 2 > upperlimit) {
 				return false;
 			} else {
 				return true;

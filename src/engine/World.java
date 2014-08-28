@@ -10,6 +10,7 @@ public class World {
 	public int width;
 	public int height;
 	public int tilesize;
+	public boolean init_anim_synchronizer;
 	public Tile[][] tile;
 	public ArrayList<Entity> entities;
 	public ArrayList<Entity> dead_entities;
@@ -33,6 +34,7 @@ public class World {
 		this.entities = new ArrayList<Entity>();
 		this.dead_entities = new ArrayList<Entity>();
 		this.currentID = 0;
+		this.init_anim_synchronizer = false;
 	}
 	
 	public boolean LoadTileDictionary(String dictionary_location) {

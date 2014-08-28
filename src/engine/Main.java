@@ -31,6 +31,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
+import org.newdawn.slick.ScalableGame;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.TrueTypeFont;
@@ -46,17 +47,22 @@ public class Main extends BasicGame {
 	public static boolean debug = true;
 	public static GameContainer game_container;
 	public static World world;
-	public static int ScreenResX = 800;
-	public static int ScreenResY = 600;
-	public static int ResX = 960;
-	public static int ResY = 540;
+	public static int ScreenResX = 1280;
+	public static int ScreenResY = 720;
+	public static int ResX = 640;
+	public static int ResY = 360;
 	public static boolean debug_mode = false;
 	public static Controller controller = null;
 	public static boolean FULLSCREEN = false;
 	public static boolean VSYNC = false;
-	public static Font font;
+	public static boolean SHOWFPS = false;
+	
+	//public static Font font;
 	public static TrueTypeFont ttf;
 	public static UnicodeFont uni;
+	
+	public static Image font_image = null;
+	public static AngelCodeFont font = null;
 	
 	public static int previous_state = States.PAUSED;
 	public static int game_state = States.PAUSED;
@@ -72,12 +78,13 @@ public class Main extends BasicGame {
 	 * Description:  Main entry point for the program, initializes Slick2D.
 	 */
 	public static void main(String[] args) throws SlickException {
-		AppGameContainer app = new AppGameContainer(new Main("Default Engine"));
-		ResX = ScreenResX;
-		ResY = ScreenResY;
+		//AppGameContainer app = new AppGameContainer(new Main("Default Engine"));
+		AppGameContainer app = new AppGameContainer(new ScalableGame(new Main("Default Engine"), ResX, ResY, true));
+		//ResX = ScreenResX;
+		//ResY = ScreenResY;
 		app.setDisplayMode(ScreenResX, ScreenResY, FULLSCREEN);
 		app.setIcon("res/icon/icon.png");
-		app.setShowFPS(false);
+		app.setShowFPS(SHOWFPS);
 		app.setVSync(VSYNC);
 		app.start();
 	}
@@ -89,7 +96,13 @@ public class Main extends BasicGame {
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException {
 		//g.setFont(uni);
-		GraphicsController.RenderWorld(world, g);
+		if (world.init_anim_synchronizer) {
+			g.setFont(font);
+			GraphicsController.RenderWorld(world, g);
+		} else {
+			GraphicsController.RenderTileAnimations(world, g);
+			world.init_anim_synchronizer = true;
+		}
 	}
 	
 	/**
@@ -100,8 +113,8 @@ public class Main extends BasicGame {
 	@Override
 	public void init(GameContainer gc) throws SlickException {
 		/*try {
-			font = Font.createFont(Font.TRUETYPE_FONT, ResourceLoader.getResourceAsStream("res/fonts/MINECRAFTIA.ttf"));
-			font = font.deriveFont(Font.PLAIN , 11.0f);
+			font = Font.createFont(Font.TRUETYPE_FONT, ResourceLoader.getResourceAsStream("res/fonts/FreePixel.ttf"));
+			font = font.deriveFont(Font.PLAIN , 40.0f);
 			uni = new UnicodeFont(font);
 			uni.addAsciiGlyphs();
 			ColorEffect a = new ColorEffect();
@@ -109,7 +122,11 @@ public class Main extends BasicGame {
 			uni.getEffects().add(a);
 			uni.loadGlyphs();
 		} catch (Exception e) {
-		}*/		
+		}*/
+		font_image = new Image("res/fonts/minecraftia_0.tga");
+		font_image.setFilter(Image.FILTER_NEAREST);
+		font = new AngelCodeFont("res/fonts/minecraftia.fnt", font_image);
+		
 		world = new World();
 		world.LoadTileDictionary("res/dictionaries/TileDictionary.dict");
 		world.LoadEntityDictionary("res/dictionaries/EntityDictionary.dict");
@@ -117,7 +134,7 @@ public class Main extends BasicGame {
 		EffectsController.Init();
 		//world.entity_dictionary.LoadAnimations("res/sprites/player/player.anim");
 		
-		MapLoader.LoadMap(world, "res/maps/Map01.map");
+		MapLoader.LoadMap(world, "res/maps/Map04.map");
 		
 		InputController.LoadKeyMapping("res/config/keymap.conf");
 		String controller_name = JoystickController.LoadKeyMapping("res/config/joymap.conf");
@@ -141,7 +158,7 @@ public class Main extends BasicGame {
 		//npc.dialog.add("Hello World");
 		//world.AddEntity(npc);
 		//world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.ENEMY, 384, 416, 32, 32));
-		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.PLAYER, 288, 128, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.PLAYER, 288, 32, 32, 32));
 		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));
 		try {
 			int player = world.FindPlayer();
