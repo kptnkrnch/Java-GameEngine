@@ -1,9 +1,10 @@
 package engine;
 
 public class TileFactory {
+	public static int tileSize = 0;
 	
 	public static Tile CreateTile(int type, int x, int y, int tilesize) {
-		
+		tileSize = tilesize;
 		Tile tile = null;
 		
 		switch(type) {
@@ -38,10 +39,11 @@ public class TileFactory {
 			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize, true);
 			break;
 		case TileDictionary.PALMTREE_GRASS_BOTLEFT:
-			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize, true);
+			tile = new Tile(type, x * tilesize, y * tilesize, tilesize / 2, tilesize, true);
+			tile.collision_box.x += tilesize / 2;
 			break;
 		case TileDictionary.PALMTREE_GRASS_BOTRIGHT:
-			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize, true);
+			tile = new Tile(type, x * tilesize, y * tilesize, tilesize / 2, tilesize, true);
 			break;
 		case TileDictionary.PALMTREE_SAND_TOPLEFT:
 			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize, true);
@@ -50,10 +52,11 @@ public class TileFactory {
 			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize, true);
 			break;
 		case TileDictionary.PALMTREE_SAND_BOTLEFT:
-			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize, true);
+			tile = new Tile(type, x * tilesize, y * tilesize, tilesize / 2, tilesize, true);
+			tile.collision_box.x += tilesize / 2;
 			break;
 		case TileDictionary.PALMTREE_SAND_BOTRIGHT:
-			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize, true);
+			tile = new Tile(type, x * tilesize, y * tilesize, tilesize / 2, tilesize, true);
 			break;
 		case TileDictionary.SAND:
 			tile = new Tile(type, x * tilesize, y * tilesize, tilesize, tilesize);

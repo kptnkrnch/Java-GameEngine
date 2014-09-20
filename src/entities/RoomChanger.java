@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.ArrayList;
+
 import engine.Entity;
 import engine.EntityFactory;
 import engine.Main;
@@ -24,6 +26,7 @@ public class RoomChanger {
 			Entity newcamera = new Entity(world.GetEntity(world.FindCamera()));
 			Entity newplayer = new Entity(player);
 			
+			Main.world.entities = new ArrayList<Entity>();
 			MapLoader.LoadMap(world, roomChanger.target_map);
 			
 			int index = world.AddEntity(newplayer);

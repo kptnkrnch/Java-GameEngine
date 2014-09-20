@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import npc.NPCData;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
@@ -34,6 +36,7 @@ public class Entity {
 	public boolean moveable;
 	public Rectangle collision_box;
 	public Rectangle image_box;
+	public NPCData npc_data;
 	
 	/* Dialog section */
 	public ArrayList<String> dialog;
@@ -58,21 +61,28 @@ public class Entity {
 	public Path path;
 	
 	/* Combat section */
-	public int c_max_health;
-	public int c_health;
-	public int c_attack;
-	public int c_defence;
-	public int c_speed;
-	public int c_critical_chance;
-	public int c_dodge_chance;
-	public int c_level;
+	public int c_max_health; //base max health
+	public int c_health; //base health
+	public int c_attack; //base attack
+	public int c_defence; //base defence
+	public int c_speed; //base speed
+	public int c_critical_chance; //base critical chance
+	public int c_dodge_chance; //base dodge chance
+	public int c_level; 
 	public int c_exp;
 	public int c_exp_next;
-	public float c_critical_damage;
-	public int c_cooldown;
+	public float c_critical_damage; //base critical damage
+	public int c_cooldown; //base cooldown
 	public long c_creatorID;
 	public long c_killerID;
 	public FadingText last_hit;
+	
+	/* Status Effects*/
+	public int burnDamage;
+	public int burnTime;
+	public int poisonDamage;
+	public int poisonTime;
+	public int frozenTime;
 	
 	public boolean attacking = false;
 	public boolean hit = false;
@@ -142,6 +152,12 @@ public class Entity {
 		this.c_killerID = temp.c_killerID;
 		this.last_hit = temp.last_hit;
 		
+		this.burnDamage = temp.burnDamage;
+		this.burnTime = temp.burnTime;
+		this.poisonDamage = temp.poisonDamage;
+		this.poisonTime = temp.poisonTime;
+		this.frozenTime = temp.frozenTime;
+		
 		this.attacking = temp.attacking;
 		this.attack = temp.attack;
 		this.hittimer = temp.hittimer;
@@ -156,6 +172,8 @@ public class Entity {
 		this.target_x = temp.target_x;
 		this.target_y = temp.target_y;
 		this.target_map = temp.target_map;
+		
+		this.npc_data = temp.npc_data;
 	}
 
 	public Entity(int type, int x, int y, int width, int height) {
@@ -208,6 +226,12 @@ public class Entity {
 		this.hittimer = 0;
 		this.last_hit = null;
 		
+		this.burnDamage = 0;
+		this.burnTime = 0;
+		this.poisonDamage = 0;
+		this.poisonTime = 0;
+		this.frozenTime = 0;
+		
 		this.spawn_point = new SpawnPoint(x, y, width, height);
 		
 		this.currentPoint = 0;
@@ -218,6 +242,8 @@ public class Entity {
 		this.target_x = 0;
 		this.target_y = 0;
 		this.target_map = null;
+		
+		this.npc_data = new NPCData();
 	}
 	
 	public boolean IsMoveable() {
@@ -370,6 +396,12 @@ public class Entity {
 		this.c_creatorID = temp.c_creatorID;
 		this.c_killerID = temp.c_killerID;
 		
+		this.burnDamage = temp.burnDamage;
+		this.burnTime = temp.burnTime;
+		this.poisonDamage = temp.poisonDamage;
+		this.poisonTime = temp.poisonTime;
+		this.frozenTime = temp.frozenTime;
+		
 		this.attacking = temp.attacking;
 		this.attack = temp.attack;
 		this.hittimer = temp.hittimer;
@@ -384,6 +416,8 @@ public class Entity {
 		this.target_x = temp.target_x;
 		this.target_y = temp.target_y;
 		this.target_map = temp.target_map;
+		
+		this.npc_data = temp.npc_data;
 	}
 	
 	/*public void UpdateAnimations(int fps_scaler) {

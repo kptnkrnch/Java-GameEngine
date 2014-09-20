@@ -8,8 +8,14 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import locations.Location;
+import locations.LocationDictionary;
+import locations.LocationLoader;
 import input.InputController;
 import input.JoystickController;
+import items.ItemHandler;
+import items.ItemInventory;
+import items.ItemLoader;
 import entities.Camera;
 import exceptions.CameraNotFoundException;
 import exceptions.PlayerNotFoundException;
@@ -19,6 +25,7 @@ import gameplay.MovementController;
 import graphics.EffectsController;
 import graphics.GUIController;
 import graphics.GraphicsController;
+import npc.NPCLoader;
 
 import org.lwjgl.input.Controller;
 import org.lwjgl.input.Controllers;
@@ -41,6 +48,9 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.gui.TextField;
 import org.newdawn.slick.util.ResourceLoader;
 
+import quests.QuestHandler;
+import quests.QuestLoader;
+import savefiles.SaveLoader;
 import sound.SoundController;
 
 public class Main extends BasicGame {
@@ -55,7 +65,7 @@ public class Main extends BasicGame {
 	public static Controller controller = null;
 	public static boolean FULLSCREEN = false;
 	public static boolean VSYNC = false;
-	public static boolean SHOWFPS = false;
+	public static boolean SHOWFPS = true;
 	
 	//public static Font font;
 	public static TrueTypeFont ttf;
@@ -123,6 +133,11 @@ public class Main extends BasicGame {
 			uni.loadGlyphs();
 		} catch (Exception e) {
 		}*/
+		ItemInventory.Init();
+		ItemLoader.LoadItems();
+		QuestLoader.LoadQuests();
+		LocationLoader.LoadLocations();
+		NPCLoader.LoadNPCs();
 		font_image = new Image("res/fonts/minecraftia_0.tga");
 		font_image.setFilter(Image.FILTER_NEAREST);
 		font = new AngelCodeFont("res/fonts/minecraftia.fnt", font_image);
@@ -130,11 +145,20 @@ public class Main extends BasicGame {
 		world = new World();
 		world.LoadTileDictionary("res/dictionaries/TileDictionary.dict");
 		world.LoadEntityDictionary("res/dictionaries/EntityDictionary.dict");
+		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.PLAYER, 288, 32, 32, 32));
+		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));
+		
+		SaveLoader.LoadSaveFile("save1.save");
 		
 		EffectsController.Init();
 		//world.entity_dictionary.LoadAnimations("res/sprites/player/player.anim");
 		
-		MapLoader.LoadMap(world, "res/maps/Map04.map");
+		
+		Location loc = LocationDictionary.GetLocationByIndex(0);
+		if (loc == null) {
+			System.exit(0);
+		}
+		MapLoader.LoadMap(world, loc.mapfile);
 		
 		InputController.LoadKeyMapping("res/config/keymap.conf");
 		String controller_name = JoystickController.LoadKeyMapping("res/config/joymap.conf");
@@ -158,8 +182,8 @@ public class Main extends BasicGame {
 		//npc.dialog.add("Hello World");
 		//world.AddEntity(npc);
 		//world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.ENEMY, 384, 416, 32, 32));
-		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.PLAYER, 288, 32, 32, 32));
-		world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));
+		//world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.PLAYER, 288, 32, 32, 32));
+		//world.AddEntity(EntityFactory.CreateEntity(world, EntityDictionary.CAMERA, ResX / 2, ResY / 2, 32, 32));
 		try {
 			int player = world.FindPlayer();
 			Camera.Follow(player);
@@ -183,7 +207,7 @@ public class Main extends BasicGame {
 		HashMap<String, Boolean> held_keys = InputController.HandleHeldInput(input, controller);
 		HashMap<String, Boolean> pressed_keys = InputController.HandlePressedInput(input, controller);
 		MovementController.HandleMovement(world, held_keys, fps_scaler);
-		ActionController.HandleEntityAction(world, pressed_keys, fps_scaler);
+		ActionController.HandleEntityAction(world, pressed_keys, held_keys, fps_scaler);
 		world.tile_dictionary.UpdateAnimations(fps_scaler);
 		world.UpdateEntityAnimations(fps_scaler);
 		if (GetState() == States.RUNNING) {
@@ -191,8 +215,10 @@ public class Main extends BasicGame {
 			CombatSystem.UpdateCooldowns(world, fps_scaler);
 			CombatSystem.CleanupDeadEntities(world);
 			CombatSystem.UpdateSpawnTimers(world, fps_scaler);
+			QuestHandler.UpdateQuestStatuses();
 		}
 		EffectsController.UpdateEffects(fps_scaler);
+		ItemHandler.CleanUpInventory();
 		
 		if (debug && input.isKeyPressed(Input.KEY_F1)) {
 			debug_mode = !debug_mode;

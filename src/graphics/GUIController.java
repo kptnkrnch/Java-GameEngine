@@ -1,6 +1,9 @@
 package graphics;
 
 import input.InputController;
+import items.Item;
+import items.ItemDictionary;
+import items.ItemInventory;
 
 import java.awt.Rectangle;
 import java.util.HashMap;
@@ -25,11 +28,14 @@ public class GUIController {
 	
 	public static String currentMenuName = "info_panel";
 	public static String previousMenuName = null;
+	public static String subMenuName = null;
 	
 	public static final String MENU_MAIN = "main";
 	public static final String MENU_INFO_PANEL = "info_panel";
 	public static final String MENU_PAUSE = "pause";
 	public static final String MENU_CONTROLS = "controls";
+	public static final String MENU_INVENTORY = "inventory";
+	public static final String SUBMENU_INVENTORY_ITEM = "inventory_item";
 	
 	public static int selectedControlField = -1;
 	public static HashMap<String, Integer> tempKeyMap = new HashMap<String, Integer>();
@@ -40,8 +46,16 @@ public class GUIController {
 		currentMenuName = menu;
 	}
 	
+	public static void SetSubMenu(String menu) {
+		subMenuName = menu;
+	}
+	
 	public static String GetCurrentMenu() {
 		return currentMenuName;
+	}
+	
+	public static String GetCurrentSubmenu() {
+		return subMenuName;
 	}
 	
 	public static String GetPreviousMenu() {
@@ -67,6 +81,17 @@ public class GUIController {
 			case MENU_CONTROLS:
 				DrawControlsMenu(world, g);
 				break;
+			case MENU_INVENTORY:
+				DrawInventoryMenu(world, g);
+				break;
+			}
+		}
+		String subMenu = GetCurrentSubmenu();
+		if (subMenu != null) {
+			switch(subMenu) {
+			case SUBMENU_INVENTORY_ITEM:
+				DrawInventoryItemMenu(world, g);
+				break;
 			}
 		}
 	}
@@ -83,11 +108,14 @@ public class GUIController {
 						temp.y + GraphicsController.VIEWPORT_Y, temp.width, temp.height);
 				
 				if (!infoPanelBox.intersects(player.collision_box)) {
-					g.drawImage(temp.background, temp.x + GraphicsController.VIEWPORT_X, 
-							temp.y + GraphicsController.VIEWPORT_Y);
-					DrawHealthBar(world, g, temp.x, temp.y);
-					DrawEXPBar(world, g, temp.x, temp.y);
+					temp.background.setAlpha(0.8f);
+				} else {
+					temp.background.setAlpha(0.4f);
 				}
+				g.drawImage(temp.background, temp.x + GraphicsController.VIEWPORT_X, 
+						temp.y + GraphicsController.VIEWPORT_Y);
+				DrawHealthBar(world, g, temp.x, temp.y);
+				DrawEXPBar(world, g, temp.x, temp.y);
 			} catch (PlayerNotFoundException e) {
 			}
 		}
@@ -168,6 +196,94 @@ public class GUIController {
 						item.y + GraphicsController.VIEWPORT_Y);
 				g.setColor(Color.white);
 			}
+		}
+	}
+	
+	public static void DrawInventoryMenu(World world, Graphics g) {
+		int menuID = world.FindMenu(MENU_INVENTORY);
+		Menu temp = world.GetMenu(menuID);
+		if (temp != null && temp.background != null
+				&& Main.GetState() == States.MENU) {
+			
+			g.drawImage(temp.background, temp.x + GraphicsController.VIEWPORT_X, 
+					temp.y + GraphicsController.VIEWPORT_Y);
+			
+			int i = 0;
+			if (ItemInventory.GetItemCount() >= 14) {
+				if (ItemInventory.currentPosition < 7) {
+					i = 0;
+				} else if (ItemInventory.currentPosition >= 7 && ItemInventory.GetItemCount() >= 14 && ItemInventory.currentPosition > ItemInventory.GetItemCount() - 8) {
+					i = ItemInventory.GetItemCount() - 14;
+				}  else {
+					i = ItemInventory.currentPosition - 6;
+				}
+			} else {
+				i = 0;
+			}
+			for (int n = 0; i < ItemInventory.GetItemCount() && n < 14; i++, n++) {
+				Item item = null;
+				item = ItemInventory.GetItem(i);
+				
+				if (item != null) {
+					if (i == ItemInventory.currentPosition) {
+						g.setColor(Color.lightGray);
+						g.fillRect(259 + GraphicsController.VIEWPORT_X, 40 + (20 * n) + GraphicsController.VIEWPORT_Y, 356, 20);
+						g.drawImage(ItemInventory.inventoryArrow, 266 + GraphicsController.VIEWPORT_X, 
+								40 + (20 * n)+ GraphicsController.VIEWPORT_Y);
+					}
+					
+					switch(item.rarity) {
+					case ItemDictionary.RARITY_COMMON:
+						g.setColor(Color.white);
+						break;
+					case ItemDictionary.RARITY_UNCOMMON:
+						g.setColor(Color.green);
+						break;
+					case ItemDictionary.RARITY_RARE:
+						g.setColor(Color.blue);
+						break;
+					case ItemDictionary.RARITY_LEGENDARY:
+						g.setColor(new Color(102, 0, 204));
+						break;
+					case ItemDictionary.RARITY_EXOTIC:
+						g.setColor(Color.orange);
+						break;
+					default:
+						g.setColor(Color.white);
+						break;
+					}
+					g.drawString(item.name, 290 + GraphicsController.VIEWPORT_X,
+							40 + 20 * n + GraphicsController.VIEWPORT_Y);
+					g.setColor(Color.white);
+				}
+			}
+		}
+	}
+	
+	public static void DrawInventoryItemMenu(World world, Graphics g) {
+		int menuID = world.FindMenu(SUBMENU_INVENTORY_ITEM);
+		Menu temp = world.GetMenu(menuID);
+		if (temp != null && temp.background != null
+				&& Main.GetState() == States.MENU) {
+			
+			g.drawImage(temp.background, temp.x + GraphicsController.VIEWPORT_X, 
+					temp.y + GraphicsController.VIEWPORT_Y);
+			
+			g.setColor(Color.black);
+			for (int i = 0; i < temp.GetMenuItemCount(); i++) {
+				MenuItem tempItem = temp.GetMenuItem(i);
+				if (tempItem.IsHighlighted()) {
+					//g.setColor(Color.blue);
+					g.setColor(Color.darkGray);
+					g.fillRect(temp.x + 5 + GraphicsController.VIEWPORT_X, temp.y + 8 + 20 * i + GraphicsController.VIEWPORT_Y, 120, 20);
+					g.setColor(Color.white);
+				} else {
+					g.setColor(Color.black);
+				}
+				g.drawString(tempItem.text, temp.x + 8 + GraphicsController.VIEWPORT_X,
+						temp.y + 8 + 20 * i + GraphicsController.VIEWPORT_Y);
+			}
+			g.setColor(Color.white);
 		}
 	}
 	

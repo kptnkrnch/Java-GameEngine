@@ -6,7 +6,7 @@ import exceptions.CameraNotFoundException;
 import exceptions.PlayerNotFoundException;
 
 public class World {
-	
+	public int currentLocationID;
 	public int width;
 	public int height;
 	public int tilesize;
@@ -24,6 +24,12 @@ public class World {
 		this.entity_dictionary = new EntityDictionary();
 		this.menus = new ArrayList<Menu>();
 		currentID = 0;
+		this.currentLocationID = 0;
+		this.width = 0;
+		this.height = 0;
+		this.tilesize = 0;
+		this.entities = new ArrayList<Entity>();
+		this.dead_entities = new ArrayList<Entity>();
 	}
 	
 	public void Init(int width, int height, int tilesize) {
@@ -31,10 +37,11 @@ public class World {
 		this.height = height;
 		this.tilesize = tilesize;
 		this.tile = new Tile[width][height];
-		this.entities = new ArrayList<Entity>();
+		//this.entities = new ArrayList<Entity>();
 		this.dead_entities = new ArrayList<Entity>();
-		this.currentID = 0;
+		this.currentID = this.entities.size();
 		this.init_anim_synchronizer = false;
+		this.currentLocationID = 0;
 	}
 	
 	public boolean LoadTileDictionary(String dictionary_location) {
@@ -74,7 +81,7 @@ public class World {
 	}
 	
 	public void SetEntity(int index, Entity entity) {
-		if (this.entities != null && index > 0 && index < entities.size()) {
+		if (this.entities != null && index >= 0 && index < entities.size()) {
 			this.entities.set(index, entity);
 		}
 	}

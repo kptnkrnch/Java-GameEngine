@@ -19,6 +19,7 @@ public class Quest {
 	public int subsequentQuestID; //-1 is none
 	public int requiredPriorQuestID; //-1 is none
 	public int turnInNPCID; //-1 is no NPC
+	public boolean isTurnInConversationComplete;
 	public String recommendedLevel; 
 	public int minimumLevel; //-1 is none
 	public int maximumLevel; //-1 is none
@@ -27,7 +28,50 @@ public class Quest {
 	public String acquiredLocation; //optional
 	public String turnInLocation;
 	public boolean isActive;
+	public ArrayList<Integer> innerQuestIDs;
 	public ArrayList<Quest> innerQuests;
 	public boolean isPrimaryQuest;
 	public boolean isInnerQuest;
+	public boolean isComplete;
+	
+	public Quest() {
+		id = -1;
+		giverNPCID = -1;
+		requiredItems = new ArrayList<Integer>();
+		requiredItemCount = new ArrayList<Integer>();
+		currentItems = new ArrayList<Integer>();
+		requiredConversations = new ArrayList<Integer>();
+		requiredLocationDiscoveries = new ArrayList<Integer>();
+		requiredEnemyTypes = new ArrayList<Integer>();
+		requiredKillCount = new ArrayList<Integer>();
+		currentKillCount = new ArrayList<Integer>();
+		rewardEXP = 0;
+		rewardMoney = 0;
+		rewardItems = new ArrayList<Integer>();
+		subsequentQuestID = -1;
+		requiredPriorQuestID = -1;
+		turnInNPCID = -1;
+		recommendedLevel = ""; 
+		minimumLevel = -1;
+		maximumLevel = -1;
+		questName = "";
+		questDescription = "";
+		acquiredLocation = "";
+		turnInLocation = "";
+		isActive = false;
+		innerQuestIDs = new ArrayList<Integer>();
+		innerQuests = new ArrayList<Quest>();
+		isPrimaryQuest = false;
+		isInnerQuest = false;
+		isComplete = false;
+		isTurnInConversationComplete = false;
+	}
+	
+	public boolean Activate() {
+		if (isComplete == false) {
+			isActive = true;
+			return true;
+		}
+		return false;
+	}
 }

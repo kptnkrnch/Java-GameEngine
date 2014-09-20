@@ -8,6 +8,7 @@ import engine.Entity;
 
 public class Path {
 	
+	public int id;
 	public ArrayList<Integer> targetX;
 	public ArrayList<Integer> targetY;
 	public ArrayList<Integer> direction;
@@ -16,6 +17,7 @@ public class Path {
 	public boolean complete;
 	
 	public Path() {
+		id = -1;
 		targetX = new ArrayList<Integer>();
 		targetY = new ArrayList<Integer>();
 		direction = new ArrayList<Integer>();

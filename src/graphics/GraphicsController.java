@@ -15,6 +15,7 @@ import engine.Entity;
 import engine.EntityDictionary;
 import engine.Main;
 import engine.Tile;
+import engine.TileFactory;
 import engine.World;
 import entities.Camera;
 import entities.Dialog;
@@ -26,7 +27,10 @@ public class GraphicsController {
 	public static Color DEFAULT_COLOR = Color.white;
 	public static int VIEWPORT_X = 0;
 	public static int VIEWPORT_Y = 0;
-	public static Rectangle VIEWPORT_BOX = new Rectangle(VIEWPORT_X, VIEWPORT_Y, Main.ResX, Main.ResY);
+	public static Rectangle VIEWPORT_BOX = new Rectangle(VIEWPORT_X - TileFactory.tileSize, 
+			VIEWPORT_Y - TileFactory.tileSize, 
+			Main.ResX + TileFactory.tileSize * 2, 
+			Main.ResY + TileFactory.tileSize * 2);
 	public static boolean room_changed = false;
 	
 	public static void RenderWorld(World world, Graphics g) {
@@ -107,8 +111,8 @@ public class GraphicsController {
 			
 		}
 		
-		VIEWPORT_BOX.x = VIEWPORT_X;
-		VIEWPORT_BOX.y = VIEWPORT_Y;
+		VIEWPORT_BOX.x = VIEWPORT_X - TileFactory.tileSize;
+		VIEWPORT_BOX.y = VIEWPORT_Y - TileFactory.tileSize;
 	}
 	
 	private static void HandleTileAnimations(World world, Graphics g) {

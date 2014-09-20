@@ -498,10 +498,11 @@ public class Player {
 			world.entities.set(i, temp);
 		}*/
 		
-		if (player.c_cooldown <= 0) {
+		//TURNED OFF COOLDOWNS FOR TESTING HOW IT FEELS
+		//if (player.c_cooldown <= 0) {
 			player.c_cooldown = CombatCalculator.CalculateCooldown(player, BASE_COOLDOWN);
 			player.attacking = true;
-		}
+		//}
 	}
 	
 	public static void ShootBullet(World world, Entity player) {

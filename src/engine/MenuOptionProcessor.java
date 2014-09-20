@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import input.InputController;
+import items.Item;
+import items.ItemHandler;
+import items.ItemInventory;
 
 import org.newdawn.slick.Color;
 
@@ -31,6 +34,13 @@ public class MenuOptionProcessor {
 	public static final String INTERACT_CONTROL_OPTION = "interact_control_option";
 	public static final String BACK_OPTION = "back_option";
 	
+	/* Submenu Inventory Item Options */
+	public static final String USE_ITEM_OPTION = "use_item_option";
+	public static final String UNEQUIP_ITEM_OPTION = "unequip_item_option";
+	public static final String EQUIP_ITEM_OPTION = "equip_item_option";
+	public static final String DROP_ITEM_OPTION = "drop_item_option";
+	public static final String CLOSE_ITEM_OPTION = "close_item_option";
+	
 	public static void HandleMenuOption(String option) {
 		if (option != null && option.length() > 0) {
 			switch(GUIController.GetCurrentMenu()) {
@@ -39,6 +49,12 @@ public class MenuOptionProcessor {
 				break;
 			case GUIController.MENU_CONTROLS:
 				HandleControlMenuOption(option);
+				break;
+			}
+			
+			switch(GUIController.subMenuName) {
+			case GUIController.SUBMENU_INVENTORY_ITEM:
+				HandleInventoryItemOption(option);
 				break;
 			}
 		}
@@ -149,6 +165,44 @@ public class MenuOptionProcessor {
 					}
 				} catch (IOException e) {
 				}
+				break;
+			}
+		}
+	}
+	
+	public static void HandleInventoryItemOption(String option) {
+		if (option != null && option.length() > 0) {
+			boolean success = false;
+			switch(option) {
+			case USE_ITEM_OPTION:
+				success = false;
+				Item item = ItemInventory.GetCurrentItem();
+				
+				success = ItemHandler.UseItem(item);
+				
+				if (success && item.maxUses > 0 && item.useCount <= item.maxUses) {
+					item.IncreaseUseCount();
+					//System.out.println("INCREASED");
+				}
+				
+				ItemInventory.SetCurrentItem(item);
+				GUIController.SetSubMenu(null);
+				break;
+			case UNEQUIP_ITEM_OPTION:
+				success = false;
+				GUIController.SetSubMenu(null);
+				break;
+			case EQUIP_ITEM_OPTION:
+				success = false;
+				GUIController.SetSubMenu(null);
+				break;
+			case DROP_ITEM_OPTION:
+				success = false;
+				ItemHandler.DropCurrentItem();
+				GUIController.SetSubMenu(null);
+				break;
+			case CLOSE_ITEM_OPTION:
+				GUIController.SetSubMenu(null);
 				break;
 			}
 		}
