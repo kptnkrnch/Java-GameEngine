@@ -65,7 +65,7 @@ InventoryData:
 		type:2
 		rarity:2
 		armor:0
-		damage:1
+		damage:2
 		criticalchance:0
 		criticaldamage:0
 		freezingdamage:0
@@ -97,7 +97,7 @@ InventoryData:
 		isquestitem:false
 		isbanked:false
 		issold:false
-		isequipped:false
+		isequipped:true
 		value:10
 	EndItem:
 	BeginItem:
@@ -106,7 +106,7 @@ InventoryData:
 		type:2
 		rarity:3
 		armor:0
-		damage:1
+		damage:4
 		criticalchance:0
 		criticaldamage:0
 		freezingdamage:0
@@ -147,7 +147,7 @@ InventoryData:
 		type:2
 		rarity:4
 		armor:0
-		damage:1
+		damage:7
 		criticalchance:0
 		criticaldamage:0
 		freezingdamage:0
@@ -188,7 +188,7 @@ InventoryData:
 		type:2
 		rarity:5
 		armor:0
-		damage:1
+		damage:12
 		criticalchance:0
 		criticaldamage:0
 		freezingdamage:0

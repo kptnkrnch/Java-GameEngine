@@ -1,5 +1,7 @@
 package engine;
 
+import items.ItemHandler;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;

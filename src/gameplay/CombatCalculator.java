@@ -1,8 +1,13 @@
 package gameplay;
 
+import items.ItemHandler;
+
 import java.util.Random;
 
 import engine.Entity;
+import engine.EntityDictionary;
+import engine.Main;
+import exceptions.PlayerNotFoundException;
 
 public class CombatCalculator {
 	
@@ -14,18 +19,34 @@ public class CombatCalculator {
 	
 	public static int CalculateDamage(Entity attacker, Entity defender) {
 		int damage = 0;
+		float critical_damage = 0;
+		int defence = 0;
 		
 		if (!DodgeCalculator(defender)) {
 			damage = attacker.c_attack;
+			critical_damage = attacker.c_critical_damage;
+			defence = defender.c_defence;
+			
+			Entity player = null;
+			try {
+				player = Main.world.GetEntity(Main.world.FindPlayer());
+			} catch (PlayerNotFoundException e) {
+			}
+			
+			if (attacker.type == EntityDictionary.PLAYER || (player != null && attacker.c_creatorID == player.id)) {
+				damage += ItemHandler.GetEquipmentAttack();
+			} else if (defender.type == EntityDictionary.PLAYER) {
+				defence += ItemHandler.GetEquipmentDefence();
+			}
 			
 			if (CriticalHitCalculator(attacker)) {
-				damage += Math.round((float)attacker.c_attack * attacker.c_critical_damage);
+				damage += Math.round((float)damage * critical_damage);
 				CriticalHit = true;
 			} else {
 				CriticalHit = false;
 			}
 			
-			damage -= defender.c_defence;
+			damage -= defence;
 			
 			if (damage <= 0) {
 				damage = 1;

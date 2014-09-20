@@ -172,6 +172,7 @@ public class MenuOptionProcessor {
 	
 	public static void HandleInventoryItemOption(String option) {
 		if (option != null && option.length() > 0) {
+			int index = -1;
 			boolean success = false;
 			switch(option) {
 			case USE_ITEM_OPTION:
@@ -190,10 +191,14 @@ public class MenuOptionProcessor {
 				break;
 			case UNEQUIP_ITEM_OPTION:
 				success = false;
+				index = ItemInventory.currentPosition;
+				ItemHandler.UnEquipItem(index);
 				GUIController.SetSubMenu(null);
 				break;
 			case EQUIP_ITEM_OPTION:
 				success = false;
+				index = ItemInventory.currentPosition;
+				ItemHandler.EquipItem(index);
 				GUIController.SetSubMenu(null);
 				break;
 			case DROP_ITEM_OPTION:

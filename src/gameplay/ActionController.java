@@ -119,7 +119,7 @@ public class ActionController {
 					menu.AddMenuItem(temp);
 					wordcount++;
 				}
-				if (item.type == ItemDictionary.TYPE_WEAPON || item.type == ItemDictionary.TYPE_ARMOR) {
+				if (item.type == ItemDictionary.TYPE_WEAPON || ItemDictionary.IsArmor(item)) {
 					if (item.isEquipped) {
 						MenuItem temp = new MenuItem("unequip", menu.x, menu.y + wordcount * 18, "unequip_item_option");
 						if (wordcount == 0) {

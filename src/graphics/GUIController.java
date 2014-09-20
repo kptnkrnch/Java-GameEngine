@@ -254,6 +254,18 @@ public class GUIController {
 					}
 					g.drawString(item.name, 290 + GraphicsController.VIEWPORT_X,
 							40 + 20 * n + GraphicsController.VIEWPORT_Y);
+					g.setColor(Color.black);
+					if (item.isEquipped) {
+						g.drawString("E", 480 + GraphicsController.VIEWPORT_X,
+								40 + 20 * n + GraphicsController.VIEWPORT_Y);
+					}
+					if (ItemDictionary.IsWeapon(item)) {
+						g.drawString("ATTACK: " + item.damage, 500 + GraphicsController.VIEWPORT_X,
+								40 + 20 * n + GraphicsController.VIEWPORT_Y);
+					} else if (ItemDictionary.IsArmor(item)) {
+						g.drawString("ARMOR: " + item.armor, 500 + GraphicsController.VIEWPORT_X,
+								40 + 20 * n + GraphicsController.VIEWPORT_Y);
+					}
 					g.setColor(Color.white);
 				}
 			}
@@ -282,6 +294,11 @@ public class GUIController {
 				}
 				g.drawString(tempItem.text, temp.x + 8 + GraphicsController.VIEWPORT_X,
 						temp.y + 8 + 20 * i + GraphicsController.VIEWPORT_Y);
+				g.setColor(Color.black);
+				if (tempItem.otherInformation.containsKey("equipped")) {
+					g.drawString("E", temp.x + 100 + GraphicsController.VIEWPORT_X,
+							temp.y + 8 + 20 * i + GraphicsController.VIEWPORT_Y);
+				}
 			}
 			g.setColor(Color.white);
 		}

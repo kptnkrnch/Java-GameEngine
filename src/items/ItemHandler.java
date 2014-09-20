@@ -121,4 +121,59 @@ public class ItemHandler {
 			ItemInventory.currentPosition = ItemInventory.GetItemCount() - 1;
 		}
 	}
+	
+	public static void EquipItem(int index) {
+		if (index >= 0 && index < ItemInventory.GetItemCount()) {
+			Item item = ItemInventory.GetItem(index);
+			
+			if (ItemDictionary.IsArmor(item) || ItemDictionary.IsWeapon(item)) {
+				for (int i = 0; i < ItemInventory.GetItemCount(); i++) {
+					Item temp = ItemInventory.GetItem(i);
+					if (temp.type == item.type && temp.isEquipped) {
+						temp.isEquipped = false;
+						ItemInventory.SetItem(i, temp);
+						break;
+					}
+				}
+				item.isEquipped = true;
+				ItemInventory.SetItem(index, item);
+			}
+		}
+	}
+	
+	public static void UnEquipItem(int index) {
+		if (index >= 0 && index < ItemInventory.GetItemCount()) {
+			Item item = ItemInventory.GetItem(index);
+			
+			item.isEquipped = false;
+			
+			ItemInventory.SetItem(index, item);
+		}
+	}
+	
+	public static int GetEquipmentDefence() {
+		int defence = 0;
+		
+		for (int i = 0; i < ItemInventory.GetItemCount(); i++) {
+			Item temp = ItemInventory.GetItem(i);
+			if (ItemDictionary.IsArmor(temp) && temp.isEquipped) {
+				defence += temp.armor;
+			}
+		}
+		
+		return defence;
+	}
+	
+	public static int GetEquipmentAttack() {
+		int attack = 0;
+		
+		for (int i = 0; i < ItemInventory.GetItemCount(); i++) {
+			Item temp = ItemInventory.GetItem(i);
+			if (ItemDictionary.IsWeapon(temp) && temp.isEquipped) {
+				attack += temp.damage;
+			}
+		}
+		
+		return attack;
+	}
 }
