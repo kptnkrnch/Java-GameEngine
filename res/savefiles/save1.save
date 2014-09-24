@@ -224,12 +224,12 @@ InventoryData:
 		value:10
 	EndItem:
 	BeginItem:
-		id:2
-		name:Basic Gun 2.0
-		type:2
-		rarity:1
-		armor:0
-		damage:1
+		id:3
+		name:Breathing Barrier
+		type:3
+		rarity:2
+		armor:3
+		damage:0
 		criticalchance:0
 		criticaldamage:0
 		freezingdamage:0

@@ -30,6 +30,9 @@ public class ActionController {
 			/* GUI Keys */
 			if (input.get("KEY_MENU")) {
 				//HandleMenuKey(world);
+				//HandleInventoryKey(world);
+			}
+			if (input.get("KEY_INVENTORY")) {
 				HandleInventoryKey(world);
 			}
 			if (GUIController.GetCurrentMenu() == GUIController.MENU_INVENTORY && GUIController.GetCurrentSubmenu() == null) {

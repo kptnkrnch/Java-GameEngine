@@ -50,6 +50,7 @@ import org.newdawn.slick.util.ResourceLoader;
 
 import quests.QuestHandler;
 import quests.QuestLoader;
+import savefiles.SaveGenerator;
 import savefiles.SaveLoader;
 import sound.SoundController;
 
@@ -190,6 +191,9 @@ public class Main extends BasicGame {
 		} catch (PlayerNotFoundException e) {
 		}
 		SoundController.LoadMusic("res/sounds/Track-03.ogg");
+		
+		SaveGenerator.SaveGame("save2.save");
+		
 		game_state = States.RUNNING;
 	}
 	

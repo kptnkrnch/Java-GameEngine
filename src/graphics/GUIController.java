@@ -260,9 +260,11 @@ public class GUIController {
 								40 + 20 * n + GraphicsController.VIEWPORT_Y);
 					}
 					if (ItemDictionary.IsWeapon(item)) {
+						g.setColor(new Color(180,0,0));
 						g.drawString("ATTACK: " + item.damage, 500 + GraphicsController.VIEWPORT_X,
 								40 + 20 * n + GraphicsController.VIEWPORT_Y);
 					} else if (ItemDictionary.IsArmor(item)) {
+						g.setColor(new Color(0,0,120));
 						g.drawString("ARMOR: " + item.armor, 500 + GraphicsController.VIEWPORT_X,
 								40 + 20 * n + GraphicsController.VIEWPORT_Y);
 					}
