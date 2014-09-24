@@ -58,15 +58,15 @@ public class Main extends BasicGame {
 	public static boolean debug = true;
 	public static GameContainer game_container;
 	public static World world;
-	public static int ScreenResX = 1280;
-	public static int ScreenResY = 720;
+	public static int ScreenResX = 640;
+	public static int ScreenResY = 360;
 	public static int ResX = 640;
 	public static int ResY = 360;
 	public static boolean debug_mode = false;
 	public static Controller controller = null;
 	public static boolean FULLSCREEN = false;
 	public static boolean VSYNC = false;
-	public static boolean SHOWFPS = true;
+	public static boolean SHOWFPS = false;
 	
 	//public static Font font;
 	public static TrueTypeFont ttf;

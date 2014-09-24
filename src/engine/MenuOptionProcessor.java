@@ -12,6 +12,7 @@ import items.ItemInventory;
 
 import org.newdawn.slick.Color;
 
+import savefiles.SaveGenerator;
 import graphics.GUIController;
 import graphics.GraphicsController;
 
@@ -51,16 +52,19 @@ public class MenuOptionProcessor {
 				HandleControlMenuOption(option);
 				break;
 			}
-			
-			switch(GUIController.subMenuName) {
-			case GUIController.SUBMENU_INVENTORY_ITEM:
-				HandleInventoryItemOption(option);
-				break;
+			if (GUIController.subMenuName != null) {
+				switch(GUIController.subMenuName) {
+				case GUIController.SUBMENU_INVENTORY_ITEM:
+					HandleInventoryItemOption(option);
+					break;
+				}
 			}
 		}
 	}
 	
 	public static void HandleMainMenuOption(String option) {
+		int saveNumber = 1;
+		String saveFileName = null;
 		if (option != null && option.length() > 0) {
 			switch(option) {
 			case GRAPHICS_OPTION:
@@ -72,6 +76,13 @@ public class MenuOptionProcessor {
 				GUIController.SetCurrentMenu(GUIController.MENU_CONTROLS);
 				break;
 			case SAVE_OPTION:
+				saveNumber = SaveGenerator.FindLastSaveFileNumber();
+				saveNumber++;
+				saveFileName = SaveGenerator.CreateSaveFileWithNumber(saveNumber);
+				if (saveFileName != null && saveFileName.contains(".save")) {
+					SaveGenerator.SaveGame(saveFileName);
+				}
+				System.out.println("Saved: " + saveFileName);
 				break;
 			case LOAD_OPTION:
 				break;

@@ -29,8 +29,7 @@ public class ActionController {
 		if (input != null && !input.isEmpty()) {
 			/* GUI Keys */
 			if (input.get("KEY_MENU")) {
-				//HandleMenuKey(world);
-				//HandleInventoryKey(world);
+				HandleMenuKey(world);
 			}
 			if (input.get("KEY_INVENTORY")) {
 				HandleInventoryKey(world);

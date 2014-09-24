@@ -7,14 +7,63 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import engine.Entity;
 import engine.Main;
 import exceptions.PlayerNotFoundException;
 
 public class SaveGenerator {
-	
+	public static ArrayList<String> savefiles = new ArrayList<String>();
 	public static final String path = "res/savefiles";
+	
+	public static void DiscoverSaveFiles() {
+		File folder = new File(path);
+		File files[] = folder.listFiles();
+		
+		savefiles = new ArrayList<String>();
+		
+		for (int i = 0; i < files.length; i++) {
+			if (files[i].isFile()) {
+				String filename = files[i].getName();
+				if (filename.contains(".save")) {
+					savefiles.add(filename);
+				}
+			}
+		}
+	}
+	
+	public static String CreateSaveFileWithNumber(int number) {
+		String savename = null;
+		
+		if (number > 0) {
+			savename = "save" + number + ".save";
+		}
+		
+		return savename;
+	}
+	
+	public static int FindLastSaveFileNumber() {
+		int number = 1;
+		
+		DiscoverSaveFiles();
+		
+		for (int i = 0; i < savefiles.size(); i++) {
+			String temp = savefiles.get(i);
+			temp = temp.replace(".save", "").replace("save", "");
+			Scanner scan = new Scanner(temp);
+			if (scan.hasNextInt()) {
+				int value = scan.nextInt();
+				if (value > number) {
+					number = value;
+				}
+			}
+			scan.close();
+		}
+		
+		return number;
+	}
 	
 	public static boolean SaveGame(String filename) {
 		boolean isSuccess = true;
