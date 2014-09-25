@@ -14,10 +14,27 @@ import engine.Main;
 public class SaveLoader {
 	public static ArrayList<String> savefiles = new ArrayList<String>();
 	public static String saveFilePath = "res/savefiles";
+	public static int currentPosition = 0;
+	
+	public static String GetPath() {
+		return saveFilePath;
+	}
+	
+	public static int GetSaveFileCount() {
+		int count = 0;
+		
+		if (savefiles != null) {
+			count = savefiles.size();
+		}
+		
+		return count;
+	}
 	
 	public static void DiscoverSaveFiles() {
 		File folder = new File(saveFilePath);
 		File files[] = folder.listFiles();
+		
+		savefiles = new ArrayList<String>();
 		
 		for (int i = 0; i < files.length; i++) {
 			if (files[i].isFile()) {
@@ -26,6 +43,48 @@ public class SaveLoader {
 					savefiles.add(filename);
 				}
 			}
+		}
+	}
+	
+	public static void ReverseSaveOrder() {
+		String temp[] = new String[savefiles.size()];
+		for (int i = savefiles.size() - 1, n = 0; i >= 0; i--, n++) {
+			temp[n] = savefiles.get(i);
+		}
+		savefiles = new ArrayList<String>();
+		
+		for (int i = 0; i < temp.length; i++) {
+			savefiles.add(temp[i]);
+		}
+	}
+	
+	public static String GetCurrentSaveFile() {
+		if (savefiles.size() > 0) {
+			return savefiles.get(currentPosition);
+		}
+		return null;
+	}
+	
+	public static String GetSaveFile(int index) {
+		if (savefiles.size() > 0 && index >= 0 && index < savefiles.size()) {
+			return savefiles.get(index);
+		}
+		return null;
+	}
+	
+	public static void MoveCursorUp() {
+		if (currentPosition == 0 && savefiles.size() > 0) {
+			currentPosition = savefiles.size() - 1;
+		} else if (savefiles.size() > 0) {
+			currentPosition--;
+		}
+	}
+	
+	public static void MoveCursorDown() {
+		if (currentPosition == savefiles.size() - 1) {
+			currentPosition = 0;
+		} else if (savefiles.size() > 0) {
+			currentPosition++;
 		}
 	}
 	

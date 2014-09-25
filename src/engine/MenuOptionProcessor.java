@@ -85,6 +85,7 @@ public class MenuOptionProcessor {
 				System.out.println("Saved: " + saveFileName);
 				break;
 			case LOAD_OPTION:
+				GUIController.SetCurrentMenu(GUIController.MENU_LOADSAVES);
 				break;
 			case EXIT_OPTION:
 				OptionExit();

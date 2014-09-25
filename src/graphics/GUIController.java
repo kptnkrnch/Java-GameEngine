@@ -15,6 +15,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.gui.TextField;
 
+import savefiles.SaveLoader;
 import engine.Entity;
 import engine.EntityDictionary;
 import engine.Main;
@@ -35,6 +36,7 @@ public class GUIController {
 	public static final String MENU_PAUSE = "pause";
 	public static final String MENU_CONTROLS = "controls";
 	public static final String MENU_INVENTORY = "inventory";
+	public static final String MENU_LOADSAVES = "load_saves";
 	public static final String SUBMENU_INVENTORY_ITEM = "inventory_item";
 	
 	public static int selectedControlField = -1;
@@ -83,6 +85,9 @@ public class GUIController {
 				break;
 			case MENU_INVENTORY:
 				DrawInventoryMenu(world, g);
+				break;
+			case MENU_LOADSAVES:
+				DrawLoadSaveFileMenu(world, g);
 				break;
 			}
 		}
@@ -303,6 +308,48 @@ public class GUIController {
 				}
 			}
 			g.setColor(Color.white);
+		}
+	}
+	
+	public static void DrawLoadSaveFileMenu(World world, Graphics g) {
+		int menuID = world.FindMenu(MENU_INVENTORY);
+		Menu temp = world.GetMenu(menuID);
+		SaveLoader.DiscoverSaveFiles();
+		SaveLoader.ReverseSaveOrder();
+		if (temp != null && temp.background != null
+				&& Main.GetState() == States.MENU) {
+			
+			g.drawImage(temp.background, temp.x + GraphicsController.VIEWPORT_X, 
+					temp.y + GraphicsController.VIEWPORT_Y);
+			
+			int i = 0;
+			if (SaveLoader.GetSaveFileCount() >= 14) {
+				if (SaveLoader.currentPosition < 7) {
+					i = 0;
+				} else if (SaveLoader.currentPosition >= 7 && SaveLoader.GetSaveFileCount() >= 14 && SaveLoader.currentPosition > SaveLoader.GetSaveFileCount() - 8) {
+					i = SaveLoader.GetSaveFileCount() - 14;
+				}  else {
+					i = SaveLoader.currentPosition - 6;
+				}
+			} else {
+				i = 0;
+			}
+			for (int n = 0; i < SaveLoader.GetSaveFileCount() && n < 14; i++, n++) {
+				String savefile = null;
+				savefile = SaveLoader.GetSaveFile(i);
+				
+				if (savefile != null) {
+					if (i == SaveLoader.currentPosition) {
+						g.setColor(Color.lightGray);
+						g.fillRect(259 + GraphicsController.VIEWPORT_X, 40 + (20 * n) + GraphicsController.VIEWPORT_Y, 356, 20);
+					}
+					g.setColor(Color.black);
+					g.drawString(savefile, 290 + GraphicsController.VIEWPORT_X,
+							40 + 20 * n + GraphicsController.VIEWPORT_Y);
+					
+					g.setColor(Color.white);
+				}
+			}
 		}
 	}
 	
