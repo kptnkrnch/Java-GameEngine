@@ -65,7 +65,7 @@ public class Main extends BasicGame {
 	public static boolean debug_mode = false;
 	public static Controller controller = null;
 	public static boolean FULLSCREEN = false;
-	public static boolean VSYNC = false;
+	public static boolean VSYNC = true;
 	public static boolean SHOWFPS = false;
 	
 	//public static Font font;

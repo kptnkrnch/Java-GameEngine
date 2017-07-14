@@ -18,6 +18,7 @@ public class InputController {
 	
 	private static HashMap<String, Boolean> held_input = null;
 	private static HashMap<String, Boolean> pressed_input = null;
+	private static HashMap<String, Boolean> old_pressed_input = null;
 	private static HashMap<String, Integer> keymap = null;
 	
 	public static HashMap<String, Boolean> HandleHeldInput(Input input_obj, Controller controller) {
@@ -63,6 +64,11 @@ public class InputController {
 			Iterator<Entry<String, Boolean>> inputIterator = pressed_input.entrySet().iterator();
 			while (inputIterator.hasNext()) {
 				Entry<String, Boolean> current = inputIterator.next();
+				if (old_pressed_input.get(current.getKey())) {
+					old_pressed_input.put(current.getKey(), true);
+				} else {
+					old_pressed_input.put(current.getKey(), current.getValue());
+				}
 				pressed_input.put(current.getKey(), false);
 			}
 			
@@ -80,8 +86,11 @@ public class InputController {
 				Iterator<Entry<String, Boolean>> tempIterator = tempmap.entrySet().iterator();
 				while (tempIterator.hasNext()) {
 					Entry<String, Boolean> current = tempIterator.next();
-					if (current.getValue()) {
+					if (current.getValue() && old_pressed_input.get(current.getKey()) == false) {
 						pressed_input.put(current.getKey(), true);
+					}
+					if (current.getValue() == false) {
+						old_pressed_input.put(current.getKey(), current.getValue());
 					}
 				}
 			}
@@ -95,6 +104,7 @@ public class InputController {
 	public static boolean LoadKeyMapping(String keyMapConfig_location) {
 		keymap = new HashMap<String, Integer>();
 		pressed_input = new HashMap<String, Boolean>();
+		old_pressed_input = new HashMap<String, Boolean>();
 		held_input = new HashMap<String, Boolean>();
 		File keyMapFile = new File(keyMapConfig_location);
 		try {
@@ -126,6 +136,7 @@ public class InputController {
 				keymap.put(command, key);
 				GUIController.tempKeyMap.put(command, key);
 				pressed_input.put(command, false);
+				old_pressed_input.put(command, false);
 				held_input.put(command, false);
 			}
 			scan.close();
@@ -133,6 +144,7 @@ public class InputController {
 			keymap = null;
 			pressed_input = null;
 			held_input = null;
+			old_pressed_input = null;
 		}
 		
 		return true;

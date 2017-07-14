@@ -35,7 +35,7 @@ public class GraphicsController {
 	
 	public static void RenderWorld(World world, Graphics g) {
 		try {
-			g.setAntiAlias(true);
+			//g.setAntiAlias(true);
 			HandleCamera(world, g);
 			
 			HandleTileAnimations(world, g);
