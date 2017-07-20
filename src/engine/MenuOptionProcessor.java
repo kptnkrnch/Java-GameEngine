@@ -52,8 +52,10 @@ public class MenuOptionProcessor {
 				HandleControlMenuOption(option);
 				break;
 			}
-			if (GUIController.subMenuName != null) {
-				switch(GUIController.subMenuName) {
+			//if (GUIController.subMenuName != null) {
+			if (GUIController.GetCurrentSubmenu() != null) {
+				//switch(GUIController.subMenuName) {
+				switch(GUIController.GetCurrentSubmenu()) {
 				case GUIController.SUBMENU_INVENTORY_ITEM:
 					HandleInventoryItemOption(option);
 					break;
